@@ -107,30 +107,10 @@ namespace ExcelToUnity_DataConverter
             return success;
         }
 
-        private static bool TryParseTime(string pServerTime, out DateTime pTime)
+        public static void ClearSettings()
         {
-            string[] formats =
-            {
-                "MM/dd/yyyy hh:mm:ss",
-                "MM/dd/yyyy HH:mm:ss",
-                "MM/dd/yyyy hh:mm:ss tt",
-                "MM/dd/yyyy hh:mm:ss tt zzz",
-                "MM/dd/yyyy hh:mm",
-                "MM/dd/yyyy HH:mm",
-            };
-
-            var enUS = new System.Globalization.CultureInfo("en-US");
-            pTime = DateTime.MinValue;
-            foreach (var format in formats)
-                if (DateTime.TryParseExact(pServerTime, format, enUS, System.Globalization.DateTimeStyles.None, out pTime))
-                    return true;
-            return false;
-        }
-
-        private static DateTime TimeStampToTime(double timeStamp)
-        {
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            return dtDateTime.AddSeconds(timeStamp);
+            m_Settings = new SettingEntity();
+            Save();
         }
     }
 }

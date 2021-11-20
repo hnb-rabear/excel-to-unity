@@ -168,7 +168,7 @@
             this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
             this.toolStripStatusLabel4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.toolStripStatusLabel4.Size = new System.Drawing.Size(37, 17);
-            this.toolStripStatusLabel4.Text = "v1.4.0";
+            this.toolStripStatusLabel4.Text = "v1.4.1";
             // 
             // toolStripStatusLabel3
             // 
