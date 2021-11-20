@@ -1,0 +1,285 @@
+/**
+ * Author RadBear - nbhung71711@gmail.com - 2017-2021
+ **/
+
+using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
+using System;
+using UnityEngine.UI;
+using System.Collections;
+
+public static class LOCALIZATION_CLASS_NAME
+{
+//LOCALIZED_DICTIONARY_KEY_ENUM
+//LOCALIZED_DICTIONARY_KEY_CONST
+//LOCALIZED_DICTIONARY_KEY_STRING
+//LOCALIZED_DICTIONARY
+
+    private static StringBuilder mStringBuilder = new StringBuilder();
+    public static Action onLanguageChanged;
+    private static string[] mTexts;
+    private static string mFolder = "Data";
+    private static string mLanguageTemp;
+    public static string currentLanguage
+    {
+        get { return PlayerPrefs.GetString("currentLanguage", defaultLanguage); }
+        set
+        {
+            if (currentLanguage != value)
+            {
+                PlayerPrefs.SetString("currentLanguage", value);
+                Init();
+            }
+        }
+    }
+
+    public static void Init()
+	{
+		if (mLanguageTemp != currentLanguage)
+		{
+			string file = languageDict[currentLanguage];
+			var asset = Resources.Load<TextAsset>(mFolder + "/" + file);
+			if (asset != null)
+			{
+				string json = asset.text;
+				mTexts = GetJsonList(json);
+				mLanguageTemp = currentLanguage;
+				onLanguageChanged?.Invoke();
+				Resources.UnloadAsset(asset);
+			}
+		}
+	}
+	
+	public static IEnumerator InitAsync()
+	{
+		if (mLanguageTemp != currentLanguage)
+		{
+			string file = languageDict[currentLanguage];
+			var request = Resources.LoadAsync<TextAsset>(mFolder + "/" + file);
+			while (!request.isDone)
+				yield return null;
+			if (request.asset != null)
+			{
+				mTexts = GetJsonList((request.asset as TextAsset).text);
+				mLanguageTemp = currentLanguage;
+				onLanguageChanged?.Invoke();
+				Resources.UnloadAsset(request.asset);
+			}
+		}
+	}
+
+    private static string[] GetTexts()
+    {
+        if (mTexts == null)
+            Init();
+        return mTexts;
+    }
+
+    public static StringBuilder Get(ID pId)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        return mStringBuilder.Append(GetTexts()[(int)pId]);
+    }
+
+    public static StringBuilder Get(ID pId, params object[] pArgs)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        mStringBuilder.AppendFormat(GetTexts()[(int)pId], pArgs);
+        return mStringBuilder;
+    }
+
+    public static StringBuilder Get(int pId)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        if (pId >= 0 && pId < GetTexts().Length)
+            mStringBuilder.Append(GetTexts()[pId]);
+        else
+            Debug.LogError("Not found id " + pId);
+        return mStringBuilder;
+    }
+
+    public static StringBuilder Get(int pId, params object[] pArgs)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        mStringBuilder.AppendFormat(GetTexts()[pId], pArgs);
+        return mStringBuilder;
+    }
+
+    public static StringBuilder Get(string pIdString)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        int index = GetIndex(pIdString);
+        if (index >= 0)
+            mStringBuilder.Append(GetTexts()[index]);
+        else
+            Debug.LogError("Not found idString " + pIdString);
+        return mStringBuilder;
+    }
+
+    public static int GetIndex(string pIdString)
+    {
+        for (int i = 0; i < idString.Length; i++)
+            if (pIdString == idString[i])
+                return i;
+        return -1;
+    }
+
+    public static StringBuilder Get(string pIdString, params object[] pArgs)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        int index = GetIndex(pIdString);
+        if (index >= 0)
+            mStringBuilder.AppendFormat(GetTexts()[index], pArgs);
+        else
+            Debug.LogError("Not found idString " + pIdString);
+        return mStringBuilder;
+    }
+
+    public static StringBuilder Get(string pIdString, ref int pIndex)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        pIndex = GetIndex(pIdString);
+        if (pIndex >= 0)
+            mStringBuilder.Append(GetTexts()[pIndex]);
+        else
+            Debug.LogError("Not found idString " + pIdString);
+        return mStringBuilder;
+    }
+
+    public static StringBuilder Get(string pIdString, ref int pIndex, params object[] pArgs)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        pIndex = GetIndex(pIdString);
+        if (pIndex >= 0)
+            mStringBuilder.AppendFormat(GetTexts()[pIndex], pArgs);
+        else
+            Debug.LogError("Not found idString " + pIdString);
+        return mStringBuilder;
+    }
+
+    public static StringBuilder Get(string pIdString, ref ID pId)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        int index = GetIndex(pIdString);
+        if (index >= 0)
+        {
+            pId = (ID)index;
+            mStringBuilder.Append(GetTexts()[index]);
+        }
+        else
+        {
+            pId = ID.NONE;
+            Debug.LogError("Not found idString " + pIdString);
+        }
+        return mStringBuilder;
+    }
+
+    public static StringBuilder Get(string pIdString, ref ID pId, params object[] pArgs)
+    {
+        mStringBuilder.Remove(0, mStringBuilder.Length);
+        int index = GetIndex(pIdString);
+        if (index >= 0)
+        {
+            pId = (ID)index;
+            mStringBuilder.AppendFormat(GetTexts()[index], pArgs);
+        }
+        else
+        {
+            pId = ID.NONE;
+            Debug.LogError("Not found idString " + pIdString);
+        }
+        return mStringBuilder;
+    }
+
+    public static string[] GetJsonList(string json)
+    {
+        var sb = new StringBuilder();
+        string newJson = sb.Append("{").Append("\"array\":").Append(json).Append("}").ToString();
+        StringArray wrapper = JsonUtility.FromJson<StringArray>(newJson);
+        return wrapper.array;
+    }
+
+    [System.Serializable]
+    private class StringArray
+    {
+        public string[] array;
+    }
+
+    public static LOCALIZATION_CLASS_NAMEText GetLOCALIZATION_CLASS_NAMEText(this Text pComponent)
+    {
+        var localizedText = pComponent.GetComponent<LOCALIZATION_CLASS_NAMEText>();
+        if (localizedText == null)
+            localizedText = pComponent.gameObject.AddComponent<LOCALIZATION_CLASS_NAMEText>();
+        return localizedText;
+    }
+
+    public static LOCALIZATION_CLASS_NAMEText GetLOCALIZATION_CLASS_NAMEText(this TMPro.TextMeshProUGUI pComponent)
+    {
+        var localizedText = pComponent.GetComponent<LOCALIZATION_CLASS_NAMEText>();
+        if (localizedText == null)
+            localizedText = pComponent.gameObject.AddComponent<LOCALIZATION_CLASS_NAMEText>();
+        return localizedText;
+    }
+}
+
+public class LOCALIZATION_CLASS_NAMEGetter
+{
+    private static Dictionary<string, int> cachedTexts = new Dictionary<string, int>();
+
+    public string key;
+    public string defaultStr;
+
+    private int mIndex = -1;
+    private bool mCheckKey;
+
+    public LOCALIZATION_CLASS_NAMEGetter(string pKey, string pDefault)
+    {
+        key = pKey;
+        defaultStr = pDefault;
+
+#if UNITY_EDITOR
+        //In Editor we check it soon to find missing localization
+        LOCALIZATION_CLASS_NAME.Get(key, ref mIndex);
+        mCheckKey = true;
+#endif
+    }
+
+    public string Get()
+    {
+        if (!mCheckKey)
+        {
+            LOCALIZATION_CLASS_NAME.Get(key, ref mIndex);
+            mCheckKey = true;
+        }
+
+        if (mIndex == -1)
+            return defaultStr;
+        var text = LOCALIZATION_CLASS_NAME.Get(mIndex).ToString();
+        if (string.IsNullOrEmpty(text))
+            return defaultStr;
+        else
+            return LOCALIZATION_CLASS_NAME.Get(mIndex).ToString().Replace("\\n", "\u000a");
+    }
+
+    public static string GetCached(string pKey)
+    {
+        if (cachedTexts.ContainsKey(pKey))
+        {
+            int id = cachedTexts[pKey];
+            if (id != -1)
+            {
+                string text = LOCALIZATION_CLASS_NAME.Get(cachedTexts[pKey]).ToString();
+                return !string.IsNullOrEmpty(text) ? text : pKey;
+            }
+            return pKey;
+        }
+        else
+        {
+            int id = -1;
+            string text = LOCALIZATION_CLASS_NAME.Get(pKey, ref id).ToString();
+            cachedTexts.Add(pKey, id);
+            return !string.IsNullOrEmpty(text) ? text : pKey;
+        }
+    }
+}

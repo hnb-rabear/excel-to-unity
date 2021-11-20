@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="folderBrowserDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>150, 17</value>
+  </metadata>
+  <metadata name="backgroundWorker1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>313, 17</value>
+  </metadata>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>477, 17</value>
+  </metadata>
+  <metadata name="saveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>683, 17</value>
+  </metadata>
+  <metadata name="statusStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>819, 17</value>
+  </metadata>
+  <data name="txtChangesLog.Text" xml:space="preserve">
+    <value>1.3
+- Added option for shinking all json sheets of a excel file into a single json file
+1.3.1
+- Added Reponsive UI
+1.3.2
+- Minified string of json data type to single line
+1.3.3
+- Fix: Emtpy cell now return 0 value instead of -1
+- Fix: Added condition for Values array of Attribute. Values array now is null if it has only 1 element which equals 0
+1.3.4
+- Added Unminimized Fields box
+- Updated Help
+1.3.5
+- Added option for exporting only IDs as Enum
+1.3.6
+- Updated Json Data Structure, Json Data Sheet now can have Empty Cells on Field Row, which stand between Non-Empty Cells
+- Added tag [x] for Json Colum Rule, colums have [x] in its name will be ignored when exportation.
+1.3.7
+- Fixed Last columns which have empty name in Json Data Sheet throw an exception
+- Added comment collumn for IDs and Constants Sheet
+- Added messages for key with no value
+- Updated example
+1.3.8
+- Fixed Responsive UI
+- Rearranged functions to be more clear
+1.3.9
+- Removed Merge Constants Sheets Checkbox, now merging sheets is default
+- Added Checkbox for exprorting Seperately Constants, IDs, Localizations Sheets
+- Added Localizations Manager incase there are many file localizations
+Update - 1.4.0
+- Fixed Localization Text Component
+- Fixed referenced id string in Constants sheet</value>
+  </data>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>RULE AND RECOMMENDATION
+--------------------------------------------------------------------------------------------------------------------------------------------
+- Tên của sheet
+%Constants% export ra file [.cs] chứa Constants
+%IDs% export ra file [.cs] Constants
+%Localization% export ra file json Localization
+%Settings% export ra file cs ScripableObject (Out of date, có thể nó không còn hoạt động đúng)
+Các trường hợp khác sẽ export ra file [.txt] chứa data dạng Json
+
+- Quy tắc tên Paramater trong sheet IDs
+Không chứa dấu cách, không dấu
+Nên viết hoa tất cả chữ cái (Không bắt buộc)
+Đối với kiểu enum thì thêm hậu tố "[enum]" vào tên của nhóm(Column)
+Khi có thêm hậu tố "[enum]" file IDs sẽ export đồng thời Constants và Enum. Nếu chỉ muốn export enum, không muốn export Constants thì chọn "Keep Only Enum as IDs" tại Tab Settings.
+
+- Quy tắc tên field/column trong sheet Json Data:
+Không chứa dấu cách, không chứa ký tự đặc biệt, không trùng tên
+Nếu có hậu tố [] value sẽ là kiểu array/list. Các phần từ của array/list phân tách bởi dấu "|", ":", hoặc Newline
+Nếu có hậu tố {} value sẽ là một chuỗi string mà có thể convert ra Json Data.
+Nếu có hậu tố [x] toàn bộ data của cột đó sẽ bị bỏ qua, không được export.
+
+- Hệ thống attribute:
+Giới thiệu: Hệ thống attributes cho phép data mở rộng không giới hạn, và dễ quản lý. Phù hợp cho game có hệ thống chỉ số phức tạp hoặc có hệ thống item đa dạng.
+Quy tắc đặt Attribute: các cột data của Attribute phải nằm ở cuối bảng dữ liệu, data của một Attribute bắt đầu duyệt từ cột có tên chứa "attribute". Thứ tự tương đối như sau.
+1: attribute% : id của Attribute, các id này phải được setup trong sheet IDs từ trước. Phải chứa chuỗi "attribute" hậu tố là gì cũng được nhưng đề xuất là nên đặt theo thứ tự bắt đầu từ 0.
+2: value% / value%[] : value của Attribute, bắt buộc kiểu Number. Có thể là array, nều là array thì cần có "[]"
+3: increase% / increase%[] : giá trị bổ sung cho Attribute, dùng trong tình huống Attribute có thể tăng cấp và tăng chỉ số. Có thể là array, nều là array thì cần có "[]"
+4: unlock% / unlock%[] : giá trị bổ sung cho Attribute, dùng trong tình huống Attribute cần điều kiện để Unlock. Có thể là array, nều là array thì cần có "[]"
+5: max% / max%[] : giá trị bổ sung cho Attribute, dùng trong tình huống Attribute có chỉ số tối đa. Có thể là array, nều là array thì cần có "[]"
+VD1: attribute0, value0, increase0, value0, max0.
+VD2: attribute1, value1[], increase1[], value1[], max1[].
+
+- Mã hóa data.
+Hiện tại Tool chỉ support mã hóa Json Data. Để mã hóa data thì chỉ cần tích vào ô Encrypt Json Data ở Tab Settings
+
+- Tách file Constants, IDs, Localizations: 
+Mặc định các sheet Constants, IDs, Localizations sẽ được export gộp vào là 1 file duy nhất theo loại của chúng. Để export riêng thì tích vào các ô tương ứng là Separate IDs, Seperate Constants, hoặc Seperate Localizations ở Tab Settings
+
+- Export riêng 1 file excel
+Tình huống muốn export riêng một file excel hoặc riêng từng phần của một file excel thì dùng Tab "Export Data From Excel".
+
+- Khi export Json Data, các Column(field) có giá trị rỗng hoặc bằng 0 sẽ bị loại bỏ khi export. Nếu muốn giữ các cột rỗng đó thì cần bổ sung tên Column(field) đó vào ô Unminimized Fields ở Tab Settings
+
+- Khi muốn bỏ qua, không export một sheet nào đó trong file excel, thì chỉ cần thêm một dòng trắng trên cùng hoặc bổ sung tên Sheet đó vào ô Excluded Sheets ở Tab Settings
+
+- Tích vào ô "Merge Json Sheets into Single Json" trong Tab Settings, để gộp tất cả data sheets trong một file excel vào một file Json duy nhất, file đó sẽ có tên theo tên của file Excel.</value>
+  </data>
+  <data name="txtSettingEncryptionKey.Text" xml:space="preserve">
+    <value>168, 220, 184, 133, 78, 149, 8, 249, 171, 138, 98, 170, 95, 15, 211, 200, 51, 242, 4, 193, 219, 181, 232, 99, 16, 240, 142, 128, 29, 163, 245, 24, 204, 73, 173, 32, 214, 76, 31, 99, 91, 239, 232, 53, 138, 195, 93, 195, 185, 210, 155, 184, 243, 216, 204, 42, 138, 101, 100, 241, 46, 145, 198, 66, 11, 17, 19, 86, 157, 27, 132, 201, 246, 112, 121, 7, 195, 148, 143, 125, 158, 29, 184, 67, 187, 100, 31, 129, 64, 130, 26, 67, 240, 128, 233, 129, 63, 169, 5, 211, 248, 200, 199, 96, 54, 128, 111, 147, 100, 6, 185, 0, 188, 143, 25, 103, 211, 18, 17, 249, 106, 54, 162, 188, 25, 34, 147, 3, 222, 61, 218, 49, 164, 165, 133, 12, 65, 92, 48, 40, 129, 76, 194, 229, 109, 76, 150, 203, 251, 62, 54, 251, 70, 224, 162, 167, 183, 78, 103, 28, 67, 183, 23, 80, 156, 97, 83, 164, 24, 183, 81, 56, 103, 77, 112, 248, 4, 168, 5, 72, 109, 18, 75, 219, 99, 181, 160, 76, 65, 16, 41, 175, 87, 195, 181, 19, 165, 172, 138, 172, 84, 40, 167, 97, 214, 90, 26, 124, 0, 166, 217, 97, 246, 117, 237, 99, 46, 15, 141, 69, 4, 245, 98, 73, 3, 8, 161, 98, 79, 161, 127, 19, 55, 158, 139, 247, 39, 59, 72, 161, 82, 158, 25, 65, 107, 173, 5, 255, 53, 28, 179, 182, 65, 162, 17</value>
+  </data>
+  <metadata name="path.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="exportIds.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="exportConstants.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="BtnDelete.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+</root>

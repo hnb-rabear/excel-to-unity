@@ -1,0 +1,41 @@
+/**
+ * Author RadBear - nbhung71711@gmail.com - 2017-2021
+ **/
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using RCore.Common;
+
+public class LocalizationsManager
+{
+    public static Action onLanguageChanged;
+
+//LOCALIZED_DICTIONARY
+	
+    public static string currentLanguage
+    {
+        get { return PlayerPrefs.GetString("currentLanguage", defaultLanguage); }
+        set
+        {
+            if (currentLanguage != value)
+            {
+                PlayerPrefs.SetString("currentLanguage", value);
+                Init();
+            }
+        }
+    }
+
+    public static void Init()
+    {
+//LOCALIZATION_INIT
+        onLanguageChanged?.Invoke();
+    }
+
+    public static IEnumerator InitAsync()
+    {
+//LOCALIZATION_INIT_ASYN
+        onLanguageChanged?.Invoke();
+    }
+}
