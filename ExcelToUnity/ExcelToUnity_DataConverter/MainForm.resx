@@ -172,7 +172,8 @@
 - Removed checking license
 - Fixed default settings
 - Moved documment to new link
-</value>
+1.4.2
+- Fixed comment of enum type value in IDs Sheet</value>
   </data>
   <data name="richTextBox1.Text" xml:space="preserve">
     <value>RULE AND RECOMMENDATION

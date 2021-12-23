@@ -281,9 +281,9 @@ namespace ExcelToUnity_DataConverter
                                 {
                                     string cellCommentFormula = Helper.ConvertFormulaCell(cellComment);
                                     if (cellCommentFormula != null)
-                                        sb.Append(" //").Append(cellCommentFormula);
+                                        sb.Append(" /*").Append(cellCommentFormula).Append("*/");
                                     else
-                                        sb.Append(" //").Append(cellComment);
+                                        sb.Append(" /*").Append(cellComment).Append("*/");
                                 }
 
                                 //Add to global keys
@@ -623,7 +623,7 @@ namespace ExcelToUnity_DataConverter
                 if (fieldStr != "")
                 {
                     if (!string.IsNullOrEmpty(comment))
-                        fieldStr += string.Format(" //{0}", comment);
+                        fieldStr += string.Format(" /*{0}*/", comment);
                     constantsSB.Append(fieldStr).AppendLine();
                 }
             }
