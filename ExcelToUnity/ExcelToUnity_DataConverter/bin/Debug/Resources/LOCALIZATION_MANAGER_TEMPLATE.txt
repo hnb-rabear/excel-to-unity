@@ -19,22 +19,26 @@ public class LocalizationsManager
         get { return PlayerPrefs.GetString("currentLanguage", defaultLanguage); }
         set
         {
-            if (currentLanguage != value)
+            if (currentLanguage != value && languages.Contains(value))
             {
                 PlayerPrefs.SetString("currentLanguage", value);
-                Init();
+                Init("");
             }
         }
     }
 
-    public static void Init()
+    public static void Init(string pLang)
     {
+		if (languages.Contains(pLang))
+			PlayerPrefs.SetString("currentLanguage", pLang);
 //LOCALIZATION_INIT
         onLanguageChanged?.Invoke();
     }
 
-    public static IEnumerator InitAsync()
+    public static IEnumerator InitAsync(string pLang)
     {
+		if (languages.Contains(pLang))
+			PlayerPrefs.SetString("currentLanguage", pLang);
 //LOCALIZATION_INIT_ASYN
         onLanguageChanged?.Invoke();
     }

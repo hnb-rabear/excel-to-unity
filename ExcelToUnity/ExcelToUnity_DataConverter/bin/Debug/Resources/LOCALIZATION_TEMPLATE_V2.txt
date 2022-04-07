@@ -26,25 +26,54 @@ public static class LOCALIZATION_CLASS_NAME
         get { return PlayerPrefs.GetString("currentLanguage", defaultLanguage); }
         set
         {
-            if (currentLanguage != value)
+            if (currentLanguage != value && languageDict.ContainsKey(value))
             {
                 PlayerPrefs.SetString("currentLanguage", value);
                 Init();
             }
         }
     }
+	public static int curLangIndex = -1;
 
     public static void Init()
 	{
-		if (mLanguageTemp != currentLanguage)
+        var lang = mLanguageTemp;
+		if (!languageDict.ContainsKey(currentLanguage))
 		{
-			string file = languageDict[currentLanguage];
+			if (string.IsNullOrEmpty(mLanguageTemp))
+				lang = defaultLanguage;
+		}
+		else lang = currentLanguage;
+				
+		if (mLanguageTemp != lang)
+		{
+			string file = languageDict[lang];
 			var asset = Resources.Load<TextAsset>(mFolder + "/" + file);
 			if (asset != null)
 			{
 				string json = asset.text;
 				mTexts = GetJsonList(json);
-				mLanguageTemp = currentLanguage;
+				mLanguageTemp = lang;
+				int index = 0;
+                foreach (var item in languageDict)
+                {
+                    if (lang == item.Key)
+                    {
+                        curLangIndex = index;
+                        break;
+                    }
+                    index++;
+                }
+                for (int i = 0; i < mDynamicTexts.Count; i++)
+                {
+                    if (mDynamicTexts[i].component == null)
+                    {
+                        mDynamicTexts.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                    mDynamicTexts[i].Refresh();
+                }
 				onLanguageChanged?.Invoke();
 				Resources.UnloadAsset(asset);
 			}
@@ -53,16 +82,44 @@ public static class LOCALIZATION_CLASS_NAME
 	
 	public static IEnumerator InitAsync()
 	{
-		if (mLanguageTemp != currentLanguage)
+        var lang = mLanguageTemp;
+		if (!languageDict.ContainsKey(currentLanguage))
 		{
-			string file = languageDict[currentLanguage];
+			if (string.IsNullOrEmpty(mLanguageTemp))
+				lang = defaultLanguage;
+		}
+		else lang = currentLanguage;
+				
+		if (mLanguageTemp != lang)
+		{
+			string file = languageDict[lang];
 			var request = Resources.LoadAsync<TextAsset>(mFolder + "/" + file);
 			while (!request.isDone)
 				yield return null;
 			if (request.asset != null)
 			{
 				mTexts = GetJsonList((request.asset as TextAsset).text);
-				mLanguageTemp = currentLanguage;
+				mLanguageTemp = lang;
+				int index = 0;
+                foreach (var item in languageDict)
+                {
+                    if (lang == item.Key)
+                    {
+                        curLangIndex = index;
+                        break;
+                    }
+                    index++;
+                }
+                for (int i = 0; i < mDynamicTexts.Count; i++)
+                {
+                    if (mDynamicTexts[i].component == null)
+                    {
+                        mDynamicTexts.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                    mDynamicTexts[i].Refresh();
+                }
 				onLanguageChanged?.Invoke();
 				Resources.UnloadAsset(request.asset);
 			}
@@ -122,6 +179,9 @@ public static class LOCALIZATION_CLASS_NAME
         for (int i = 0; i < idString.Length; i++)
             if (pIdString == idString[i])
                 return i;
+#if UNITY_EDITOR
+		Debug.LogError("Not found " + pIdString);
+#endif
         return -1;
     }
 
@@ -206,20 +266,87 @@ public static class LOCALIZATION_CLASS_NAME
         public string[] array;
     }
 
-    public static LOCALIZATION_CLASS_NAMEText GetLOCALIZATION_CLASS_NAMEText(this Text pComponent)
+    private static List<DynamicText> mDynamicTexts = new List<DynamicText>();
+    public static void RegisterDynamicText(Text pComponent, string pLocalizedKey, params string[] pArgs)
     {
-        var localizedText = pComponent.GetComponent<LOCALIZATION_CLASS_NAMEText>();
-        if (localizedText == null)
-            localizedText = pComponent.gameObject.AddComponent<LOCALIZATION_CLASS_NAMEText>();
-        return localizedText;
+        int key = GetIndex(pLocalizedKey);
+        RegisterDynamicText(pComponent, key, pArgs);
     }
 
-    public static LOCALIZATION_CLASS_NAMEText GetLOCALIZATION_CLASS_NAMEText(this TMPro.TextMeshProUGUI pComponent)
+    public static void RegisterDynamicText(Text pComponent, int pLocalizedKey, params string[] pArgs)
     {
+        if (pComponent == null)
+            return;
+        for (int i = 0; i < mDynamicTexts.Count; i++)
+        	if (mDynamicTexts[i].component == pComponent)
+            {
+                if (mDynamicTexts[i].key != pLocalizedKey || mDynamicTexts[i].args != pArgs)
+                {
+                    mDynamicTexts[i].curLangIndex = -1;
+                    mDynamicTexts[i].key = pLocalizedKey;
+                    mDynamicTexts[i].args = pArgs;
+                }
+                mDynamicTexts[i].Refresh();
+                return;
+            }
+        var text = new DynamicText(pLocalizedKey, pComponent, pArgs);
+        text.Refresh();
+        mDynamicTexts.Add(text);
+#if UNITY_EDITOR
         var localizedText = pComponent.GetComponent<LOCALIZATION_CLASS_NAMEText>();
-        if (localizedText == null)
-            localizedText = pComponent.gameObject.AddComponent<LOCALIZATION_CLASS_NAMEText>();
-        return localizedText;
+        if (localizedText != null)
+        {
+            Debug.LogError($"{pComponent.name} should not have LOCALIZATION_CLASS_NAMEText!");
+            GameObject.Destroy(localizedText);
+        }
+#endif
+    }
+
+    public static void UnregisterDynamicText(Text pComponent)
+    {
+        for (int i = 0; i < mDynamicTexts.Count; i++)
+            if (mDynamicTexts[i].component == pComponent)
+            {
+                mDynamicTexts.RemoveAt(i);
+                return;
+            }
+    }
+
+    public class DynamicText
+    {
+        public int key = -1;
+        public Text component;
+        public string[] args;
+        public int curLangIndex = -1;
+        public DynamicText(int pIntKey, Text pText, params string[] pArgs)
+        {
+            key = pIntKey;
+            component = pText;
+            args = pArgs;
+        }
+        public void Refresh()
+        {
+            if (curLangIndex != LOCALIZATION_CLASS_NAME.curLangIndex)
+            {
+#if UNITY_EDITOR
+                var text = Get(key);
+                try
+                {
+#endif
+					if (args != null)
+						component.text = Get(key, args).ToString();
+					else
+						component.text = Get(key).ToString();
+					curLangIndex = LOCALIZATION_CLASS_NAME.curLangIndex;
+#if UNITY_EDITOR
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError(text + "\n" + ex.ToString());
+                }
+#endif
+            }
+        }
     }
 }
 
