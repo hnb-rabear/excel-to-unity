@@ -1890,6 +1890,7 @@ namespace ExcelToUnity_DataConverter
                 //Build initialization code
                 var initLines = new StringBuilder();
                 var initAsynLines = new StringBuilder();
+                var setFolder = new StringBuilder();
                 for (int i = 0; i < m_LocalizedSheetsExported.Count; i++)
                 {
                     initLines.Append($"\t\t{m_LocalizedSheetsExported[i]}.Init();");
@@ -1899,12 +1900,17 @@ namespace ExcelToUnity_DataConverter
                     initAsynLines.Append($"\t\tyield return CoroutineUtil.StartCoroutine({m_LocalizedSheetsExported[i]}.InitAsync());");
                     if (i < m_LocalizedSheetsExported.Count - 1)
                         initAsynLines.Append(Environment.NewLine);
+
+                    setFolder.Append($"\t\t{m_LocalizedSheetsExported[i]}.Folder = pFolder;");
+                    if (i < m_LocalizedSheetsExported.Count - 1)
+                        setFolder.Append(Environment.NewLine);
                 }
 
                 string fileContent = File.ReadAllText(LOCALIZATION_MANAGER_TEMPLATE);
                 fileContent = fileContent.Replace("//LOCALIZATION_INIT_ASYN", initAsynLines.ToString());
                 fileContent = fileContent.Replace("//LOCALIZATION_INIT", initLines.ToString());
                 fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
+                fileContent = fileContent.Replace("//LOCALIZATION_SET_FOLDER", setFolder.ToString());
                 fileContent = AddNamespace(fileContent);
                 Helper.WriteFile(Config.Settings.outputConstantsFilePath, "LocalizationsManager.cs", fileContent);
             }

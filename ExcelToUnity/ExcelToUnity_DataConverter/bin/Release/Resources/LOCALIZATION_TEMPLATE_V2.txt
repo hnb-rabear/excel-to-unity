@@ -16,10 +16,10 @@ public static class LOCALIZATION_CLASS_NAME
 //LOCALIZED_DICTIONARY_KEY_STRING
 //LOCALIZED_DICTIONARY
 
+	public static string Folder = "Data";
     private static StringBuilder mStringBuilder = new StringBuilder();
     public static Action onLanguageChanged;
     private static string[] mTexts;
-    private static string mFolder = "Data";
     private static string mLanguageTemp;
     public static string currentLanguage
     {
@@ -48,7 +48,7 @@ public static class LOCALIZATION_CLASS_NAME
 		if (mLanguageTemp != lang)
 		{
 			string file = languageDict[lang];
-			var asset = Resources.Load<TextAsset>(mFolder + "/" + file);
+			var asset = Resources.Load<TextAsset>(Folder + "/" + file);
 			if (asset != null)
 			{
 				string json = asset.text;
@@ -93,7 +93,7 @@ public static class LOCALIZATION_CLASS_NAME
 		if (mLanguageTemp != lang)
 		{
 			string file = languageDict[lang];
-			var request = Resources.LoadAsync<TextAsset>(mFolder + "/" + file);
+			var request = Resources.LoadAsync<TextAsset>(Folder + "/" + file);
 			while (!request.isDone)
 				yield return null;
 			if (request.asset != null)

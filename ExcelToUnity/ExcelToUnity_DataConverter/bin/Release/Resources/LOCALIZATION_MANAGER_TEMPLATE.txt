@@ -42,4 +42,9 @@ public class LocalizationsManager
 //LOCALIZATION_INIT_ASYN
         onLanguageChanged?.Invoke();
     }
+	
+	public void SetFolder(string pFolder)
+	{
+//LOCALIZATION_SET_FOLDER
+	}
 }
