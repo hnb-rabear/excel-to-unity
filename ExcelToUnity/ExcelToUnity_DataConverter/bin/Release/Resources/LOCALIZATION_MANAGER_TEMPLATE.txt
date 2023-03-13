@@ -43,7 +43,7 @@ public class LocalizationsManager
         onLanguageChanged?.Invoke();
     }
 	
-	public void SetFolder(string pFolder)
+	public static void SetFolder(string pFolder)
 	{
 //LOCALIZATION_SET_FOLDER
 	}

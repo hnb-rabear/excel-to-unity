@@ -99,9 +99,7 @@ E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\NPO
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.CodeDom.dll
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.ComponentModel.Annotations.dll
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Configuration.ConfigurationManager.dll
-E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Console.dll
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Data.SqlClient.dll
-E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.ValueTuple.dll
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Memory.dll
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Numerics.Vectors.dll
@@ -115,7 +113,6 @@ E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\NPO
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\NPOI.OOXML.xml
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\NPOI.OpenXml4Net.xml
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.ValueTuple.xml
-E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csprojAssemblyReference.cache
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.FrmGoogleSheetSample.resources
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.FrmSetupCredential.resources
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.MainForm.resources
@@ -125,3 +122,5 @@ E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\Exc
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.CopyComplete
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.exe
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.pdb
+E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.AssemblyReference.cache
+E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.SuggestedBindingRedirects.cache

@@ -26,6 +26,10 @@ namespace ExcelToUnity_DataConverter.Entities
         /// </summary>
         public string outputConstantsFilePath = "";
         /// <summary>
+        /// Output folder for Localization
+        /// </summary>
+        public string outputLocalizationFilePath = "";
+        /// <summary>
         /// All excel files path
         /// </summary>
         public List<FileEntity> allFiles = new List<FileEntity>();

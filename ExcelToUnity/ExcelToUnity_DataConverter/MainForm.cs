@@ -415,6 +415,8 @@ namespace ExcelToUnity_DataConverter
                                 try
                                 {
                                     ICell cellIdValue = rowData.GetCell(col + 1);
+                                    if (cellIdValue == null)
+                                        continue;
                                     string key = cellIdName.ToString().Trim();
                                     int value = int.Parse(cellIdValue.ToString().Trim());
                                     ids.Add(new ID(key, value));
@@ -1835,7 +1837,7 @@ namespace ExcelToUnity_DataConverter
             foreach (var listText in pLanguageTextDict)
             {
                 string json = JsonConvert.SerializeObject(listText.Value);
-                Helper.WriteFile(Config.Settings.outputDataFilePath, pFileName + "_" + listText.Key + ".txt", json);
+                Helper.WriteFile(Config.Settings.outputLocalizationFilePath, pFileName + "_" + listText.Key + ".txt", json);
             }
 
             //Build language dictionary
@@ -2036,12 +2038,17 @@ namespace ExcelToUnity_DataConverter
         private void txtOuputJsonFilePath_TextChanged(object sender, EventArgs e)
         {
             SetupConfigFolders(txtOutputJsonFilePath, ref Config.Settings.outputDataFilePath);
-        }
+		}
 
-        /// <summary>
-        /// Export single excel file
-        /// </summary>
-        private void BtnExportJson_Click(object sender, EventArgs e)
+		private void txtSettingOutputLocalizationFilePath_TextChanged(object sender, EventArgs e)
+		{
+			SetupConfigFolders(txtSettingOutputLocalizationFilePath, ref Config.Settings.outputLocalizationFilePath);
+		}
+
+		/// <summary>
+		/// Export single excel file
+		/// </summary>
+		private void BtnExportJson_Click(object sender, EventArgs e)
         {
             var allSheets = new List<string>();
             if (m_WorkBook == null)
@@ -2718,9 +2725,25 @@ namespace ExcelToUnity_DataConverter
                 Process.Start(txtSettingOuputConstantsFilePath.Text);
             else
                 MessageBox.Show("Folder not exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
+		}
 
-        private void LoadSettings()
+		private void btnOpenFolderLocalization_Click(object sender, EventArgs e)
+		{
+			if (string.IsNullOrEmpty(txtSettingOutputLocalizationFilePath.Text))
+				return;
+
+			if (Directory.Exists(txtSettingOutputLocalizationFilePath.Text))
+				Process.Start(txtSettingOutputLocalizationFilePath.Text);
+			else
+				MessageBox.Show("Folder not exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+
+		private void btnSelectFolderLocalization_Click(object sender, EventArgs e)
+		{
+			Helper.SelectFolder(txtSettingOutputLocalizationFilePath);
+		}
+
+		private void LoadSettings()
         {
             //--This is demo setup (not used anymore)
             if (!string.IsNullOrEmpty(Config.Settings.inputCSVFilePath))
@@ -2751,6 +2774,7 @@ namespace ExcelToUnity_DataConverter
             else
                 txtInputXLSXFilePath.Text = "";
             txtSettingOutputDataFilePath.Text = Config.Settings.outputDataFilePath;
+            txtSettingOutputLocalizationFilePath.Text = Config.Settings.outputLocalizationFilePath;
             txtSettingOuputConstantsFilePath.Text = Config.Settings.outputConstantsFilePath;
             chkSettingEnableEncryption.Checked = Config.Settings.encryption;
             if (!string.IsNullOrEmpty(Config.Settings.encryptionKey))
