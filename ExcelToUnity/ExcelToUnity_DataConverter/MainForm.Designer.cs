@@ -172,7 +172,7 @@
 			this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
 			this.toolStripStatusLabel4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.toolStripStatusLabel4.Size = new System.Drawing.Size(37, 17);
-			this.toolStripStatusLabel4.Text = "v1.4.2";
+			this.toolStripStatusLabel4.Text = "v1.4.3";
 			// 
 			// toolStripStatusLabel3
 			// 
@@ -193,6 +193,7 @@
 			// txtChangesLog
 			// 
 			this.txtChangesLog.AllowDrop = true;
+			this.txtChangesLog.BackColor = System.Drawing.SystemColors.HighlightText;
 			this.txtChangesLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtChangesLog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtChangesLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
@@ -288,7 +289,7 @@
 			this.txtEncryptionOutput.Multiline = true;
 			this.txtEncryptionOutput.Name = "txtEncryptionOutput";
 			this.txtEncryptionOutput.ReadOnly = true;
-			this.txtEncryptionOutput.Size = new System.Drawing.Size(307, 371);
+			this.txtEncryptionOutput.Size = new System.Drawing.Size(307, 388);
 			this.txtEncryptionOutput.TabIndex = 1;
 			// 
 			// txtEncryptionInput
@@ -301,7 +302,7 @@
 			this.txtEncryptionInput.Margin = new System.Windows.Forms.Padding(0);
 			this.txtEncryptionInput.Multiline = true;
 			this.txtEncryptionInput.Name = "txtEncryptionInput";
-			this.txtEncryptionInput.Size = new System.Drawing.Size(307, 371);
+			this.txtEncryptionInput.Size = new System.Drawing.Size(307, 388);
 			this.txtEncryptionInput.TabIndex = 0;
 			// 
 			// tabSetUp
@@ -344,7 +345,7 @@
 			// label10
 			// 
 			this.label10.AutoSize = true;
-			this.label10.Location = new System.Drawing.Point(6, 69);
+			this.label10.Location = new System.Drawing.Point(6, 61);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(98, 13);
 			this.label10.TabIndex = 44;
@@ -354,10 +355,11 @@
 			// 
 			this.txtSettingOutputLocalizationFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingOutputLocalizationFilePath.Location = new System.Drawing.Point(105, 66);
+			this.txtSettingOutputLocalizationFilePath.Location = new System.Drawing.Point(105, 57);
 			this.txtSettingOutputLocalizationFilePath.Name = "txtSettingOutputLocalizationFilePath";
 			this.txtSettingOutputLocalizationFilePath.Size = new System.Drawing.Size(403, 20);
 			this.txtSettingOutputLocalizationFilePath.TabIndex = 43;
+			this.toolTip.SetToolTip(this.txtSettingOutputLocalizationFilePath, "Directory for exporting localization text files");
 			this.txtSettingOutputLocalizationFilePath.TextChanged += new System.EventHandler(this.txtSettingOutputLocalizationFilePath_TextChanged);
 			// 
 			// btnOpenFolderLocalization
@@ -365,10 +367,11 @@
 			this.btnOpenFolderLocalization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOpenFolderLocalization.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnOpenFolderLocalization.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.btnOpenFolderLocalization.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnOpenFolderLocalization.Location = new System.Drawing.Point(605, 63);
+			this.btnOpenFolderLocalization.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnOpenFolderLocalization.Location = new System.Drawing.Point(605, 57);
+			this.btnOpenFolderLocalization.Margin = new System.Windows.Forms.Padding(0);
 			this.btnOpenFolderLocalization.Name = "btnOpenFolderLocalization";
-			this.btnOpenFolderLocalization.Size = new System.Drawing.Size(88, 25);
+			this.btnOpenFolderLocalization.Size = new System.Drawing.Size(88, 20);
 			this.btnOpenFolderLocalization.TabIndex = 42;
 			this.btnOpenFolderLocalization.Text = "Open Explorer";
 			this.btnOpenFolderLocalization.UseVisualStyleBackColor = false;
@@ -379,10 +382,11 @@
 			this.btnSelectFolderLocalization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnSelectFolderLocalization.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnSelectFolderLocalization.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.btnSelectFolderLocalization.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnSelectFolderLocalization.Location = new System.Drawing.Point(514, 63);
+			this.btnSelectFolderLocalization.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnSelectFolderLocalization.Location = new System.Drawing.Point(514, 57);
+			this.btnSelectFolderLocalization.Margin = new System.Windows.Forms.Padding(0);
 			this.btnSelectFolderLocalization.Name = "btnSelectFolderLocalization";
-			this.btnSelectFolderLocalization.Size = new System.Drawing.Size(85, 25);
+			this.btnSelectFolderLocalization.Size = new System.Drawing.Size(85, 20);
 			this.btnSelectFolderLocalization.TabIndex = 41;
 			this.btnSelectFolderLocalization.Text = "Select Folder";
 			this.btnSelectFolderLocalization.UseVisualStyleBackColor = false;
@@ -391,29 +395,31 @@
 			// chkSeperateLocalization
 			// 
 			this.chkSeperateLocalization.AutoSize = true;
-			this.chkSeperateLocalization.Location = new System.Drawing.Point(531, 99);
+			this.chkSeperateLocalization.Location = new System.Drawing.Point(531, 86);
 			this.chkSeperateLocalization.Name = "chkSeperateLocalization";
-			this.chkSeperateLocalization.Size = new System.Drawing.Size(157, 17);
+			this.chkSeperateLocalization.Size = new System.Drawing.Size(133, 17);
 			this.chkSeperateLocalization.TabIndex = 40;
-			this.chkSeperateLocalization.Text = "Seperate Localizations Files";
+			this.chkSeperateLocalization.Text = "Seperate Localizations";
+			this.toolTip.SetToolTip(this.chkSeperateLocalization, "Seperate Localizations Files");
 			this.chkSeperateLocalization.UseVisualStyleBackColor = true;
 			this.chkSeperateLocalization.CheckedChanged += new System.EventHandler(this.chkSeperateLocalization_CheckedChanged);
 			// 
 			// chkSeperateConstants
 			// 
 			this.chkSeperateConstants.AutoSize = true;
-			this.chkSeperateConstants.Location = new System.Drawing.Point(363, 99);
+			this.chkSeperateConstants.Location = new System.Drawing.Point(363, 86);
 			this.chkSeperateConstants.Name = "chkSeperateConstants";
-			this.chkSeperateConstants.Size = new System.Drawing.Size(143, 17);
+			this.chkSeperateConstants.Size = new System.Drawing.Size(119, 17);
 			this.chkSeperateConstants.TabIndex = 39;
-			this.chkSeperateConstants.Text = "Seperate Constants Files";
+			this.chkSeperateConstants.Text = "Seperate Constants";
+			this.toolTip.SetToolTip(this.chkSeperateConstants, "Seperate Constants Files");
 			this.chkSeperateConstants.UseVisualStyleBackColor = true;
 			this.chkSeperateConstants.CheckedChanged += new System.EventHandler(this.chkSeperateConstants_CheckedChanged);
 			// 
 			// chkKeepOnlyEnumAsIds
 			// 
 			this.chkKeepOnlyEnumAsIds.AutoSize = true;
-			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(224, 122);
+			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(363, 109);
 			this.chkKeepOnlyEnumAsIds.Name = "chkKeepOnlyEnumAsIds";
 			this.chkKeepOnlyEnumAsIds.Size = new System.Drawing.Size(110, 17);
 			this.chkKeepOnlyEnumAsIds.TabIndex = 38;
@@ -426,8 +432,8 @@
 			this.btnLoadDefaultSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnLoadDefaultSettings.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnLoadDefaultSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.btnLoadDefaultSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnLoadDefaultSettings.Location = new System.Drawing.Point(591, 361);
+			this.btnLoadDefaultSettings.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnLoadDefaultSettings.Location = new System.Drawing.Point(596, 361);
 			this.btnLoadDefaultSettings.Name = "btnLoadDefaultSettings";
 			this.btnLoadDefaultSettings.Size = new System.Drawing.Size(97, 25);
 			this.btnLoadDefaultSettings.TabIndex = 36;
@@ -438,7 +444,7 @@
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(6, 337);
+			this.label9.Location = new System.Drawing.Point(6, 322);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(93, 13);
 			this.label9.TabIndex = 35;
@@ -448,12 +454,14 @@
 			// 
 			this.txtUnminimizeFields.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtUnminimizeFields.Location = new System.Drawing.Point(105, 332);
+			this.txtUnminimizeFields.Location = new System.Drawing.Point(105, 319);
 			this.txtUnminimizeFields.Multiline = true;
 			this.txtUnminimizeFields.Name = "txtUnminimizeFields";
-			this.txtUnminimizeFields.Size = new System.Drawing.Size(583, 23);
+			this.txtUnminimizeFields.Size = new System.Drawing.Size(588, 36);
 			this.txtUnminimizeFields.TabIndex = 34;
 			this.txtUnminimizeFields.Text = "id; mode; type; group; level; rank";
+			this.toolTip.SetToolTip(this.txtUnminimizeFields, "Enter name\'s column in json data sheet, which will be keep when exporting even if" +
+        " it\'s column is empty");
 			this.txtUnminimizeFields.Leave += new System.EventHandler(this.txtUnminimizeFields_Leave);
 			// 
 			// btnOpenGoogleSheet
@@ -462,8 +470,8 @@
 			this.btnOpenGoogleSheet.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnOpenGoogleSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.btnOpenGoogleSheet.Enabled = false;
-			this.btnOpenGoogleSheet.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnOpenGoogleSheet.Location = new System.Drawing.Point(488, 361);
+			this.btnOpenGoogleSheet.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnOpenGoogleSheet.Location = new System.Drawing.Point(493, 361);
 			this.btnOpenGoogleSheet.Name = "btnOpenGoogleSheet";
 			this.btnOpenGoogleSheet.Size = new System.Drawing.Size(97, 25);
 			this.btnOpenGoogleSheet.TabIndex = 33;
@@ -474,11 +482,12 @@
 			// chkMergeJsonIntoSingleOne2
 			// 
 			this.chkMergeJsonIntoSingleOne2.AutoSize = true;
-			this.chkMergeJsonIntoSingleOne2.Location = new System.Drawing.Point(363, 122);
+			this.chkMergeJsonIntoSingleOne2.Location = new System.Drawing.Point(531, 109);
 			this.chkMergeJsonIntoSingleOne2.Name = "chkMergeJsonIntoSingleOne2";
-			this.chkMergeJsonIntoSingleOne2.Size = new System.Drawing.Size(215, 17);
+			this.chkMergeJsonIntoSingleOne2.Size = new System.Drawing.Size(129, 17);
 			this.chkMergeJsonIntoSingleOne2.TabIndex = 32;
-			this.chkMergeJsonIntoSingleOne2.Text = "Export only one Json file for an Excel file";
+			this.chkMergeJsonIntoSingleOne2.Text = "One Json - One Excel";
+			this.toolTip.SetToolTip(this.chkMergeJsonIntoSingleOne2, "Export only one Json file for an Excel file");
 			this.chkMergeJsonIntoSingleOne2.UseVisualStyleBackColor = true;
 			this.chkMergeJsonIntoSingleOne2.CheckedChanged += new System.EventHandler(this.chkMergeJsonIntoSingleExcel2_CheckedChanged);
 			// 
@@ -487,10 +496,11 @@
 			this.btnOpenFolder2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOpenFolder2.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnOpenFolder2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.btnOpenFolder2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnOpenFolder2.Location = new System.Drawing.Point(605, 32);
+			this.btnOpenFolder2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnOpenFolder2.Location = new System.Drawing.Point(605, 31);
+			this.btnOpenFolder2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.btnOpenFolder2.Name = "btnOpenFolder2";
-			this.btnOpenFolder2.Size = new System.Drawing.Size(88, 25);
+			this.btnOpenFolder2.Size = new System.Drawing.Size(88, 20);
 			this.btnOpenFolder2.TabIndex = 28;
 			this.btnOpenFolder2.Text = "Open Explorer";
 			this.btnOpenFolder2.UseVisualStyleBackColor = false;
@@ -501,10 +511,11 @@
 			this.btnOpenFolder1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOpenFolder1.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnOpenFolder1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.btnOpenFolder1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnOpenFolder1.Location = new System.Drawing.Point(605, 4);
+			this.btnOpenFolder1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnOpenFolder1.Location = new System.Drawing.Point(605, 6);
+			this.btnOpenFolder1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.btnOpenFolder1.Name = "btnOpenFolder1";
-			this.btnOpenFolder1.Size = new System.Drawing.Size(88, 25);
+			this.btnOpenFolder1.Size = new System.Drawing.Size(88, 20);
 			this.btnOpenFolder1.TabIndex = 27;
 			this.btnOpenFolder1.Text = "Open Explorer";
 			this.btnOpenFolder1.UseVisualStyleBackColor = false;
@@ -513,18 +524,19 @@
 			// chkSeperateIDs
 			// 
 			this.chkSeperateIDs.AutoSize = true;
-			this.chkSeperateIDs.Location = new System.Drawing.Point(224, 99);
+			this.chkSeperateIDs.Location = new System.Drawing.Point(224, 86);
 			this.chkSeperateIDs.Name = "chkSeperateIDs";
-			this.chkSeperateIDs.Size = new System.Drawing.Size(112, 17);
+			this.chkSeperateIDs.Size = new System.Drawing.Size(88, 17);
 			this.chkSeperateIDs.TabIndex = 25;
-			this.chkSeperateIDs.Text = "Seperate IDs Files";
+			this.chkSeperateIDs.Text = "Seperate IDs";
+			this.toolTip.SetToolTip(this.chkSeperateIDs, "Seperate IDs Files");
 			this.chkSeperateIDs.UseVisualStyleBackColor = true;
 			this.chkSeperateIDs.CheckedChanged += new System.EventHandler(this.chkSeperateIDs_CheckedChanged);
 			// 
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(6, 100);
+			this.label8.Location = new System.Drawing.Point(6, 87);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(64, 13);
 			this.label8.TabIndex = 24;
@@ -534,7 +546,7 @@
 			// 
 			this.txtSettingNamespace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingNamespace.Location = new System.Drawing.Point(105, 96);
+			this.txtSettingNamespace.Location = new System.Drawing.Point(105, 83);
 			this.txtSettingNamespace.Name = "txtSettingNamespace";
 			this.txtSettingNamespace.Size = new System.Drawing.Size(113, 20);
 			this.txtSettingNamespace.TabIndex = 23;
@@ -545,22 +557,24 @@
 			// 
 			this.txtSettingExcludedSheet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingExcludedSheet.Location = new System.Drawing.Point(105, 286);
+			this.txtSettingExcludedSheet.Location = new System.Drawing.Point(105, 273);
 			this.txtSettingExcludedSheet.Multiline = true;
 			this.txtSettingExcludedSheet.Name = "txtSettingExcludedSheet";
-			this.txtSettingExcludedSheet.Size = new System.Drawing.Size(583, 40);
+			this.txtSettingExcludedSheet.Size = new System.Drawing.Size(588, 40);
 			this.txtSettingExcludedSheet.TabIndex = 21;
 			this.txtSettingExcludedSheet.Text = "Sheet1; Sheet2; Sheet3;";
+			this.toolTip.SetToolTip(this.txtSettingExcludedSheet, "Enter sheet\'s name which will be excluded when exporting. Note, exclude sheet wil" +
+        "l be still processed but not exported.");
 			this.txtSettingExcludedSheet.Leave += new System.EventHandler(this.txtSettingExcludedSheet_Leave);
 			// 
 			// txtSettingEncryptionKey
 			// 
 			this.txtSettingEncryptionKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingEncryptionKey.Location = new System.Drawing.Point(105, 145);
+			this.txtSettingEncryptionKey.Location = new System.Drawing.Point(105, 132);
 			this.txtSettingEncryptionKey.Multiline = true;
 			this.txtSettingEncryptionKey.Name = "txtSettingEncryptionKey";
-			this.txtSettingEncryptionKey.Size = new System.Drawing.Size(583, 135);
+			this.txtSettingEncryptionKey.Size = new System.Drawing.Size(588, 135);
 			this.txtSettingEncryptionKey.TabIndex = 17;
 			this.txtSettingEncryptionKey.Text = resources.GetString("txtSettingEncryptionKey.Text");
 			this.txtSettingEncryptionKey.Leave += new System.EventHandler(this.txtSettingEncryptionKey_Leave);
@@ -569,10 +583,11 @@
 			// 
 			this.txtSettingOuputConstantsFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingOuputConstantsFilePath.Location = new System.Drawing.Point(105, 34);
+			this.txtSettingOuputConstantsFilePath.Location = new System.Drawing.Point(105, 31);
 			this.txtSettingOuputConstantsFilePath.Name = "txtSettingOuputConstantsFilePath";
 			this.txtSettingOuputConstantsFilePath.Size = new System.Drawing.Size(403, 20);
 			this.txtSettingOuputConstantsFilePath.TabIndex = 14;
+			this.toolTip.SetToolTip(this.txtSettingOuputConstantsFilePath, "Directory for exporting Constants and IDs classes");
 			this.txtSettingOuputConstantsFilePath.TextChanged += new System.EventHandler(this.txtOuputConstantsFilePath_TextChanged);
 			// 
 			// txtSettingOutputDataFilePath
@@ -583,12 +598,13 @@
 			this.txtSettingOutputDataFilePath.Name = "txtSettingOutputDataFilePath";
 			this.txtSettingOutputDataFilePath.Size = new System.Drawing.Size(403, 20);
 			this.txtSettingOutputDataFilePath.TabIndex = 11;
+			this.toolTip.SetToolTip(this.txtSettingOutputDataFilePath, "Directory for exporting json files");
 			this.txtSettingOutputDataFilePath.TextChanged += new System.EventHandler(this.txtOutputDataFilePath_TextChanged);
 			// 
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(6, 289);
+			this.label7.Location = new System.Drawing.Point(6, 276);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(87, 13);
 			this.label7.TabIndex = 22;
@@ -597,7 +613,7 @@
 			// chkSettingEnableEncryption
 			// 
 			this.chkSettingEnableEncryption.AutoSize = true;
-			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(105, 122);
+			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(224, 109);
 			this.chkSettingEnableEncryption.Name = "chkSettingEnableEncryption";
 			this.chkSettingEnableEncryption.Size = new System.Drawing.Size(113, 17);
 			this.chkSettingEnableEncryption.TabIndex = 19;
@@ -608,7 +624,7 @@
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(6, 148);
+			this.label6.Location = new System.Drawing.Point(6, 135);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(78, 13);
 			this.label6.TabIndex = 18;
@@ -619,10 +635,11 @@
 			this.btnSelectFolder2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnSelectFolder2.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnSelectFolder2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.btnSelectFolder2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnSelectFolder2.Location = new System.Drawing.Point(514, 32);
+			this.btnSelectFolder2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnSelectFolder2.Location = new System.Drawing.Point(514, 31);
+			this.btnSelectFolder2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.btnSelectFolder2.Name = "btnSelectFolder2";
-			this.btnSelectFolder2.Size = new System.Drawing.Size(85, 25);
+			this.btnSelectFolder2.Size = new System.Drawing.Size(85, 20);
 			this.btnSelectFolder2.TabIndex = 16;
 			this.btnSelectFolder2.Text = "Select Folder";
 			this.btnSelectFolder2.UseVisualStyleBackColor = false;
@@ -631,21 +648,22 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(6, 38);
+			this.label3.Location = new System.Drawing.Point(6, 35);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(89, 13);
+			this.label3.Size = new System.Drawing.Size(84, 13);
 			this.label3.TabIndex = 15;
-			this.label3.Text = "Constants Output";
+			this.label3.Text = "Constant Output";
 			// 
 			// btnSelectFolder
 			// 
 			this.btnSelectFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnSelectFolder.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnSelectFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.btnSelectFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnSelectFolder.Location = new System.Drawing.Point(514, 4);
+			this.btnSelectFolder.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnSelectFolder.Location = new System.Drawing.Point(514, 6);
+			this.btnSelectFolder.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.btnSelectFolder.Name = "btnSelectFolder";
-			this.btnSelectFolder.Size = new System.Drawing.Size(85, 25);
+			this.btnSelectFolder.Size = new System.Drawing.Size(85, 20);
 			this.btnSelectFolder.TabIndex = 13;
 			this.btnSelectFolder.Text = "Select Folder";
 			this.btnSelectFolder.UseVisualStyleBackColor = false;
@@ -679,9 +697,9 @@
 			this.panel3.Controls.Add(this.BtnAddFile);
 			this.panel3.Controls.Add(this.DtgFilePaths);
 			this.panel3.Controls.Add(this.BtnAllInOne);
-			this.panel3.Location = new System.Drawing.Point(3, 0);
+			this.panel3.Location = new System.Drawing.Point(0, 0);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(690, 250);
+			this.panel3.Size = new System.Drawing.Size(696, 250);
 			this.panel3.TabIndex = 26;
 			// 
 			// BtnAddFile
@@ -725,7 +743,7 @@
 			this.DtgFilePaths.MultiSelect = false;
 			this.DtgFilePaths.Name = "DtgFilePaths";
 			this.DtgFilePaths.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DtgFilePaths.Size = new System.Drawing.Size(690, 221);
+			this.DtgFilePaths.Size = new System.Drawing.Size(696, 221);
 			this.DtgFilePaths.TabIndex = 0;
 			this.DtgFilePaths.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DtgFilePaths_CellClick);
 			this.DtgFilePaths.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DtgFilePaths_CellValueChanged);
@@ -768,7 +786,7 @@
 			// 
 			this.BtnAllInOne.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.BtnAllInOne.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.BtnAllInOne.Location = new System.Drawing.Point(595, 3);
+			this.BtnAllInOne.Location = new System.Drawing.Point(601, 3);
 			this.BtnAllInOne.Name = "BtnAllInOne";
 			this.BtnAllInOne.Size = new System.Drawing.Size(95, 23);
 			this.BtnAllInOne.TabIndex = 3;
@@ -781,12 +799,12 @@
 			this.txtLog2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtLog2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtLog2.Location = new System.Drawing.Point(3, 253);
+			this.txtLog2.Location = new System.Drawing.Point(0, 253);
 			this.txtLog2.Multiline = true;
 			this.txtLog2.Name = "txtLog2";
 			this.txtLog2.ReadOnly = true;
 			this.txtLog2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtLog2.Size = new System.Drawing.Size(690, 121);
+			this.txtLog2.Size = new System.Drawing.Size(696, 141);
 			this.txtLog2.TabIndex = 24;
 			// 
 			// tabPage2
@@ -1173,7 +1191,7 @@
 			this.txtLog.Name = "txtLog";
 			this.txtLog.ReadOnly = true;
 			this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtLog.Size = new System.Drawing.Size(696, 124);
+			this.txtLog.Size = new System.Drawing.Size(696, 114);
 			this.txtLog.TabIndex = 23;
 			// 
 			// tabChangeLog

@@ -1899,7 +1899,7 @@ namespace ExcelToUnity_DataConverter
                     if (i < m_LocalizedSheetsExported.Count - 1)
                         initLines.Append(Environment.NewLine);
 
-                    initAsynLines.Append($"\t\tyield return CoroutineUtil.StartCoroutine({m_LocalizedSheetsExported[i]}.InitAsync());");
+                    initAsynLines.Append($"\t\tyield return {m_LocalizedSheetsExported[i]}.InitAsync();");
                     if (i < m_LocalizedSheetsExported.Count - 1)
                         initAsynLines.Append(Environment.NewLine);
 

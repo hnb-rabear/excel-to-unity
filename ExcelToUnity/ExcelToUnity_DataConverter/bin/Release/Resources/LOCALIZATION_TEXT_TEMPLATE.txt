@@ -31,6 +31,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
     [SerializeField] private string m_LocalizedIDString;
     [SerializeField] private CaseType m_CaseType;
 	[SerializeField] private string[] m_Args;
+	[SerializeField] private List<string> m_IgnoredLangs = new List<string>(); //Used for TMPPRo
 
     [NonSerialized] private int m_LocalizedID = -1;
 	
@@ -97,6 +98,8 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 		int curLangIndex = LOCALIZATION_CLASS_NAME.curLangIndex;
         if (Application.isPlaying && m_LanguageIndex == curLangIndex)
 			return;
+		if (m_IgnoredLangs.Count > 0 && m_IgnoredLangs.Contains(LocalizationCommon.currentLanguage))
+			return;
         string text = "";
         if (m_LocalizedID >= 0)
             text = LOCALIZATION_CLASS_NAME.Get(m_LocalizedID).ToString();
@@ -153,6 +156,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
         private string m_Search;
         private bool m_ShowText;
         private int m_MaxResults;
+		private int m_IgnoredLangIdx;
 
         private void OnEnable()
         {
@@ -181,7 +185,36 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 				m_Target.Refresh();
 			}
 			
-			if (GUILayout.Button("Test"))
+			if (GUILayout.Button("Add Ignored Lang"))
+				m_Target.m_IgnoredLangs.Add("");
+			if (m_Target.m_IgnoredLangs.Count > 0)
+			{
+				for (int i = 0; i < m_Target.m_IgnoredLangs.Count; i++)
+				{
+					GUILayout.BeginHorizontal();
+					m_Target.m_IgnoredLangs[i] = EditorGUILayout.TextField(m_Target.m_IgnoredLangs[i], EditorStyles.textField);
+					if (GUILayout.Button("<"))
+					{
+						m_IgnoredLangIdx--;
+						m_IgnoredLangIdx = Mathf.Clamp(m_IgnoredLangIdx, 0, LOCALIZATION_CLASS_NAME.languageDict.Count - 1);
+						m_Target.m_IgnoredLangs[i] = LOCALIZATION_CLASS_NAME.GetLanguage(m_IgnoredLangIdx);
+					}
+					if (GUILayout.Button(">"))
+					{
+						m_IgnoredLangIdx++;
+						m_IgnoredLangIdx = Mathf.Clamp(m_IgnoredLangIdx, 0, LOCALIZATION_CLASS_NAME.languageDict.Count - 1);
+						m_Target.m_IgnoredLangs[i] = LOCALIZATION_CLASS_NAME.GetLanguage(m_IgnoredLangIdx);
+					}
+					if (GUILayout.Button("Remove"))
+					{
+						m_Target.m_IgnoredLangs.RemoveAt(i);
+						i--;
+					}
+					GUILayout.EndHorizontal();
+				}
+			}
+			
+			if (GUILayout.Button("Test Next Lang"))
             {
                 int index = 0;
                 foreach (var lang in LOCALIZATION_CLASS_NAME.languageDict)

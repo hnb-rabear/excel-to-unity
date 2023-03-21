@@ -273,6 +273,18 @@ public static class LOCALIZATION_CLASS_NAME
         StringArray wrapper = JsonUtility.FromJson<StringArray>(newJson);
         return wrapper.array;
     }
+	
+	public static string GetLanguage(int index)
+	{
+		int i = 0;
+		foreach (var lang in languageDict)
+		{
+			if (i == index)
+				return lang.Key;
+			i++;
+		}
+		return "";
+	}
 
     [System.Serializable]
     private class StringArray
