@@ -1963,19 +1963,6 @@ namespace ExcelToUnity_DataConverter
 
 			// Set up the delays for the ToolTip.
 			toolTip.ShowAlways = true;
-
-			// Set up the ToolTip text for the Button and Checkbox.
-			toolTip.SetToolTip(txtSettingOutputDataFilePath, "Địa chỉ thư mục lưu file JSON data (.txt)");
-			toolTip.SetToolTip(txtSettingOuputConstantsFilePath, "Địa chỉ thư mục lưu file Constants và IDs (.cs)");
-			toolTip.SetToolTip(chkSettingEnableEncryption, "Mã hóa các file JSON data");
-			toolTip.SetToolTip(chkSeperateIDs, "Hợp nhất các file Constants, IDs và Localization vào 1 file ứng với mỗi loại");
-			toolTip.SetToolTip(txtSettingExcludedSheet, "Danh sách các sheet sẽ bị bỏ qua khi đọc data từ Excel, tên sheet cách nhau bởi dấu \";\"");
-			toolTip.SetToolTip(btnOpenFolder1, "Đến folder đích");
-			toolTip.SetToolTip(btnOpenFolder2, "Đến folder đích");
-			toolTip.SetToolTip(btnSelectFolder, "Chọn folder đích");
-			toolTip.SetToolTip(btnSelectFolder2, "Chọn folder đích");
-			toolTip.SetToolTip(txtUnminimizeFields, "Danh sách các cột (field) cần giữ nguyên giá trị. Giá trị trong các cột này sẽ không được thu gọn");
-			toolTip.SetToolTip(chkKeepOnlyEnumAsIds, "Trong sheet IDs, những cột ID có gắn tag [enum] sẽ chỉ export ra data dạng enum!");
 		}
 
 		private void btnSelectInputFile_Click(object sender, EventArgs e)
