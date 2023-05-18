@@ -59,7 +59,21 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
         if (Application.isPlaying)
             return;
 
-        Init();
+		Init();
+		
+		int localizedID = -1;
+		LOCALIZATION_CLASS_NAME.Get(m_LocalizedIDString, ref localizedID);
+		if (localizedID == -1)
+		{
+			string path = name;
+			var parent = transform.parent;
+			while (parent != null)
+			{
+				path = $"{parent.name}.{path}";
+				parent = parent.parent;
+			}
+			Debug.LogError($"{path}: not found {m_LocalizedIDString} in {nameof(LOCALIZATION_CLASS_NAME)}");
+		}
     }
 	
     public void Set(int pId, params string[] pArgs)
@@ -98,7 +112,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 		int curLangIndex = LOCALIZATION_CLASS_NAME.curLangIndex;
         if (Application.isPlaying && m_LanguageIndex == curLangIndex)
 			return;
-		if (m_IgnoredLangs.Count > 0 && m_IgnoredLangs.Contains(LocalizationCommon.currentLanguage))
+		if (m_IgnoredLangs.Count > 0 && m_IgnoredLangs.Contains(LOCALIZATION_CLASS_NAME.currentLanguage))
 			return;
         string text = "";
         if (m_LocalizedID >= 0)

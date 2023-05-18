@@ -47,6 +47,9 @@ public static class LOCALIZATION_CLASS_NAME
 				
 		if (mLanguageTemp != lang)
 		{
+#if UNITY_EDITOR
+			Debug.Log($"Init {nameof(LOCALIZATION_CLASS_NAME)}");
+#endif
 			string file = languageDict[lang];
 			var asset = Resources.Load<TextAsset>(Folder + "/" + file);
 			if (asset != null)
@@ -92,6 +95,9 @@ public static class LOCALIZATION_CLASS_NAME
 				
 		if (mLanguageTemp != lang)
 		{
+#if UNITY_EDITOR
+			Debug.Log($"Init {nameof(LOCALIZATION_CLASS_NAME)}");
+#endif
 			string file = languageDict[lang];
 			var request = Resources.LoadAsync<TextAsset>(Folder + "/" + file);
 			while (!request.isDone)
@@ -368,7 +374,7 @@ public static class LOCALIZATION_CLASS_NAME
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError(text + "\n" + ex.ToString());
+                    Debug.LogError(text + "\n" + ex);
                 }
 #endif
             }

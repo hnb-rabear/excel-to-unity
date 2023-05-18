@@ -42,6 +42,17 @@
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.txtSettingOutputLocalizationFilePath = new System.Windows.Forms.TextBox();
+			this.chkSeperateLocalization = new System.Windows.Forms.CheckBox();
+			this.chkSeperateConstants = new System.Windows.Forms.CheckBox();
+			this.txtUnminimizeFields = new System.Windows.Forms.TextBox();
+			this.chkMergeJsonIntoSingleOne2 = new System.Windows.Forms.CheckBox();
+			this.chkSeperateIDs = new System.Windows.Forms.CheckBox();
+			this.txtSettingExcludedSheet = new System.Windows.Forms.TextBox();
+			this.txtSettingOuputConstantsFilePath = new System.Windows.Forms.TextBox();
+			this.txtSettingOutputDataFilePath = new System.Windows.Forms.TextBox();
+			this.txtSettingEncryptionKey = new System.Windows.Forms.TextBox();
+			this.txtLanguageMaps = new System.Windows.Forms.TextBox();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.statusStrip2 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -57,27 +68,18 @@
 			this.txtEncryptionOutput = new System.Windows.Forms.TextBox();
 			this.txtEncryptionInput = new System.Windows.Forms.TextBox();
 			this.tabSetUp = new System.Windows.Forms.TabPage();
+			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
-			this.txtSettingOutputLocalizationFilePath = new System.Windows.Forms.TextBox();
 			this.btnOpenFolderLocalization = new System.Windows.Forms.Button();
 			this.btnSelectFolderLocalization = new System.Windows.Forms.Button();
-			this.chkSeperateLocalization = new System.Windows.Forms.CheckBox();
-			this.chkSeperateConstants = new System.Windows.Forms.CheckBox();
 			this.chkKeepOnlyEnumAsIds = new System.Windows.Forms.CheckBox();
 			this.btnLoadDefaultSettings = new System.Windows.Forms.Button();
 			this.label9 = new System.Windows.Forms.Label();
-			this.txtUnminimizeFields = new System.Windows.Forms.TextBox();
 			this.btnOpenGoogleSheet = new System.Windows.Forms.Button();
-			this.chkMergeJsonIntoSingleOne2 = new System.Windows.Forms.CheckBox();
 			this.btnOpenFolder2 = new System.Windows.Forms.Button();
 			this.btnOpenFolder1 = new System.Windows.Forms.Button();
-			this.chkSeperateIDs = new System.Windows.Forms.CheckBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.txtSettingNamespace = new System.Windows.Forms.TextBox();
-			this.txtSettingExcludedSheet = new System.Windows.Forms.TextBox();
-			this.txtSettingEncryptionKey = new System.Windows.Forms.TextBox();
-			this.txtSettingOuputConstantsFilePath = new System.Windows.Forms.TextBox();
-			this.txtSettingOutputDataFilePath = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.chkSettingEnableEncryption = new System.Windows.Forms.CheckBox();
 			this.label6 = new System.Windows.Forms.Label();
@@ -156,6 +158,148 @@
 			this.toolTip.ReshowDelay = 100;
 			this.toolTip.ShowAlways = true;
 			// 
+			// txtSettingOutputLocalizationFilePath
+			// 
+			this.txtSettingOutputLocalizationFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtSettingOutputLocalizationFilePath.Location = new System.Drawing.Point(105, 57);
+			this.txtSettingOutputLocalizationFilePath.Name = "txtSettingOutputLocalizationFilePath";
+			this.txtSettingOutputLocalizationFilePath.Size = new System.Drawing.Size(464, 20);
+			this.txtSettingOutputLocalizationFilePath.TabIndex = 43;
+			this.toolTip.SetToolTip(this.txtSettingOutputLocalizationFilePath, "Folder where the localization text files will be exported");
+			this.txtSettingOutputLocalizationFilePath.TextChanged += new System.EventHandler(this.txtSettingOutputLocalizationFilePath_TextChanged);
+			// 
+			// chkSeperateLocalization
+			// 
+			this.chkSeperateLocalization.AutoSize = true;
+			this.chkSeperateLocalization.Location = new System.Drawing.Point(531, 85);
+			this.chkSeperateLocalization.Name = "chkSeperateLocalization";
+			this.chkSeperateLocalization.Size = new System.Drawing.Size(133, 17);
+			this.chkSeperateLocalization.TabIndex = 40;
+			this.chkSeperateLocalization.Text = "Separate Localizations";
+			this.toolTip.SetToolTip(this.chkSeperateLocalization, "Seperate Localizations Files");
+			this.chkSeperateLocalization.UseVisualStyleBackColor = true;
+			this.chkSeperateLocalization.CheckedChanged += new System.EventHandler(this.chkSeperateLocalization_CheckedChanged);
+			// 
+			// chkSeperateConstants
+			// 
+			this.chkSeperateConstants.AutoSize = true;
+			this.chkSeperateConstants.Location = new System.Drawing.Point(406, 85);
+			this.chkSeperateConstants.Name = "chkSeperateConstants";
+			this.chkSeperateConstants.Size = new System.Drawing.Size(119, 17);
+			this.chkSeperateConstants.TabIndex = 39;
+			this.chkSeperateConstants.Text = "Separate Constants";
+			this.toolTip.SetToolTip(this.chkSeperateConstants, "Seperate Constants Files");
+			this.chkSeperateConstants.UseVisualStyleBackColor = true;
+			this.chkSeperateConstants.CheckedChanged += new System.EventHandler(this.chkSeperateConstants_CheckedChanged);
+			// 
+			// txtUnminimizeFields
+			// 
+			this.txtUnminimizeFields.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtUnminimizeFields.Location = new System.Drawing.Point(105, 319);
+			this.txtUnminimizeFields.Multiline = true;
+			this.txtUnminimizeFields.Name = "txtUnminimizeFields";
+			this.txtUnminimizeFields.Size = new System.Drawing.Size(588, 36);
+			this.txtUnminimizeFields.TabIndex = 34;
+			this.txtUnminimizeFields.Text = "id; mode; type; group; level; rank";
+			this.toolTip.SetToolTip(this.txtUnminimizeFields, "Type the name of the column in the json data sheet that you want to export even i" +
+        "f it has no values.\r\nSeparate each field with a comma ‘;’");
+			this.txtUnminimizeFields.TextChanged += new System.EventHandler(this.txtUnminimizeFields_TextChanged);
+			this.txtUnminimizeFields.Leave += new System.EventHandler(this.txtUnminimizeFields_Leave);
+			// 
+			// chkMergeJsonIntoSingleOne2
+			// 
+			this.chkMergeJsonIntoSingleOne2.AutoSize = true;
+			this.chkMergeJsonIntoSingleOne2.Location = new System.Drawing.Point(531, 109);
+			this.chkMergeJsonIntoSingleOne2.Name = "chkMergeJsonIntoSingleOne2";
+			this.chkMergeJsonIntoSingleOne2.Size = new System.Drawing.Size(129, 17);
+			this.chkMergeJsonIntoSingleOne2.TabIndex = 32;
+			this.chkMergeJsonIntoSingleOne2.Text = "One Json - One Excel";
+			this.toolTip.SetToolTip(this.chkMergeJsonIntoSingleOne2, "Export only one Json file for an Excel file");
+			this.chkMergeJsonIntoSingleOne2.UseVisualStyleBackColor = true;
+			this.chkMergeJsonIntoSingleOne2.CheckedChanged += new System.EventHandler(this.chkMergeJsonIntoSingleExcel2_CheckedChanged);
+			// 
+			// chkSeperateIDs
+			// 
+			this.chkSeperateIDs.AutoSize = true;
+			this.chkSeperateIDs.Location = new System.Drawing.Point(312, 85);
+			this.chkSeperateIDs.Name = "chkSeperateIDs";
+			this.chkSeperateIDs.Size = new System.Drawing.Size(88, 17);
+			this.chkSeperateIDs.TabIndex = 25;
+			this.chkSeperateIDs.Text = "Separate IDs";
+			this.toolTip.SetToolTip(this.chkSeperateIDs, "Seperate IDs Files");
+			this.chkSeperateIDs.UseVisualStyleBackColor = true;
+			this.chkSeperateIDs.CheckedChanged += new System.EventHandler(this.chkSeperateIDs_CheckedChanged);
+			// 
+			// txtSettingExcludedSheet
+			// 
+			this.txtSettingExcludedSheet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtSettingExcludedSheet.Location = new System.Drawing.Point(105, 273);
+			this.txtSettingExcludedSheet.Multiline = true;
+			this.txtSettingExcludedSheet.Name = "txtSettingExcludedSheet";
+			this.txtSettingExcludedSheet.Size = new System.Drawing.Size(588, 40);
+			this.txtSettingExcludedSheet.TabIndex = 21;
+			this.txtSettingExcludedSheet.Text = "Sheet1; Sheet2; Sheet3;";
+			this.toolTip.SetToolTip(this.txtSettingExcludedSheet, "Type the name of the sheet that you want to skip when exporting. The skipped shee" +
+        "t will still be processed but not exported.\r\nSeparate each sheet with a comma ‘;" +
+        "’");
+			this.txtSettingExcludedSheet.TextChanged += new System.EventHandler(this.txtSettingExcludedSheet_TextChanged);
+			this.txtSettingExcludedSheet.Leave += new System.EventHandler(this.txtSettingExcludedSheet_Leave);
+			// 
+			// txtSettingOuputConstantsFilePath
+			// 
+			this.txtSettingOuputConstantsFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtSettingOuputConstantsFilePath.Location = new System.Drawing.Point(105, 31);
+			this.txtSettingOuputConstantsFilePath.Name = "txtSettingOuputConstantsFilePath";
+			this.txtSettingOuputConstantsFilePath.Size = new System.Drawing.Size(464, 20);
+			this.txtSettingOuputConstantsFilePath.TabIndex = 14;
+			this.toolTip.SetToolTip(this.txtSettingOuputConstantsFilePath, "Folder where the Constants and IDs classes will be exported");
+			this.txtSettingOuputConstantsFilePath.TextChanged += new System.EventHandler(this.txtOuputConstantsFilePath_TextChanged);
+			// 
+			// txtSettingOutputDataFilePath
+			// 
+			this.txtSettingOutputDataFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtSettingOutputDataFilePath.Location = new System.Drawing.Point(105, 6);
+			this.txtSettingOutputDataFilePath.Name = "txtSettingOutputDataFilePath";
+			this.txtSettingOutputDataFilePath.Size = new System.Drawing.Size(464, 20);
+			this.txtSettingOutputDataFilePath.TabIndex = 11;
+			this.toolTip.SetToolTip(this.txtSettingOutputDataFilePath, "Folder where the json files will be exported");
+			this.txtSettingOutputDataFilePath.TextChanged += new System.EventHandler(this.txtOutputDataFilePath_TextChanged);
+			// 
+			// txtSettingEncryptionKey
+			// 
+			this.txtSettingEncryptionKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtSettingEncryptionKey.Location = new System.Drawing.Point(105, 132);
+			this.txtSettingEncryptionKey.Multiline = true;
+			this.txtSettingEncryptionKey.Name = "txtSettingEncryptionKey";
+			this.txtSettingEncryptionKey.Size = new System.Drawing.Size(588, 109);
+			this.txtSettingEncryptionKey.TabIndex = 17;
+			this.txtSettingEncryptionKey.Text = resources.GetString("txtSettingEncryptionKey.Text");
+			this.toolTip.SetToolTip(this.txtSettingEncryptionKey, "The key that encrypts the json data before exporting it");
+			this.txtSettingEncryptionKey.TextChanged += new System.EventHandler(this.txtSettingEncryptionKey_TextChanged);
+			this.txtSettingEncryptionKey.Leave += new System.EventHandler(this.txtSettingEncryptionKey_Leave);
+			// 
+			// txtLanguageMaps
+			// 
+			this.txtLanguageMaps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtLanguageMaps.Location = new System.Drawing.Point(105, 247);
+			this.txtLanguageMaps.Name = "txtLanguageMaps";
+			this.txtLanguageMaps.Size = new System.Drawing.Size(588, 20);
+			this.txtLanguageMaps.TabIndex = 45;
+			this.txtLanguageMaps.Tag = "";
+			this.txtLanguageMaps.Text = "japan (jp); korea (ko)";
+			this.toolTip.SetToolTip(this.txtLanguageMaps, "Type the name of the language you want to localize. The tool will extract all uni" +
+        "que characters for each language and export them to a txt file.\r\nSeparate each l" +
+        "anguage with a comma ‘;’");
+			this.txtLanguageMaps.TextChanged += new System.EventHandler(this.txtLanguageMaps_TextChanged);
+			this.txtLanguageMaps.Leave += new System.EventHandler(this.txtLanguageMaps_Leave);
+			// 
 			// statusStrip2
 			// 
 			this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -172,7 +316,7 @@
 			this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
 			this.toolStripStatusLabel4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.toolStripStatusLabel4.Size = new System.Drawing.Size(37, 17);
-			this.toolStripStatusLabel4.Text = "v1.4.3";
+			this.toolStripStatusLabel4.Text = "v1.4.4";
 			// 
 			// toolStripStatusLabel3
 			// 
@@ -307,6 +451,8 @@
 			// 
 			// tabSetUp
 			// 
+			this.tabSetUp.Controls.Add(this.label11);
+			this.tabSetUp.Controls.Add(this.txtLanguageMaps);
 			this.tabSetUp.Controls.Add(this.label10);
 			this.tabSetUp.Controls.Add(this.txtSettingOutputLocalizationFilePath);
 			this.tabSetUp.Controls.Add(this.btnOpenFolderLocalization);
@@ -342,6 +488,15 @@
 			this.tabSetUp.TabIndex = 3;
 			this.tabSetUp.Text = "Settings";
 			// 
+			// label11
+			// 
+			this.label11.AutoSize = true;
+			this.label11.Location = new System.Drawing.Point(6, 250);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(83, 13);
+			this.label11.TabIndex = 46;
+			this.label11.Text = "Language maps";
+			// 
 			// label10
 			// 
 			this.label10.AutoSize = true;
@@ -351,27 +506,16 @@
 			this.label10.TabIndex = 44;
 			this.label10.Text = "Localization Output";
 			// 
-			// txtSettingOutputLocalizationFilePath
-			// 
-			this.txtSettingOutputLocalizationFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingOutputLocalizationFilePath.Location = new System.Drawing.Point(105, 57);
-			this.txtSettingOutputLocalizationFilePath.Name = "txtSettingOutputLocalizationFilePath";
-			this.txtSettingOutputLocalizationFilePath.Size = new System.Drawing.Size(403, 20);
-			this.txtSettingOutputLocalizationFilePath.TabIndex = 43;
-			this.toolTip.SetToolTip(this.txtSettingOutputLocalizationFilePath, "Directory for exporting localization text files");
-			this.txtSettingOutputLocalizationFilePath.TextChanged += new System.EventHandler(this.txtSettingOutputLocalizationFilePath_TextChanged);
-			// 
 			// btnOpenFolderLocalization
 			// 
 			this.btnOpenFolderLocalization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOpenFolderLocalization.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnOpenFolderLocalization.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.btnOpenFolderLocalization.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOpenFolderLocalization.Location = new System.Drawing.Point(605, 57);
+			this.btnOpenFolderLocalization.Location = new System.Drawing.Point(615, 57);
 			this.btnOpenFolderLocalization.Margin = new System.Windows.Forms.Padding(0);
 			this.btnOpenFolderLocalization.Name = "btnOpenFolderLocalization";
-			this.btnOpenFolderLocalization.Size = new System.Drawing.Size(88, 20);
+			this.btnOpenFolderLocalization.Size = new System.Drawing.Size(78, 20);
 			this.btnOpenFolderLocalization.TabIndex = 42;
 			this.btnOpenFolderLocalization.Text = "Open Explorer";
 			this.btnOpenFolderLocalization.UseVisualStyleBackColor = false;
@@ -383,43 +527,19 @@
 			this.btnSelectFolderLocalization.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnSelectFolderLocalization.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.btnSelectFolderLocalization.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnSelectFolderLocalization.Location = new System.Drawing.Point(514, 57);
+			this.btnSelectFolderLocalization.Location = new System.Drawing.Point(572, 57);
 			this.btnSelectFolderLocalization.Margin = new System.Windows.Forms.Padding(0);
 			this.btnSelectFolderLocalization.Name = "btnSelectFolderLocalization";
-			this.btnSelectFolderLocalization.Size = new System.Drawing.Size(85, 20);
+			this.btnSelectFolderLocalization.Size = new System.Drawing.Size(43, 20);
 			this.btnSelectFolderLocalization.TabIndex = 41;
-			this.btnSelectFolderLocalization.Text = "Select Folder";
+			this.btnSelectFolderLocalization.Text = "Select";
 			this.btnSelectFolderLocalization.UseVisualStyleBackColor = false;
 			this.btnSelectFolderLocalization.Click += new System.EventHandler(this.btnSelectFolderLocalization_Click);
-			// 
-			// chkSeperateLocalization
-			// 
-			this.chkSeperateLocalization.AutoSize = true;
-			this.chkSeperateLocalization.Location = new System.Drawing.Point(531, 86);
-			this.chkSeperateLocalization.Name = "chkSeperateLocalization";
-			this.chkSeperateLocalization.Size = new System.Drawing.Size(133, 17);
-			this.chkSeperateLocalization.TabIndex = 40;
-			this.chkSeperateLocalization.Text = "Seperate Localizations";
-			this.toolTip.SetToolTip(this.chkSeperateLocalization, "Seperate Localizations Files");
-			this.chkSeperateLocalization.UseVisualStyleBackColor = true;
-			this.chkSeperateLocalization.CheckedChanged += new System.EventHandler(this.chkSeperateLocalization_CheckedChanged);
-			// 
-			// chkSeperateConstants
-			// 
-			this.chkSeperateConstants.AutoSize = true;
-			this.chkSeperateConstants.Location = new System.Drawing.Point(363, 86);
-			this.chkSeperateConstants.Name = "chkSeperateConstants";
-			this.chkSeperateConstants.Size = new System.Drawing.Size(119, 17);
-			this.chkSeperateConstants.TabIndex = 39;
-			this.chkSeperateConstants.Text = "Seperate Constants";
-			this.toolTip.SetToolTip(this.chkSeperateConstants, "Seperate Constants Files");
-			this.chkSeperateConstants.UseVisualStyleBackColor = true;
-			this.chkSeperateConstants.CheckedChanged += new System.EventHandler(this.chkSeperateConstants_CheckedChanged);
 			// 
 			// chkKeepOnlyEnumAsIds
 			// 
 			this.chkKeepOnlyEnumAsIds.AutoSize = true;
-			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(363, 109);
+			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(405, 109);
 			this.chkKeepOnlyEnumAsIds.Name = "chkKeepOnlyEnumAsIds";
 			this.chkKeepOnlyEnumAsIds.Size = new System.Drawing.Size(110, 17);
 			this.chkKeepOnlyEnumAsIds.TabIndex = 38;
@@ -450,20 +570,6 @@
 			this.label9.TabIndex = 35;
 			this.label9.Text = "Unminimized fields";
 			// 
-			// txtUnminimizeFields
-			// 
-			this.txtUnminimizeFields.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtUnminimizeFields.Location = new System.Drawing.Point(105, 319);
-			this.txtUnminimizeFields.Multiline = true;
-			this.txtUnminimizeFields.Name = "txtUnminimizeFields";
-			this.txtUnminimizeFields.Size = new System.Drawing.Size(588, 36);
-			this.txtUnminimizeFields.TabIndex = 34;
-			this.txtUnminimizeFields.Text = "id; mode; type; group; level; rank";
-			this.toolTip.SetToolTip(this.txtUnminimizeFields, "Enter name\'s column in json data sheet, which will be keep when exporting even if" +
-        " it\'s column is empty");
-			this.txtUnminimizeFields.Leave += new System.EventHandler(this.txtUnminimizeFields_Leave);
-			// 
 			// btnOpenGoogleSheet
 			// 
 			this.btnOpenGoogleSheet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -479,28 +585,16 @@
 			this.btnOpenGoogleSheet.UseVisualStyleBackColor = false;
 			this.btnOpenGoogleSheet.Click += new System.EventHandler(this.btnOpenGoogleSheet_Click);
 			// 
-			// chkMergeJsonIntoSingleOne2
-			// 
-			this.chkMergeJsonIntoSingleOne2.AutoSize = true;
-			this.chkMergeJsonIntoSingleOne2.Location = new System.Drawing.Point(531, 109);
-			this.chkMergeJsonIntoSingleOne2.Name = "chkMergeJsonIntoSingleOne2";
-			this.chkMergeJsonIntoSingleOne2.Size = new System.Drawing.Size(129, 17);
-			this.chkMergeJsonIntoSingleOne2.TabIndex = 32;
-			this.chkMergeJsonIntoSingleOne2.Text = "One Json - One Excel";
-			this.toolTip.SetToolTip(this.chkMergeJsonIntoSingleOne2, "Export only one Json file for an Excel file");
-			this.chkMergeJsonIntoSingleOne2.UseVisualStyleBackColor = true;
-			this.chkMergeJsonIntoSingleOne2.CheckedChanged += new System.EventHandler(this.chkMergeJsonIntoSingleExcel2_CheckedChanged);
-			// 
 			// btnOpenFolder2
 			// 
 			this.btnOpenFolder2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOpenFolder2.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnOpenFolder2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.btnOpenFolder2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOpenFolder2.Location = new System.Drawing.Point(605, 31);
-			this.btnOpenFolder2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.btnOpenFolder2.Location = new System.Drawing.Point(615, 31);
+			this.btnOpenFolder2.Margin = new System.Windows.Forms.Padding(0);
 			this.btnOpenFolder2.Name = "btnOpenFolder2";
-			this.btnOpenFolder2.Size = new System.Drawing.Size(88, 20);
+			this.btnOpenFolder2.Size = new System.Drawing.Size(78, 20);
 			this.btnOpenFolder2.TabIndex = 28;
 			this.btnOpenFolder2.Text = "Open Explorer";
 			this.btnOpenFolder2.UseVisualStyleBackColor = false;
@@ -512,26 +606,14 @@
 			this.btnOpenFolder1.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnOpenFolder1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.btnOpenFolder1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOpenFolder1.Location = new System.Drawing.Point(605, 6);
-			this.btnOpenFolder1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.btnOpenFolder1.Location = new System.Drawing.Point(615, 6);
+			this.btnOpenFolder1.Margin = new System.Windows.Forms.Padding(0);
 			this.btnOpenFolder1.Name = "btnOpenFolder1";
-			this.btnOpenFolder1.Size = new System.Drawing.Size(88, 20);
+			this.btnOpenFolder1.Size = new System.Drawing.Size(78, 20);
 			this.btnOpenFolder1.TabIndex = 27;
 			this.btnOpenFolder1.Text = "Open Explorer";
 			this.btnOpenFolder1.UseVisualStyleBackColor = false;
 			this.btnOpenFolder1.Click += new System.EventHandler(this.btnOpenFolder1_Click);
-			// 
-			// chkSeperateIDs
-			// 
-			this.chkSeperateIDs.AutoSize = true;
-			this.chkSeperateIDs.Location = new System.Drawing.Point(224, 86);
-			this.chkSeperateIDs.Name = "chkSeperateIDs";
-			this.chkSeperateIDs.Size = new System.Drawing.Size(88, 17);
-			this.chkSeperateIDs.TabIndex = 25;
-			this.chkSeperateIDs.Text = "Seperate IDs";
-			this.toolTip.SetToolTip(this.chkSeperateIDs, "Seperate IDs Files");
-			this.chkSeperateIDs.UseVisualStyleBackColor = true;
-			this.chkSeperateIDs.CheckedChanged += new System.EventHandler(this.chkSeperateIDs_CheckedChanged);
 			// 
 			// label8
 			// 
@@ -548,58 +630,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSettingNamespace.Location = new System.Drawing.Point(105, 83);
 			this.txtSettingNamespace.Name = "txtSettingNamespace";
-			this.txtSettingNamespace.Size = new System.Drawing.Size(113, 20);
+			this.txtSettingNamespace.Size = new System.Drawing.Size(201, 20);
 			this.txtSettingNamespace.TabIndex = 23;
 			this.txtSettingNamespace.TextChanged += new System.EventHandler(this.txtSettingNamespace_TextChanged);
 			this.txtSettingNamespace.Leave += new System.EventHandler(this.txtSettingNamespace_Leave);
-			// 
-			// txtSettingExcludedSheet
-			// 
-			this.txtSettingExcludedSheet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingExcludedSheet.Location = new System.Drawing.Point(105, 273);
-			this.txtSettingExcludedSheet.Multiline = true;
-			this.txtSettingExcludedSheet.Name = "txtSettingExcludedSheet";
-			this.txtSettingExcludedSheet.Size = new System.Drawing.Size(588, 40);
-			this.txtSettingExcludedSheet.TabIndex = 21;
-			this.txtSettingExcludedSheet.Text = "Sheet1; Sheet2; Sheet3;";
-			this.toolTip.SetToolTip(this.txtSettingExcludedSheet, "Enter sheet\'s name which will be excluded when exporting. Note, exclude sheet wil" +
-        "l be still processed but not exported.");
-			this.txtSettingExcludedSheet.Leave += new System.EventHandler(this.txtSettingExcludedSheet_Leave);
-			// 
-			// txtSettingEncryptionKey
-			// 
-			this.txtSettingEncryptionKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingEncryptionKey.Location = new System.Drawing.Point(105, 132);
-			this.txtSettingEncryptionKey.Multiline = true;
-			this.txtSettingEncryptionKey.Name = "txtSettingEncryptionKey";
-			this.txtSettingEncryptionKey.Size = new System.Drawing.Size(588, 135);
-			this.txtSettingEncryptionKey.TabIndex = 17;
-			this.txtSettingEncryptionKey.Text = resources.GetString("txtSettingEncryptionKey.Text");
-			this.txtSettingEncryptionKey.Leave += new System.EventHandler(this.txtSettingEncryptionKey_Leave);
-			// 
-			// txtSettingOuputConstantsFilePath
-			// 
-			this.txtSettingOuputConstantsFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingOuputConstantsFilePath.Location = new System.Drawing.Point(105, 31);
-			this.txtSettingOuputConstantsFilePath.Name = "txtSettingOuputConstantsFilePath";
-			this.txtSettingOuputConstantsFilePath.Size = new System.Drawing.Size(403, 20);
-			this.txtSettingOuputConstantsFilePath.TabIndex = 14;
-			this.toolTip.SetToolTip(this.txtSettingOuputConstantsFilePath, "Directory for exporting Constants and IDs classes");
-			this.txtSettingOuputConstantsFilePath.TextChanged += new System.EventHandler(this.txtOuputConstantsFilePath_TextChanged);
-			// 
-			// txtSettingOutputDataFilePath
-			// 
-			this.txtSettingOutputDataFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingOutputDataFilePath.Location = new System.Drawing.Point(105, 6);
-			this.txtSettingOutputDataFilePath.Name = "txtSettingOutputDataFilePath";
-			this.txtSettingOutputDataFilePath.Size = new System.Drawing.Size(403, 20);
-			this.txtSettingOutputDataFilePath.TabIndex = 11;
-			this.toolTip.SetToolTip(this.txtSettingOutputDataFilePath, "Directory for exporting json files");
-			this.txtSettingOutputDataFilePath.TextChanged += new System.EventHandler(this.txtOutputDataFilePath_TextChanged);
 			// 
 			// label7
 			// 
@@ -613,11 +647,11 @@
 			// chkSettingEnableEncryption
 			// 
 			this.chkSettingEnableEncryption.AutoSize = true;
-			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(224, 109);
+			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(312, 109);
 			this.chkSettingEnableEncryption.Name = "chkSettingEnableEncryption";
-			this.chkSettingEnableEncryption.Size = new System.Drawing.Size(113, 17);
+			this.chkSettingEnableEncryption.Size = new System.Drawing.Size(87, 17);
 			this.chkSettingEnableEncryption.TabIndex = 19;
-			this.chkSettingEnableEncryption.Text = "Encrypt Json Data";
+			this.chkSettingEnableEncryption.Text = "Encrypt Json";
 			this.chkSettingEnableEncryption.UseVisualStyleBackColor = true;
 			this.chkSettingEnableEncryption.CheckedChanged += new System.EventHandler(this.chkSettingEnableEncryption_CheckedChanged);
 			// 
@@ -636,12 +670,12 @@
 			this.btnSelectFolder2.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnSelectFolder2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.btnSelectFolder2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnSelectFolder2.Location = new System.Drawing.Point(514, 31);
-			this.btnSelectFolder2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.btnSelectFolder2.Location = new System.Drawing.Point(572, 31);
+			this.btnSelectFolder2.Margin = new System.Windows.Forms.Padding(0);
 			this.btnSelectFolder2.Name = "btnSelectFolder2";
-			this.btnSelectFolder2.Size = new System.Drawing.Size(85, 20);
+			this.btnSelectFolder2.Size = new System.Drawing.Size(43, 20);
 			this.btnSelectFolder2.TabIndex = 16;
-			this.btnSelectFolder2.Text = "Select Folder";
+			this.btnSelectFolder2.Text = "Select";
 			this.btnSelectFolder2.UseVisualStyleBackColor = false;
 			this.btnSelectFolder2.Click += new System.EventHandler(this.btnSelectOuputConstantsFile_Click);
 			// 
@@ -660,12 +694,12 @@
 			this.btnSelectFolder.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnSelectFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.btnSelectFolder.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnSelectFolder.Location = new System.Drawing.Point(514, 6);
-			this.btnSelectFolder.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.btnSelectFolder.Location = new System.Drawing.Point(572, 6);
+			this.btnSelectFolder.Margin = new System.Windows.Forms.Padding(0);
 			this.btnSelectFolder.Name = "btnSelectFolder";
-			this.btnSelectFolder.Size = new System.Drawing.Size(85, 20);
+			this.btnSelectFolder.Size = new System.Drawing.Size(43, 20);
 			this.btnSelectFolder.TabIndex = 13;
-			this.btnSelectFolder.Text = "Select Folder";
+			this.btnSelectFolder.Text = "Select";
 			this.btnSelectFolder.UseVisualStyleBackColor = false;
 			this.btnSelectFolder.Click += new System.EventHandler(this.btnOutputFolder_Click);
 			// 
@@ -1383,6 +1417,8 @@
         private System.Windows.Forms.TextBox txtSettingOutputLocalizationFilePath;
         private System.Windows.Forms.Button btnOpenFolderLocalization;
         private System.Windows.Forms.Button btnSelectFolderLocalization;
-    }
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.TextBox txtLanguageMaps;
+	}
 }
 

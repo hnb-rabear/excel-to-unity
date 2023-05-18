@@ -49,6 +49,7 @@ namespace ExcelToUnity_DataConverter.Entities
         public bool seperateLocalizations;
         public bool mergeJsonsIntoSingleJson;
         public bool keepOnlyEnumAsIDs;
+        public string languageCharactersMaps;
 
         public string[] GetExcludedSheets()
         {

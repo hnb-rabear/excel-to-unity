@@ -123,4 +123,3 @@ E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\Exc
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.exe
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.pdb
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.AssemblyReference.cache
-E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.SuggestedBindingRedirects.cache
