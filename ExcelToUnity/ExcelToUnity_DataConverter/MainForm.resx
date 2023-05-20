@@ -192,55 +192,59 @@ Version 1.4.3
 Added a localization output folder and updated localization templates.
 
 Version 1.4.4
-Added a language characters map generator.</value>
+Added a language characters map generator.
+
+Version 1.4.5
+Added method for getting system language.
+Updated Help</value>
   </data>
   <data name="richTextBox1.Text" xml:space="preserve">
     <value>RULE AND RECOMMENDATION
---------------------------------------------------------------------------------------------------------------------------------------------
-- Tên của sheet
-%Constants% export ra file [.cs] chứa Constants
-%IDs% export ra file [.cs] Constants
-%Localization% export ra file json Localization
-%Settings% export ra file cs ScripableObject (Out of date, có thể nó không còn hoạt động đúng)
+-----------------------
+- Sheet name
+%Constants% exports to a [.cs] file containing Constants
+%IDs% exports to a [.cs] file containing Constants
+%Localization% exports to a json Localization file
+%Settings% exports to a [.cs] ScripableObject file (Out of date, it may not function correctly)
 Các trường hợp khác sẽ export ra file [.txt] chứa data dạng Json
 
-- Quy tắc tên Paramater trong sheet IDs
-Không chứa dấu cách, không dấu
-Nên viết hoa tất cả chữ cái (Không bắt buộc)
-Đối với kiểu enum thì thêm hậu tố "[enum]" vào tên của nhóm(Column)
-Khi có thêm hậu tố "[enum]" file IDs sẽ export đồng thời Constants và Enum. Nếu chỉ muốn export Enum, không muốn export Const thì chọn "Only Enum as IDs" tại Tab Settings.
+- Naming rules for parameters in the IDs sheet
+Should not contain spaces or accents
+Preferably write all letters in uppercase (not mandatory)
+For enum types, add the suffix "[enum]" to the name of the group (column)
+When adding the suffix "[enum]", the IDs file will export both Constants and Enum. If you only want to export Enum and not Constants, select "Only Enum as IDs" in the Settings tab.
 
-- Quy tắc tên field/column trong sheet Json Data:
-Không chứa dấu cách, không chứa ký tự đặc biệt, không trùng tên
-Nếu có hậu tố [] value sẽ là kiểu array/list. Các phần từ của array/list phân tách bởi dấu "|", ":", hoặc Newline
-Nếu có hậu tố {} value sẽ là một chuỗi string mà có thể convert ra Json Data.
-Nếu có hậu tố [x] toàn bộ data của cột đó sẽ bị bỏ qua, không được export.
+- Naming rules for fields/columns in the Json Data sheet:
+Should not contain spaces or special characters, and should have unique names
+If the suffix [] is added, the value will be an array/list. Elements of the array/list are separated by "|", ":", or a newline.
+If the suffix {} is added, the value will be a string that can be converted to Json Data.
+If the suffix [x] is added, the entire data of that column will be ignored and not exported.
 
-- Hệ thống attribute:
-Giới thiệu: Hệ thống attributes cho phép data mở rộng không giới hạn, và dễ quản lý. Phù hợp cho game có hệ thống chỉ số phức tạp hoặc có hệ thống item đa dạng.
-Quy tắc đặt Attribute: các cột data của Attribute phải nằm ở cuối bảng dữ liệu, data của một Attribute bắt đầu duyệt từ cột có tên chứa "attribute". Thứ tự tương đối như sau.
-1: attribute% : id của Attribute, các id này phải được setup trong sheet IDs từ trước. Phải chứa chuỗi "attribute" hậu tố là gì cũng được nhưng đề xuất là nên đặt theo thứ tự bắt đầu từ 0.
-2: value% / value%[] : value của Attribute, bắt buộc kiểu Number. Có thể là array, nều là array thì cần có "[]"
-3: increase% / increase%[] : giá trị bổ sung cho Attribute, dùng trong tình huống Attribute có thể tăng cấp và tăng chỉ số. Có thể là array, nều là array thì cần có "[]"
-4: unlock% / unlock%[] : giá trị bổ sung cho Attribute, dùng trong tình huống Attribute cần điều kiện để Unlock. Có thể là array, nều là array thì cần có "[]"
-5: max% / max%[] : giá trị bổ sung cho Attribute, dùng trong tình huống Attribute có chỉ số tối đa. Có thể là array, nều là array thì cần có "[]"
-VD1: attribute0, value0, increase0, value0, max0.
-VD2: attribute1, value1[], increase1[], value1[], max1[].
+- Attribute system:
+Introduction: The attribute system allows for unlimited data expansion and easy management. Suitable for games with complex stat systems or diverse item systems.
+Attribute naming rules: Attribute data columns must be located at the end of the data table, and the data for an attribute starts from the column with the name containing "attribute". The relative order is as follows:
+1: attribute%: Attribute ID, these IDs must be set up in the IDs sheet beforehand. It must contain the string "attribute" followed by any suffix, but it is recommended to use sequential numbers starting from 0.
+2: value% / value%[]: Attribute value, must be of type Number. It can be an array, in that case it should have "[]".
+3: increase% / increase%[]: Additional value for the attribute, used when the attribute can level up and increase stats. It can be an array, in that case it should have "[]".
+4: unlock% / unlock%[]: Additional value for the attribute, used when the attribute requires conditions to unlock. It can be an array, in that case it should have "[]".
+5: max% / max%[]: Additional value for the attribute, used when the attribute has a maximum value. It can be an array, in that case it should have "[]".
+Example 1: attribute0, value0, increase0, value0, max0.
+Example 2: attribute1, value1[], increase1[], value1[], max1[].
 
-- Mã hóa data.
-Hiện tại Tool chỉ support mã hóa Json Data. Để mã hóa data thì chỉ cần tích vào ô Encrypt Json Data ở Tab Settings
+- Data encryption:
+Currently, the tool only supports encrypting Json Data. To encrypt the data, simply check the "Encrypt Json Data" box in the Settings tab.
 
-- Tách file Constants, IDs, Localizations: 
-Mặc định các sheet Constants, IDs, Localizations sẽ được export gộp vào là 1 file duy nhất theo loại của chúng. Để export riêng thì tích vào các ô tương ứng là Separate IDs, Seperate Constants, hoặc Seperate Localizations ở Tab Settings
+- Separating Constants, IDs, and Localizations files:Separating Constants, IDs, and Localizations files:
+By default, the Constants, IDs, and Localizations sheets will be exported and merged into a single file based on their types. To export them separately, check the corresponding boxes for Separate IDs, Separate Constants, or Separate Localizations in the Settings tab.
 
-- Export riêng 1 file excel
-Tình huống muốn export riêng một file excel hoặc riêng từng phần của một file excel thì dùng Tab "Export Data From Excel".
+- Exporting to separate Excel files:
+To export to single Excel file or export a specific sections of an Excel file, use the "Export Data From Excel" tab.
 
-- Khi export Json Data, các Column(field) có giá trị rỗng hoặc bằng 0 sẽ bị loại bỏ khi export. Nếu muốn giữ các cột rỗng đó thì cần bổ sung tên Column(field) đó vào ô Unminimized Fields ở Tab Settings
+- When exporting Json Data, columns (fields) with empty or zero values will be excluded from the export. If you want to keep those empty columns, add their names to the Unminimized Fields box in the Settings tab.
 
-- Khi muốn bỏ qua, không export một sheet nào đó trong file excel, thì chỉ cần thêm một dòng trắng trên cùng hoặc bổ sung tên Sheet đó vào ô Excluded Sheets ở Tab Settings
+- When you want to skip exporting a specific sheet in the Excel file, simply add a blank row at the top or add the name of that sheet to the Excluded Sheets box in the Settings tab.
 
-- Tích vào ô "Export only one Json file for an Excel file" trong Tab Settings, để gộp tất cả data sheets trong một file excel vào một file Json duy nhất, file đó sẽ có tên theo tên của file Excel.</value>
+- Check the "One Json - One Excel" checkbox in the Settings tab to merge all data sheets in an Excel file into a single Json file. The resulting file will be named after the Excel file.</value>
   </data>
   <metadata name="path.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

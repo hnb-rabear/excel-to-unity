@@ -1892,10 +1892,39 @@ namespace ExcelToUnity_DataConverter
 			{
 				//Build language dictionary
 				var languagesDictBuilder = new StringBuilder();
+				var systemLanguages = new StringBuilder();
 				languagesDictBuilder.Append("\tpublic static readonly List<string> languages = new List<string>() { ");
 				foreach (var lang in m_LocalizedLanguages)
 				{
 					languagesDictBuilder.Append($"\"{lang}\", ");
+
+					string langLower = lang.ToLower();
+					if (langLower.Contains("english"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.English => \"{lang}\",").AppendLine();
+					else if(langLower.Contains("vietnam"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Vietnamese => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("spanish"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Spanish => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("portugal") || langLower.Contains("portuguese"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Portuguese => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("russia"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Russian => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("germany") || langLower.Contains("german"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.German => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("indonesia"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Indonesian => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("thai"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Thai => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("korea"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Korean => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("japan"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Japanese => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("french"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.French => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("italian"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.Italian => \"{lang}\",").AppendLine();
+					else if (langLower.Contains("chinese"))
+						systemLanguages.Append($"\t\t\tSystemLanguage.ChineseSimplified => \"{lang}\",").AppendLine();
 				}
 				languagesDictBuilder.Append("};\n");
 				languagesDictBuilder.Append(string.Format("\tpublic static readonly string defaultLanguage = \"{0}\";", m_LocalizedLanguages.First()));
@@ -1904,6 +1933,7 @@ namespace ExcelToUnity_DataConverter
 				var initLines = new StringBuilder();
 				var initAsynLines = new StringBuilder();
 				var setFolder = new StringBuilder();
+				
 				for (int i = 0; i < m_LocalizedSheetsExported.Count; i++)
 				{
 					initLines.Append($"\t\t{m_LocalizedSheetsExported[i]}.Init();");
@@ -1924,6 +1954,7 @@ namespace ExcelToUnity_DataConverter
 				fileContent = fileContent.Replace("//LOCALIZATION_INIT", initLines.ToString());
 				fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
 				fileContent = fileContent.Replace("//LOCALIZATION_SET_FOLDER", setFolder.ToString());
+				fileContent = fileContent.Replace("//LOCALIZATION_SYSTEM_LANGUAGE", systemLanguages.ToString());
 				fileContent = AddNamespace(fileContent);
 				Helper.WriteFile(Config.Settings.outputConstantsFilePath, "LocalizationsManager.cs", fileContent);
 			}

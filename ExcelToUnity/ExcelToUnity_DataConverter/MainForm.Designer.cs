@@ -30,14 +30,14 @@
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -53,6 +53,8 @@
 			this.txtSettingOutputDataFilePath = new System.Windows.Forms.TextBox();
 			this.txtSettingEncryptionKey = new System.Windows.Forms.TextBox();
 			this.txtLanguageMaps = new System.Windows.Forms.TextBox();
+			this.chkKeepOnlyEnumAsIds = new System.Windows.Forms.CheckBox();
+			this.chkSettingEnableEncryption = new System.Windows.Forms.CheckBox();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.statusStrip2 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -72,7 +74,6 @@
 			this.label10 = new System.Windows.Forms.Label();
 			this.btnOpenFolderLocalization = new System.Windows.Forms.Button();
 			this.btnSelectFolderLocalization = new System.Windows.Forms.Button();
-			this.chkKeepOnlyEnumAsIds = new System.Windows.Forms.CheckBox();
 			this.btnLoadDefaultSettings = new System.Windows.Forms.Button();
 			this.label9 = new System.Windows.Forms.Label();
 			this.btnOpenGoogleSheet = new System.Windows.Forms.Button();
@@ -81,7 +82,6 @@
 			this.label8 = new System.Windows.Forms.Label();
 			this.txtSettingNamespace = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.chkSettingEnableEncryption = new System.Windows.Forms.CheckBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.btnSelectFolder2 = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
@@ -303,6 +303,31 @@
 			this.txtLanguageMaps.TextChanged += new System.EventHandler(this.txtLanguageMaps_TextChanged);
 			this.txtLanguageMaps.Leave += new System.EventHandler(this.txtLanguageMaps_Leave);
 			// 
+			// chkKeepOnlyEnumAsIds
+			// 
+			this.chkKeepOnlyEnumAsIds.AutoSize = true;
+			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(405, 109);
+			this.chkKeepOnlyEnumAsIds.Name = "chkKeepOnlyEnumAsIds";
+			this.chkKeepOnlyEnumAsIds.Size = new System.Drawing.Size(110, 17);
+			this.chkKeepOnlyEnumAsIds.TabIndex = 38;
+			this.chkKeepOnlyEnumAsIds.Text = "Only Enum as IDs";
+			this.toolTip.SetToolTip(this.chkKeepOnlyEnumAsIds, "In the IDs sheet, ID columns with the [enum] tag will only export data in enum fo" +
+        "rm!");
+			this.chkKeepOnlyEnumAsIds.UseVisualStyleBackColor = true;
+			this.chkKeepOnlyEnumAsIds.CheckedChanged += new System.EventHandler(this.chkKeepOnlyEnumAsIds_CheckedChanged);
+			// 
+			// chkSettingEnableEncryption
+			// 
+			this.chkSettingEnableEncryption.AutoSize = true;
+			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(312, 109);
+			this.chkSettingEnableEncryption.Name = "chkSettingEnableEncryption";
+			this.chkSettingEnableEncryption.Size = new System.Drawing.Size(87, 17);
+			this.chkSettingEnableEncryption.TabIndex = 19;
+			this.chkSettingEnableEncryption.Text = "Encrypt Json";
+			this.toolTip.SetToolTip(this.chkSettingEnableEncryption, "Encrypts the json data before exporting it");
+			this.chkSettingEnableEncryption.UseVisualStyleBackColor = true;
+			this.chkSettingEnableEncryption.CheckedChanged += new System.EventHandler(this.chkSettingEnableEncryption_CheckedChanged);
+			// 
 			// statusStrip2
 			// 
 			this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -319,7 +344,7 @@
 			this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
 			this.toolStripStatusLabel4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.toolStripStatusLabel4.Size = new System.Drawing.Size(37, 17);
-			this.toolStripStatusLabel4.Text = "v1.4.4";
+			this.toolStripStatusLabel4.Text = "v1.4.5";
 			// 
 			// toolStripStatusLabel3
 			// 
@@ -539,19 +564,6 @@
 			this.btnSelectFolderLocalization.UseVisualStyleBackColor = false;
 			this.btnSelectFolderLocalization.Click += new System.EventHandler(this.btnSelectFolderLocalization_Click);
 			// 
-			// chkKeepOnlyEnumAsIds
-			// 
-			this.chkKeepOnlyEnumAsIds.AutoSize = true;
-			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(405, 109);
-			this.chkKeepOnlyEnumAsIds.Name = "chkKeepOnlyEnumAsIds";
-			this.chkKeepOnlyEnumAsIds.Size = new System.Drawing.Size(110, 17);
-			this.chkKeepOnlyEnumAsIds.TabIndex = 38;
-			this.chkKeepOnlyEnumAsIds.Text = "Only Enum as IDs";
-			this.toolTip.SetToolTip(this.chkKeepOnlyEnumAsIds, "In the IDs sheet, ID columns with the [enum] tag will only export data in enum fo" +
-        "rm!");
-			this.chkKeepOnlyEnumAsIds.UseVisualStyleBackColor = true;
-			this.chkKeepOnlyEnumAsIds.CheckedChanged += new System.EventHandler(this.chkKeepOnlyEnumAsIds_CheckedChanged);
-			// 
 			// btnLoadDefaultSettings
 			// 
 			this.btnLoadDefaultSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -648,18 +660,6 @@
 			this.label7.Size = new System.Drawing.Size(87, 13);
 			this.label7.TabIndex = 22;
 			this.label7.Text = "Excluded Sheets";
-			// 
-			// chkSettingEnableEncryption
-			// 
-			this.chkSettingEnableEncryption.AutoSize = true;
-			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(312, 109);
-			this.chkSettingEnableEncryption.Name = "chkSettingEnableEncryption";
-			this.chkSettingEnableEncryption.Size = new System.Drawing.Size(87, 17);
-			this.chkSettingEnableEncryption.TabIndex = 19;
-			this.chkSettingEnableEncryption.Text = "Encrypt Json";
-			this.toolTip.SetToolTip(this.chkSettingEnableEncryption, "Encrypts the json data before exporting it");
-			this.chkSettingEnableEncryption.UseVisualStyleBackColor = true;
-			this.chkSettingEnableEncryption.CheckedChanged += new System.EventHandler(this.chkSettingEnableEncryption_CheckedChanged);
 			// 
 			// label6
 			// 
@@ -758,26 +758,26 @@
 			this.DtgFilePaths.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle33.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle33.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle33.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle33;
+			dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle25.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle25.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle25;
 			this.DtgFilePaths.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgFilePaths.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.path,
             this.exportIds,
             this.exportConstants,
             this.BtnDelete});
-			dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle35.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle35.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle35.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle35.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle35;
+			dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle27.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle27.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle27.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle27.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle27;
 			this.DtgFilePaths.Location = new System.Drawing.Point(0, 29);
 			this.DtgFilePaths.Margin = new System.Windows.Forms.Padding(0);
 			this.DtgFilePaths.MultiSelect = false;
@@ -809,10 +809,10 @@
 			// 
 			// BtnDelete
 			// 
-			dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle34.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle34.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle34;
+			dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle26;
 			this.BtnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BtnDelete.HeaderText = "Delete";
 			this.BtnDelete.Name = "BtnDelete";
@@ -984,18 +984,18 @@
 			// 
 			this.DtgIDs.AllowUserToAddRows = false;
 			this.DtgIDs.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle36.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle36.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle36;
+			dataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle28;
 			this.DtgIDs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle37.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle37.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle37.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle37.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle37;
+			dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle29;
 			this.DtgIDs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgIDs.Location = new System.Drawing.Point(259, 60);
 			this.DtgIDs.Name = "DtgIDs";
@@ -1049,26 +1049,26 @@
 			// 
 			this.DtgSheets.AllowUserToAddRows = false;
 			this.DtgSheets.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle38.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle38.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle38;
+			dataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle30;
 			this.DtgSheets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle39.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle39.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle39.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle39;
+			dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle31.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle31.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle31.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle31;
 			this.DtgSheets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle40.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle40.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle40.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle40.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle40.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle40.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle40;
+			dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle32.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle32;
 			this.DtgSheets.Location = new System.Drawing.Point(0, 60);
 			this.DtgSheets.Name = "DtgSheets";
 			this.DtgSheets.Size = new System.Drawing.Size(253, 214);
