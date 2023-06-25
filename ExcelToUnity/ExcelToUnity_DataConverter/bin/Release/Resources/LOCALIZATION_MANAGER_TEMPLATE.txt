@@ -47,4 +47,16 @@ public class LocalizationsManager
 	{
 //LOCALIZATION_SET_FOLDER
 	}
+
+    public static string GetSystemLanguage()
+	{
+		if (PlayerPrefs.HasKey("currentLanguage"))
+			return PlayerPrefs.GetString("currentLanguage");
+
+		var curLang = Application.systemLanguage;
+		return curLang switch
+		{
+//LOCALIZATION_SYSTEM_LANGUAGE
+		};
+	}
 }

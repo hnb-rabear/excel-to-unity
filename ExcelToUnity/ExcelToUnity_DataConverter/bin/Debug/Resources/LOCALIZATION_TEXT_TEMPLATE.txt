@@ -36,6 +36,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
     [NonSerialized] private int m_LocalizedID = -1;
 	
 	private int m_LanguageIndex = -1;
+	public string LocalizedIDString => m_LocalizedIDString;
 
 	private void Awake()
     {

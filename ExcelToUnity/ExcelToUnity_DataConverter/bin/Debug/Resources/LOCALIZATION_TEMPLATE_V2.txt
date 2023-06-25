@@ -380,6 +380,77 @@ public static class LOCALIZATION_CLASS_NAME
             }
         }
     }
+	
+#if UNITY_EDITOR
+	public static void CreateClassContainsRefinedIds(string pPath)
+	{
+		var ids = FindUsingIDs(pPath);
+		Debug.Log($"Writing {ids.Count} ids to {pPath}");
+		CreateClassContainsRefinedIds(ids);
+	}
+	public static List<string> FindUsingIDs(string pPath)
+	{
+		var results = new List<string>();
+		var assetIds = UnityEditor.AssetDatabase.FindAssets("t:prefab", new[] { pPath });
+		foreach (var guid in assetIds)
+		{
+			var obj = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(UnityEditor.AssetDatabase.GUIDToAssetPath(guid));
+			var components = RCore.Common.ComponentExtension.FindComponentsInChildren<LOCALIZATION_CLASS_NAMEText>(obj);
+			foreach (var com in components)
+			{
+				string id = com.LocalizedIDString;
+				id = id.Replace(" ", "_");
+				id = System.Text.RegularExpressions.Regex.Replace(id, "[^a-zA-Z0-9_.]+", "", System.Text.RegularExpressions.RegexOptions.Compiled);
+				if (!results.Contains(id))
+					results.Add(id);
+			}
+		}
+		return results;
+	}
+	public static void CreateClassContainsRefinedIds(List<string> pRefinedIds)
+	{
+		string enumIds = "";
+		string intIds = "";
+		for (int i = 0; i < pRefinedIds.Count; i++)
+		{
+			enumIds += $"{nameof(LOCALIZATION_CLASS_NAME)}.ID.{pRefinedIds[i]}";
+			intIds += $"{nameof(LOCALIZATION_CLASS_NAME)}.{pRefinedIds[i]}";
+			if (i < pRefinedIds.Count - 1)
+			{
+				enumIds += ", ";
+				intIds += ", ";
+			}
+		}
+		if (enumIds == "")
+			return;
+		string template = GetTemplateClassContainsRefinedIds();
+		string result = template.Replace("ENUM_IDS", enumIds).Replace("INT_IDS", intIds);
+		string directoryPath = $"{Application.dataPath}/LocalizationRefinedIds";
+		string path = $"{directoryPath}/{nameof(LOCALIZATION_CLASS_NAME)}RefinedIds.cs";
+		if (!System.IO.Directory.Exists(directoryPath))
+			System.IO.Directory.CreateDirectory(directoryPath);
+		System.IO.File.WriteAllText(path, result);
+	}
+	private static string GetTemplateClassContainsRefinedIds()
+	{
+		string content = $"namespace {typeof(LOCALIZATION_CLASS_NAME).Namespace}\n"
+			+ "{\n"
+			+ "\tusing System.Collections.Generic;\n"
+			+ $"\tpublic class LOCALIZATION_CLASS_NAMERefinedIds\n"
+			+ "\t{\n"
+			+ "\t\tpublic static readonly List<LOCALIZATION_CLASS_NAME.ID> enumIds = new List<LOCALIZATION_CLASS_NAME.ID> { ENUM_IDS };\n"
+			+ "\t\tpublic static readonly List<int> intIds = new List<int> { INT_IDS };\n"
+			+ "\t}\n"
+			+ "}";
+		return content;
+	}
+	[UnityEditor.MenuItem("Assets/Create/RCore/Localization Refined Ids/Create LOCALIZATION_CLASS_NAMERefinedIds")]
+	public static void CreateLOCALIZATION_CLASS_NAMERefinedIds()
+	{
+		string currentPath = UnityEditor.AssetDatabase.GetAssetPath(UnityEditor.Selection.activeObject);
+		CreateClassContainsRefinedIds(currentPath);
+	}
+#endif
 }
 
 public class LOCALIZATION_CLASS_NAMEGetter
