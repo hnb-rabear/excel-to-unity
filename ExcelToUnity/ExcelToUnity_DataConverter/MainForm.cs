@@ -1926,6 +1926,7 @@ namespace ExcelToUnity_DataConverter
 					else if (langLower.Contains("chinese"))
 						systemLanguages.Append($"\t\t\tSystemLanguage.ChineseSimplified => \"{lang}\",").AppendLine();
 				}
+				systemLanguages.Append($"\t\t\t_ => \"{m_LocalizedLanguages[0]}\",").AppendLine();
 				languagesDictBuilder.Append("};\n");
 				languagesDictBuilder.Append(string.Format("\tpublic static readonly string defaultLanguage = \"{0}\";", m_LocalizedLanguages.First()));
 
