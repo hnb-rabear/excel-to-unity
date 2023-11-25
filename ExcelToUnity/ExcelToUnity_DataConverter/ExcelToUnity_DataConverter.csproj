@@ -102,8 +102,6 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Encrytion.cs" />
-    <Compile Include="Entities\BusinessGoalEntity.cs" />
-    <Compile Include="Entities\CashUpgradeEntity.cs" />
     <Compile Include="Entities\FileEntity.cs" />
     <Compile Include="FrmGoogleSheetSample.cs">
       <SubType>Form</SubType>
@@ -124,8 +122,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Templates\ConstantsTemplate.cs" />
-    <Compile Include="Templates\IDsTemplate.cs" />
     <Compile Include="Entities\SettingEntity.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -135,7 +131,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Entities\BusinessEntity.cs" />
     <EmbeddedResource Include="FrmGoogleSheetSample.resx">
       <DependentUpon>FrmGoogleSheetSample.cs</DependentUpon>
     </EmbeddedResource>
@@ -150,6 +145,9 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="changelog.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -168,31 +166,36 @@
     <Folder Include="bin\Debug\Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\13971043351543238891-128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\7003416761543238890-128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\13971043351543238891-1281.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\7003416761543238890-1281.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\20611017341553230898-128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\10969839221551938562-128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\6759131901551940349-128.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\folder.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\floppy-disk %2820x20%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\help.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Templates\ConstantsTemplate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Templates\IDsTemplate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Templates\LocalizationsManagerTemplate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Templates\LocalizationTemplate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Templates\LocalizationTemplateV2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Templates\LocalizationTextTemplate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Templates\SettingsTemplate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

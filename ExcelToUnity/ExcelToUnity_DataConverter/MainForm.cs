@@ -1,4 +1,4 @@
-﻿using ChoETL;
+using ChoETL;
 using Newtonsoft.Json;
 using NPOI.SS.UserModel;
 using System;
@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -84,13 +85,13 @@ namespace ExcelToUnity_DataConverter
 
 #region Constants
 
-        private const string IDS_CS_TEMPLATE = "Resources\\IDsTemplate.txt";
-        private const string CONSTANTS_CS_TEMPLATE = "Resources\\ConstantsTemplate.txt";
-        private const string SETTINGS_CS_TEMPLATE = "Resources\\SettingsTemplate.txt";
-        private const string LOCALIZATION_TEMPLATE = "Resources\\LOCALIZATION_TEMPLATE.txt";
-        private const string LOCALIZATION_TEMPLATE_V2 = "Resources\\LOCALIZATION_TEMPLATE_V2.txt";
-        private const string LOCALIZATION_TEXT_TEMPLATE = "Resources\\LOCALIZATION_TEXT_TEMPLATE.txt";
-        private const string LOCALIZATION_MANAGER_TEMPLATE = "Resources\\LOCALIZATION_MANAGER_TEMPLATE.txt";
+        private const string CONSTANTS_CS_TEMPLATE = "Resources\\Templates\\ConstantsTemplate.txt";
+        private const string IDS_CS_TEMPLATE = "Resources\\Templates\\IDsTemplate.txt";
+        private const string LOCALIZATION_MANAGER_TEMPLATE = "Resources\\Templates\\LocalizationsManagerTemplate.txt";
+        private const string LOCALIZATION_TEMPLATE = "Resources\\Templates\\LocalizationTemplate.txt";
+        private const string LOCALIZATION_TEMPLATE_V2 = "Resources\\Templates\\LocalizationTemplateV2.txt";
+        private const string LOCALIZATION_TEXT_TEMPLATE = "Resources\\Templates\\LocalizationTextTemplate.txt";
+        private const string SETTINGS_CS_TEMPLATE = "Resources\\Templates\\SettingsTemplate.txt";
         private const string IDS_SHEET = "IDs";
         private const string CONSTANTS_SHEET = "Constants";
         private const string SETTINGS_SHEET = "Settings";
@@ -1799,6 +1800,22 @@ namespace ExcelToUnity_DataConverter
 
             // Set up the delays for the ToolTip.
             toolTip.ShowAlways = true;
+            
+            string changlogPath = "changelog.md";
+            using (var reader = new StreamReader(changlogPath))
+            {
+                string content = reader.ReadToEnd();
+                txtChangesLog.Text = content;
+            }
+
+            string helpPath = "Resources\\help.md";
+            using (var reader = new StreamReader(helpPath))
+            {
+                string content = reader.ReadToEnd();
+                txtBoxHelp.Text = content;
+            }
+
+            txtVersion.Text = "1.4.6";
         }
 
         private void btnSelectInputFile_Click(object sender, EventArgs e)

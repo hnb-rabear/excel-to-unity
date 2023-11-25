@@ -59,7 +59,6 @@ E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Sy
 E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Data.SqlClient.dll
 E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.ValueTuple.dll
 E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Memory.dll
-E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Numerics.Vectors.dll
 E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.Buffers.dll
 E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\BouncyCastle.Crypto.xml
 E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\CsvHelper.xml
@@ -119,3 +118,13 @@ E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\Exc
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.pdb
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.AssemblyReference.cache
 E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.AssemblyReference.cache
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.SuggestedBindingRedirects.cache
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\changelog.md
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\ConstantsTemplate.txt
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\IDsTemplate.txt
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationsManagerTemplate.txt
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTemplate.txt
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTemplateV2.txt
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTextTemplate.txt
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\SettingsTemplate.txt
+E:\Projects\_\ExcelsToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\help.md

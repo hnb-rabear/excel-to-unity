@@ -1,4 +1,4 @@
-﻿namespace ExcelToUnity_DataConverter
+namespace ExcelToUnity_DataConverter
 {
     partial class MainForm
     {
@@ -30,14 +30,14 @@
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -57,14 +57,14 @@
 			this.chkSettingEnableEncryption = new System.Windows.Forms.CheckBox();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.statusStrip2 = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.txtVersion = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tabPage6 = new System.Windows.Forms.TabPage();
 			this.txtChangesLog = new System.Windows.Forms.TextBox();
 			this.tabPage5 = new System.Windows.Forms.TabPage();
-			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+			this.txtBoxHelp = new System.Windows.Forms.RichTextBox();
 			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.tabEncription = new System.Windows.Forms.TabPage();
 			this.BtnDecrypt = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
 			this.txtEncryptionOutput = new System.Windows.Forms.TextBox();
@@ -87,7 +87,7 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.btnSelectFolder = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.BtnAddFile = new System.Windows.Forms.Button();
 			this.DtgFilePaths = new System.Windows.Forms.DataGridView();
@@ -97,14 +97,6 @@
 			this.BtnDelete = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.BtnAllInOne = new System.Windows.Forms.Button();
 			this.txtLog2 = new System.Windows.Forms.TextBox();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.btnConvertCSVToJson = new System.Windows.Forms.Button();
-			this.txtInputCSVFilePath = new System.Windows.Forms.TextBox();
-			this.txtOutputJsonFilePath = new System.Windows.Forms.TextBox();
-			this.btnSelectFolder3 = new System.Windows.Forms.Button();
-			this.btnSelectCSVFile = new System.Windows.Forms.Button();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.btnSelectFile = new System.Windows.Forms.Button();
@@ -121,23 +113,22 @@
 			this.BtnExportJson = new System.Windows.Forms.Button();
 			this.BtnExportIds = new System.Windows.Forms.Button();
 			this.BtnExportConstants = new System.Windows.Forms.Button();
-			this.BtnExportSettings = new System.Windows.Forms.Button();
 			this.btnExportLocalization = new System.Windows.Forms.Button();
-			this.BtnTest = new System.Windows.Forms.Button();
 			this.txtLog = new System.Windows.Forms.TextBox();
 			this.tabChangeLog = new System.Windows.Forms.TabControl();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.BtnSaveSettings = new System.Windows.Forms.Button();
 			this.BtnLoadSettings = new System.Windows.Forms.Button();
+			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.statusStrip2.SuspendLayout();
 			this.tabPage6.SuspendLayout();
 			this.tabPage5.SuspendLayout();
-			this.tabPage4.SuspendLayout();
+			this.tabEncription.SuspendLayout();
 			this.tabSetUp.SuspendLayout();
-			this.tabPage3.SuspendLayout();
+			this.tabPage2.SuspendLayout();
 			this.panel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DtgFilePaths)).BeginInit();
-			this.tabPage2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DtgIDs)).BeginInit();
@@ -145,6 +136,10 @@
 			this.panel1.SuspendLayout();
 			this.tabChangeLog.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+			this.splitContainer1.Panel1.SuspendLayout();
+			this.splitContainer1.Panel2.SuspendLayout();
+			this.splitContainer1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog
@@ -171,6 +166,7 @@
 			// 
 			// chkSeperateLocalization
 			// 
+			this.chkSeperateLocalization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkSeperateLocalization.AutoSize = true;
 			this.chkSeperateLocalization.Location = new System.Drawing.Point(531, 85);
 			this.chkSeperateLocalization.Name = "chkSeperateLocalization";
@@ -184,6 +180,7 @@
 			// 
 			// chkSeperateConstants
 			// 
+			this.chkSeperateConstants.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkSeperateConstants.AutoSize = true;
 			this.chkSeperateConstants.Location = new System.Drawing.Point(406, 85);
 			this.chkSeperateConstants.Name = "chkSeperateConstants";
@@ -212,6 +209,7 @@
 			// 
 			// chkMergeJsonIntoSingleOne2
 			// 
+			this.chkMergeJsonIntoSingleOne2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkMergeJsonIntoSingleOne2.AutoSize = true;
 			this.chkMergeJsonIntoSingleOne2.Location = new System.Drawing.Point(531, 109);
 			this.chkMergeJsonIntoSingleOne2.Name = "chkMergeJsonIntoSingleOne2";
@@ -224,6 +222,7 @@
 			// 
 			// chkSeperateIDs
 			// 
+			this.chkSeperateIDs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkSeperateIDs.AutoSize = true;
 			this.chkSeperateIDs.Location = new System.Drawing.Point(312, 85);
 			this.chkSeperateIDs.Name = "chkSeperateIDs";
@@ -305,6 +304,7 @@
 			// 
 			// chkKeepOnlyEnumAsIds
 			// 
+			this.chkKeepOnlyEnumAsIds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkKeepOnlyEnumAsIds.AutoSize = true;
 			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(405, 109);
 			this.chkKeepOnlyEnumAsIds.Name = "chkKeepOnlyEnumAsIds";
@@ -318,6 +318,7 @@
 			// 
 			// chkSettingEnableEncryption
 			// 
+			this.chkSettingEnableEncryption.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkSettingEnableEncryption.AutoSize = true;
 			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(312, 109);
 			this.chkSettingEnableEncryption.Name = "chkSettingEnableEncryption";
@@ -331,7 +332,7 @@
 			// statusStrip2
 			// 
 			this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel4,
+            this.txtVersion,
             this.toolStripStatusLabel3});
 			this.statusStrip2.Location = new System.Drawing.Point(0, 456);
 			this.statusStrip2.Name = "statusStrip2";
@@ -339,12 +340,12 @@
 			this.statusStrip2.Size = new System.Drawing.Size(704, 22);
 			this.statusStrip2.TabIndex = 9;
 			// 
-			// toolStripStatusLabel4
+			// txtVersion
 			// 
-			this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-			this.toolStripStatusLabel4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.toolStripStatusLabel4.Size = new System.Drawing.Size(37, 17);
-			this.toolStripStatusLabel4.Text = "v1.4.5";
+			this.txtVersion.Name = "txtVersion";
+			this.txtVersion.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.txtVersion.Size = new System.Drawing.Size(37, 17);
+			this.txtVersion.Text = "v1.4.5";
 			// 
 			// toolStripStatusLabel3
 			// 
@@ -380,7 +381,7 @@
 			// 
 			// tabPage5
 			// 
-			this.tabPage5.Controls.Add(this.richTextBox1);
+			this.tabPage5.Controls.Add(this.txtBoxHelp);
 			this.tabPage5.Location = new System.Drawing.Point(4, 22);
 			this.tabPage5.Name = "tabPage5";
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
@@ -388,49 +389,46 @@
 			this.tabPage5.TabIndex = 5;
 			this.tabPage5.Text = "Help";
 			// 
-			// richTextBox1
+			// txtBoxHelp
 			// 
-			this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.richTextBox1.Location = new System.Drawing.Point(3, 3);
-			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.Size = new System.Drawing.Size(690, 388);
-			this.richTextBox1.TabIndex = 23;
-			this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
+			this.txtBoxHelp.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtBoxHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txtBoxHelp.Location = new System.Drawing.Point(3, 3);
+			this.txtBoxHelp.Name = "txtBoxHelp";
+			this.txtBoxHelp.Size = new System.Drawing.Size(690, 388);
+			this.txtBoxHelp.TabIndex = 23;
+			this.txtBoxHelp.Text = resources.GetString("txtBoxHelp.Text");
 			// 
 			// linkLabel1
 			// 
 			this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel1.AutoSize = true;
-			this.linkLabel1.Location = new System.Drawing.Point(585, 9);
+			this.linkLabel1.Location = new System.Drawing.Point(594, 9);
 			this.linkLabel1.Name = "linkLabel1";
 			this.linkLabel1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.linkLabel1.Size = new System.Drawing.Size(107, 13);
+			this.linkLabel1.Size = new System.Drawing.Size(98, 13);
 			this.linkLabel1.TabIndex = 26;
 			this.linkLabel1.TabStop = true;
-			this.linkLabel1.Text = "Download Document";
+			this.linkLabel1.Text = "Download Example";
 			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
 			// 
-			// tabPage4
+			// tabEncription
 			// 
-			this.tabPage4.Controls.Add(this.BtnDecrypt);
-			this.tabPage4.Controls.Add(this.button1);
-			this.tabPage4.Controls.Add(this.txtEncryptionOutput);
-			this.tabPage4.Controls.Add(this.txtEncryptionInput);
-			this.tabPage4.Location = new System.Drawing.Point(4, 22);
-			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(696, 394);
-			this.tabPage4.TabIndex = 4;
-			this.tabPage4.Text = "Encrypt & Decrypt Text";
+			this.tabEncription.Controls.Add(this.splitContainer1);
+			this.tabEncription.Location = new System.Drawing.Point(4, 22);
+			this.tabEncription.Name = "tabEncription";
+			this.tabEncription.Padding = new System.Windows.Forms.Padding(3);
+			this.tabEncription.Size = new System.Drawing.Size(696, 394);
+			this.tabEncription.TabIndex = 4;
+			this.tabEncription.Text = "Encryption Tool";
 			// 
 			// BtnDecrypt
 			// 
 			this.BtnDecrypt.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.BtnDecrypt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.BtnDecrypt.Location = new System.Drawing.Point(313, 141);
+			this.BtnDecrypt.Location = new System.Drawing.Point(0, 3);
 			this.BtnDecrypt.Name = "BtnDecrypt";
-			this.BtnDecrypt.Size = new System.Drawing.Size(70, 28);
+			this.BtnDecrypt.Size = new System.Drawing.Size(88, 28);
 			this.BtnDecrypt.TabIndex = 2;
 			this.BtnDecrypt.Text = "Decrypt";
 			this.BtnDecrypt.UseVisualStyleBackColor = false;
@@ -440,9 +438,9 @@
 			// 
 			this.button1.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button1.Location = new System.Drawing.Point(313, 107);
+			this.button1.Location = new System.Drawing.Point(94, 3);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(70, 28);
+			this.button1.Size = new System.Drawing.Size(88, 28);
 			this.button1.TabIndex = 3;
 			this.button1.Text = "Encrypt";
 			this.button1.UseVisualStyleBackColor = false;
@@ -456,25 +454,24 @@
 			this.txtEncryptionOutput.BackColor = System.Drawing.Color.White;
 			this.txtEncryptionOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtEncryptionOutput.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.txtEncryptionOutput.Location = new System.Drawing.Point(386, 3);
+			this.txtEncryptionOutput.Location = new System.Drawing.Point(0, 37);
 			this.txtEncryptionOutput.Margin = new System.Windows.Forms.Padding(0);
 			this.txtEncryptionOutput.Multiline = true;
 			this.txtEncryptionOutput.Name = "txtEncryptionOutput";
 			this.txtEncryptionOutput.ReadOnly = true;
-			this.txtEncryptionOutput.Size = new System.Drawing.Size(307, 388);
+			this.txtEncryptionOutput.Size = new System.Drawing.Size(690, 153);
 			this.txtEncryptionOutput.TabIndex = 1;
 			// 
 			// txtEncryptionInput
 			// 
-			this.txtEncryptionInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
 			this.txtEncryptionInput.BackColor = System.Drawing.Color.White;
 			this.txtEncryptionInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtEncryptionInput.Location = new System.Drawing.Point(3, 3);
+			this.txtEncryptionInput.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtEncryptionInput.Location = new System.Drawing.Point(0, 0);
 			this.txtEncryptionInput.Margin = new System.Windows.Forms.Padding(0);
 			this.txtEncryptionInput.Multiline = true;
 			this.txtEncryptionInput.Name = "txtEncryptionInput";
-			this.txtEncryptionInput.Size = new System.Drawing.Size(307, 388);
+			this.txtEncryptionInput.Size = new System.Drawing.Size(690, 194);
 			this.txtEncryptionInput.TabIndex = 0;
 			// 
 			// tabSetUp
@@ -718,16 +715,16 @@
 			this.label2.TabIndex = 12;
 			this.label2.Text = "Json Data Output";
 			// 
-			// tabPage3
+			// tabPage2
 			// 
-			this.tabPage3.Controls.Add(this.panel3);
-			this.tabPage3.Controls.Add(this.txtLog2);
-			this.tabPage3.Location = new System.Drawing.Point(4, 22);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(696, 394);
-			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Convert Multi Files (All In One)";
+			this.tabPage2.Controls.Add(this.panel3);
+			this.tabPage2.Controls.Add(this.txtLog2);
+			this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage2.Size = new System.Drawing.Size(696, 394);
+			this.tabPage2.TabIndex = 2;
+			this.tabPage2.Text = "Export Multi Excels (All In One)";
 			// 
 			// panel3
 			// 
@@ -758,26 +755,26 @@
 			this.DtgFilePaths.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle25.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle25.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle25;
+			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
 			this.DtgFilePaths.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgFilePaths.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.path,
             this.exportIds,
             this.exportConstants,
             this.BtnDelete});
-			dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle27.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle27.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle27.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle27.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle27;
+			dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle19;
 			this.DtgFilePaths.Location = new System.Drawing.Point(0, 29);
 			this.DtgFilePaths.Margin = new System.Windows.Forms.Padding(0);
 			this.DtgFilePaths.MultiSelect = false;
@@ -809,10 +806,10 @@
 			// 
 			// BtnDelete
 			// 
-			dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle26;
+			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle18;
 			this.BtnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BtnDelete.HeaderText = "Delete";
 			this.BtnDelete.Name = "BtnDelete";
@@ -847,88 +844,6 @@
 			this.txtLog2.Size = new System.Drawing.Size(696, 141);
 			this.txtLog2.TabIndex = 24;
 			// 
-			// tabPage2
-			// 
-			this.tabPage2.Controls.Add(this.btnConvertCSVToJson);
-			this.tabPage2.Controls.Add(this.txtInputCSVFilePath);
-			this.tabPage2.Controls.Add(this.txtOutputJsonFilePath);
-			this.tabPage2.Controls.Add(this.btnSelectFolder3);
-			this.tabPage2.Controls.Add(this.btnSelectCSVFile);
-			this.tabPage2.Controls.Add(this.label4);
-			this.tabPage2.Controls.Add(this.label5);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(696, 394);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "Convert CSV To Json (Test)";
-			// 
-			// btnConvertCSVToJson
-			// 
-			this.btnConvertCSVToJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnConvertCSVToJson.Location = new System.Drawing.Point(471, 64);
-			this.btnConvertCSVToJson.Name = "btnConvertCSVToJson";
-			this.btnConvertCSVToJson.Size = new System.Drawing.Size(75, 23);
-			this.btnConvertCSVToJson.TabIndex = 14;
-			this.btnConvertCSVToJson.Text = "Convert";
-			this.btnConvertCSVToJson.UseVisualStyleBackColor = false;
-			// 
-			// txtInputCSVFilePath
-			// 
-			this.txtInputCSVFilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtInputCSVFilePath.Location = new System.Drawing.Point(61, 10);
-			this.txtInputCSVFilePath.Name = "txtInputCSVFilePath";
-			this.txtInputCSVFilePath.ReadOnly = true;
-			this.txtInputCSVFilePath.Size = new System.Drawing.Size(404, 20);
-			this.txtInputCSVFilePath.TabIndex = 9;
-			// 
-			// txtOutputJsonFilePath
-			// 
-			this.txtOutputJsonFilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtOutputJsonFilePath.Location = new System.Drawing.Point(61, 36);
-			this.txtOutputJsonFilePath.Name = "txtOutputJsonFilePath";
-			this.txtOutputJsonFilePath.ReadOnly = true;
-			this.txtOutputJsonFilePath.Size = new System.Drawing.Size(404, 20);
-			this.txtOutputJsonFilePath.TabIndex = 11;
-			// 
-			// btnSelectFolder3
-			// 
-			this.btnSelectFolder3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnSelectFolder3.Location = new System.Drawing.Point(471, 35);
-			this.btnSelectFolder3.Name = "btnSelectFolder3";
-			this.btnSelectFolder3.Size = new System.Drawing.Size(75, 23);
-			this.btnSelectFolder3.TabIndex = 13;
-			this.btnSelectFolder3.Text = "Open";
-			this.btnSelectFolder3.UseVisualStyleBackColor = false;
-			// 
-			// btnSelectCSVFile
-			// 
-			this.btnSelectCSVFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnSelectCSVFile.Location = new System.Drawing.Point(471, 9);
-			this.btnSelectCSVFile.Name = "btnSelectCSVFile";
-			this.btnSelectCSVFile.Size = new System.Drawing.Size(75, 23);
-			this.btnSelectCSVFile.TabIndex = 8;
-			this.btnSelectCSVFile.Text = "Select File";
-			this.btnSelectCSVFile.UseVisualStyleBackColor = false;
-			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(6, 40);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(53, 13);
-			this.label4.TabIndex = 12;
-			this.label4.Text = "Export To";
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(6, 14);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(47, 13);
-			this.label5.TabIndex = 10;
-			this.label5.Text = "CSV File";
-			// 
 			// tabPage1
 			// 
 			this.tabPage1.Controls.Add(this.panel2);
@@ -939,7 +854,7 @@
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage1.Size = new System.Drawing.Size(696, 394);
 			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "Convert Single File";
+			this.tabPage1.Text = "Export Single Excel";
 			// 
 			// panel2
 			// 
@@ -980,18 +895,18 @@
 			// 
 			this.DtgIDs.AllowUserToAddRows = false;
 			this.DtgIDs.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle28;
+			dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
 			this.DtgIDs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle29;
+			dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
 			this.DtgIDs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgIDs.Location = new System.Drawing.Point(259, 60);
 			this.DtgIDs.Name = "DtgIDs";
@@ -1002,11 +917,11 @@
 			// txtMegedJsonCustomName
 			// 
 			this.txtMegedJsonCustomName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtMegedJsonCustomName.Location = new System.Drawing.Point(423, 35);
+			this.txtMegedJsonCustomName.Location = new System.Drawing.Point(316, 35);
 			this.txtMegedJsonCustomName.Name = "txtMegedJsonCustomName";
 			this.txtMegedJsonCustomName.Size = new System.Drawing.Size(168, 20);
 			this.txtMegedJsonCustomName.TabIndex = 25;
-			this.txtMegedJsonCustomName.Text = "Custom Json File Name";
+			this.txtMegedJsonCustomName.Text = "Output Json File Name";
 			this.txtMegedJsonCustomName.TextChanged += new System.EventHandler(this.txtMegedJsonCustomName_TextChanged);
 			// 
 			// label1
@@ -1022,11 +937,11 @@
 			// 
 			this.chkMergeJsonIntoSingleOne.AutoSize = true;
 			this.chkMergeJsonIntoSingleOne.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.chkMergeJsonIntoSingleOne.Location = new System.Drawing.Point(259, 37);
+			this.chkMergeJsonIntoSingleOne.Location = new System.Drawing.Point(216, 37);
 			this.chkMergeJsonIntoSingleOne.Name = "chkMergeJsonIntoSingleOne";
-			this.chkMergeJsonIntoSingleOne.Size = new System.Drawing.Size(158, 17);
+			this.chkMergeJsonIntoSingleOne.Size = new System.Drawing.Size(94, 17);
 			this.chkMergeJsonIntoSingleOne.TabIndex = 24;
-			this.chkMergeJsonIntoSingleOne.Text = "Merge Jsons into single Json";
+			this.chkMergeJsonIntoSingleOne.Text = "Combine Jsons";
 			this.chkMergeJsonIntoSingleOne.UseVisualStyleBackColor = true;
 			this.chkMergeJsonIntoSingleOne.CheckedChanged += new System.EventHandler(this.chkMergeJsonInSingleExcel_CheckedChanged);
 			// 
@@ -1045,26 +960,26 @@
 			// 
 			this.DtgSheets.AllowUserToAddRows = false;
 			this.DtgSheets.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle30;
+			dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle22;
 			this.DtgSheets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle31.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle31.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle31.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle31;
+			dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
 			this.DtgSheets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle32.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle32;
+			dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle24;
 			this.DtgSheets.Location = new System.Drawing.Point(0, 60);
 			this.DtgSheets.Name = "DtgSheets";
 			this.DtgSheets.Size = new System.Drawing.Size(253, 214);
@@ -1076,9 +991,9 @@
 			this.chkEncrypt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.chkEncrypt.Location = new System.Drawing.Point(125, 37);
 			this.chkEncrypt.Name = "chkEncrypt";
-			this.chkEncrypt.Size = new System.Drawing.Size(85, 17);
+			this.chkEncrypt.Size = new System.Drawing.Size(84, 17);
 			this.chkEncrypt.TabIndex = 22;
-			this.chkEncrypt.Text = "Encrypt Data";
+			this.chkEncrypt.Text = "Encrypt Json";
 			this.chkEncrypt.UseVisualStyleBackColor = true;
 			this.chkEncrypt.CheckedChanged += new System.EventHandler(this.chkEncrypt_CheckedChanged);
 			// 
@@ -1103,9 +1018,7 @@
 			this.panel1.Controls.Add(this.BtnExportJson);
 			this.panel1.Controls.Add(this.BtnExportIds);
 			this.panel1.Controls.Add(this.BtnExportConstants);
-			this.panel1.Controls.Add(this.BtnExportSettings);
 			this.panel1.Controls.Add(this.btnExportLocalization);
-			this.panel1.Controls.Add(this.BtnTest);
 			this.panel1.Location = new System.Drawing.Point(594, 0);
 			this.panel1.Margin = new System.Windows.Forms.Padding(0);
 			this.panel1.Name = "panel1";
@@ -1172,20 +1085,6 @@
 			this.BtnExportConstants.UseVisualStyleBackColor = false;
 			this.BtnExportConstants.Click += new System.EventHandler(this.BtnExportConstants_Click);
 			// 
-			// BtnExportSettings
-			// 
-			this.BtnExportSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.BtnExportSettings.BackColor = System.Drawing.SystemColors.Control;
-			this.BtnExportSettings.Cursor = System.Windows.Forms.Cursors.Default;
-			this.BtnExportSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.BtnExportSettings.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.BtnExportSettings.Location = new System.Drawing.Point(7, 140);
-			this.BtnExportSettings.Name = "BtnExportSettings";
-			this.BtnExportSettings.Size = new System.Drawing.Size(90, 37);
-			this.BtnExportSettings.TabIndex = 15;
-			this.BtnExportSettings.Text = "Export Settings";
-			this.BtnExportSettings.UseVisualStyleBackColor = false;
-			// 
 			// btnExportLocalization
 			// 
 			this.btnExportLocalization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1193,28 +1092,13 @@
 			this.btnExportLocalization.Cursor = System.Windows.Forms.Cursors.Default;
 			this.btnExportLocalization.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnExportLocalization.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.btnExportLocalization.Location = new System.Drawing.Point(7, 183);
+			this.btnExportLocalization.Location = new System.Drawing.Point(6, 140);
 			this.btnExportLocalization.Name = "btnExportLocalization";
 			this.btnExportLocalization.Size = new System.Drawing.Size(90, 40);
 			this.btnExportLocalization.TabIndex = 20;
 			this.btnExportLocalization.Text = "Export Localization";
 			this.btnExportLocalization.UseVisualStyleBackColor = false;
 			this.btnExportLocalization.Click += new System.EventHandler(this.btnExportLocalization_Click);
-			// 
-			// BtnTest
-			// 
-			this.BtnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.BtnTest.BackColor = System.Drawing.SystemColors.Control;
-			this.BtnTest.Cursor = System.Windows.Forms.Cursors.Default;
-			this.BtnTest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.BtnTest.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.BtnTest.Location = new System.Drawing.Point(7, 229);
-			this.BtnTest.Name = "BtnTest";
-			this.BtnTest.Size = new System.Drawing.Size(90, 23);
-			this.BtnTest.TabIndex = 16;
-			this.BtnTest.Text = "TEST";
-			this.BtnTest.UseVisualStyleBackColor = false;
-			this.BtnTest.Click += new System.EventHandler(this.BtnTest_Click);
 			// 
 			// txtLog
 			// 
@@ -1236,9 +1120,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabChangeLog.Controls.Add(this.tabPage1);
 			this.tabChangeLog.Controls.Add(this.tabPage2);
-			this.tabChangeLog.Controls.Add(this.tabPage3);
 			this.tabChangeLog.Controls.Add(this.tabSetUp);
-			this.tabChangeLog.Controls.Add(this.tabPage4);
+			this.tabChangeLog.Controls.Add(this.tabEncription);
 			this.tabChangeLog.Controls.Add(this.tabPage5);
 			this.tabChangeLog.Controls.Add(this.tabPage6);
 			this.tabChangeLog.ItemSize = new System.Drawing.Size(124, 18);
@@ -1257,7 +1140,7 @@
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(2);
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(582, 34);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(591, 34);
 			this.flowLayoutPanel1.TabIndex = 10;
 			// 
 			// BtnSaveSettings
@@ -1284,6 +1167,26 @@
 			this.BtnLoadSettings.UseVisualStyleBackColor = true;
 			this.BtnLoadSettings.Click += new System.EventHandler(this.BtnLoadSettings_Click);
 			// 
+			// splitContainer1
+			// 
+			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+			this.splitContainer1.Name = "splitContainer1";
+			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainer1.Panel1
+			// 
+			this.splitContainer1.Panel1.Controls.Add(this.txtEncryptionInput);
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.txtEncryptionOutput);
+			this.splitContainer1.Panel2.Controls.Add(this.BtnDecrypt);
+			this.splitContainer1.Panel2.Controls.Add(this.button1);
+			this.splitContainer1.Size = new System.Drawing.Size(690, 388);
+			this.splitContainer1.SplitterDistance = 194;
+			this.splitContainer1.TabIndex = 4;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1304,16 +1207,13 @@
 			this.tabPage6.ResumeLayout(false);
 			this.tabPage6.PerformLayout();
 			this.tabPage5.ResumeLayout(false);
-			this.tabPage4.ResumeLayout(false);
-			this.tabPage4.PerformLayout();
+			this.tabEncription.ResumeLayout(false);
 			this.tabSetUp.ResumeLayout(false);
 			this.tabSetUp.PerformLayout();
-			this.tabPage3.ResumeLayout(false);
-			this.tabPage3.PerformLayout();
-			this.panel3.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.DtgFilePaths)).EndInit();
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage2.PerformLayout();
+			this.panel3.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.DtgFilePaths)).EndInit();
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage1.PerformLayout();
 			this.panel2.ResumeLayout(false);
@@ -1323,6 +1223,12 @@
 			this.panel1.ResumeLayout(false);
 			this.tabChangeLog.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
+			this.splitContainer1.Panel1.ResumeLayout(false);
+			this.splitContainer1.Panel1.PerformLayout();
+			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+			this.splitContainer1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1336,11 +1242,11 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.StatusStrip statusStrip2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripStatusLabel txtVersion;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TextBox txtChangesLog;
         private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage tabEncription;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button BtnDecrypt;
         private System.Windows.Forms.TextBox txtEncryptionOutput;
@@ -1362,20 +1268,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSelectFolder;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button BtnAddFile;
         private System.Windows.Forms.DataGridView DtgFilePaths;
         private System.Windows.Forms.Button BtnAllInOne;
         private System.Windows.Forms.TextBox txtLog2;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button btnConvertCSVToJson;
-        private System.Windows.Forms.TextBox txtInputCSVFilePath;
-        private System.Windows.Forms.TextBox txtOutputJsonFilePath;
-        private System.Windows.Forms.Button btnSelectFolder3;
-        private System.Windows.Forms.Button btnSelectCSVFile;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnSelectFile;
@@ -1392,9 +1290,7 @@
         private System.Windows.Forms.Button BtnExportJson;
         private System.Windows.Forms.Button BtnExportIds;
         private System.Windows.Forms.Button BtnExportConstants;
-        private System.Windows.Forms.Button BtnExportSettings;
         private System.Windows.Forms.Button btnExportLocalization;
-        private System.Windows.Forms.Button BtnTest;
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.TabControl tabChangeLog;
         private System.Windows.Forms.DataGridViewTextBoxColumn path;
@@ -1404,7 +1300,7 @@
         private System.Windows.Forms.Button btnOpenGoogleSheet;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox txtUnminimizeFields;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox txtBoxHelp;
         private System.Windows.Forms.Button btnLoadDefaultSettings;
         private System.Windows.Forms.CheckBox chkKeepOnlyEnumAsIds;
         private System.Windows.Forms.TextBox txtEncryptionInput;
@@ -1420,6 +1316,8 @@
         private System.Windows.Forms.Button btnSelectFolderLocalization;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.TextBox txtLanguageMaps;
-	}
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+    }
 }
 
