@@ -2689,7 +2689,7 @@ namespace ExcelToUnity_DataConverter
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/nbhung100914/ExcelToUnity/blob/main/ExcelToUnity/Document/DataConverterExample.xlsx");
+            Process.Start("https://github.com/nbhung100914/excel-to-unity/blob/main/Example.xlsx");
         }
 
         private void BtnSaveSettings_Click(object sender, EventArgs e)
