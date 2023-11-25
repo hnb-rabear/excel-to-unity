@@ -1,17 +1,14 @@
 ﻿using ChoETL;
 using CsvHelper;
 using Newtonsoft.Json;
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExcelToUnity_DataConverter
@@ -20,6 +17,7 @@ namespace ExcelToUnity_DataConverter
     {
         public string Key { get; set; }
         public int Value { get; set; }
+
         public ID(string key, int value)
         {
             Key = key;
@@ -31,10 +29,12 @@ namespace ExcelToUnity_DataConverter
     {
         public string name;
         public string type;
+
         public FieldValueType(string name)
         {
             this.name = name;
         }
+
         public FieldValueType(string name, string type)
         {
             this.name = name;
@@ -48,17 +48,27 @@ namespace ExcelToUnity_DataConverter
         {
             if (cell == null)
                 return pDefault;
-            string cellStr = "";
+            string cellStr;
             if (cell.CellType == CellType.Formula)
             {
-                if (cell.CachedFormulaResultType == CellType.Numeric)
-                    cellStr = cell.NumericCellValue.ToString();
-                else if (cell.CachedFormulaResultType == CellType.String)
-                    cellStr = cell.StringCellValue.ToString();
-                else if (cell.CachedFormulaResultType == CellType.Boolean)
-                    cellStr = cell.BooleanCellValue.ToString();
-                else
-                    cellStr = cell.ToString();
+                switch (cell.CachedFormulaResultType)
+                {
+                    case CellType.Numeric:
+                        cellStr = cell.NumericCellValue.ToString(CultureInfo.InvariantCulture);
+                        break;
+                    
+                    case CellType.String:
+                        cellStr = cell.StringCellValue;
+                        break;
+                    
+                    case CellType.Boolean:
+                        cellStr = cell.BooleanCellValue.ToString();
+                        break;
+                    
+                    default:
+                        cellStr = cell.ToString();
+                        break;
+                }
             }
             else
                 cellStr = cell.ToString();
@@ -72,9 +82,9 @@ namespace ExcelToUnity_DataConverter
 
         public static IWorkbook LoadWorkBook(string pFilePath)
         {
-            using (FileStream file = new FileStream(pFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var file = new FileStream(pFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                return new XSSFWorkbook((Stream)file);
+                return new XSSFWorkbook(file);
             }
         }
 
@@ -86,7 +96,7 @@ namespace ExcelToUnity_DataConverter
             {
                 try
                 {
-                    var obj = Newtonsoft.Json.Linq.JToken.Parse(strInput);
+                    Newtonsoft.Json.Linq.JToken.Parse(strInput);
                     return true;
                 }
                 catch (JsonReaderException jex)
@@ -126,8 +136,8 @@ namespace ExcelToUnity_DataConverter
         /// </summary>
         public static List<FieldValueType> GetFieldValueTypes(IWorkbook pWorkBook, string pSheetName)
         {
-            ISheet sheet = pWorkBook.GetSheet(pSheetName);
-            IRow rowData = sheet.GetRow(0);
+            var sheet = pWorkBook.GetSheet(pSheetName);
+            var rowData = sheet.GetRow(0);
             if (rowData.IsNull())
                 return null;
 
@@ -136,7 +146,7 @@ namespace ExcelToUnity_DataConverter
             var fieldsValue = new string[lastCellNum];
             for (int col = 0; col < rowData.LastCellNum; col++)
             {
-                ICell cell = rowData.GetCell(col);
+                var cell = rowData.GetCell(col);
                 if (cell != null && !string.IsNullOrEmpty(cell.StringCellValue))
                     fieldsName[col] = cell.ToString().Replace(" ", "_");
                 else
@@ -152,7 +162,7 @@ namespace ExcelToUnity_DataConverter
                     //Find longest value, and use it to check value type
                     for (int col = 0; col < fieldsName.Length; col++)
                     {
-                        ICell cell = rowData.GetCell(col);
+                        var cell = rowData.GetCell(col);
                         if (cell != null)
                         {
                             string cellStr = cell.ToCellString();
@@ -195,13 +205,11 @@ namespace ExcelToUnity_DataConverter
                     }
                     else
                     {
-                        decimal valNumber = 0;
-                        bool valBool = false;
-                        if (!filedValue.Contains(',') && decimal.TryParse(filedValue, out valNumber))
+                        if (!filedValue.Contains(',') && decimal.TryParse(filedValue, out decimal _))
                         {
                             fieldValueType.type = "number";
                         }
-                        else if (bool.TryParse(filedValue.ToLower(), out valBool))
+                        else if (bool.TryParse(filedValue.ToLower(), out bool _))
                         {
                             fieldValueType.type = "bool";
                         }
@@ -221,12 +229,12 @@ namespace ExcelToUnity_DataConverter
                     string[] values = SplitValueToArray(filedValue, false);
                     int lenVal = 0;
                     string longestValue = "";
-                    for (int l = 0; l < values.Length; l++)
+                    foreach (string val in values)
                     {
-                        if (lenVal < values[l].Length)
+                        if (lenVal < val.Length)
                         {
-                            lenVal = values[l].Length;
-                            longestValue = values[l];
+                            lenVal = val.Length;
+                            longestValue = val;
                         }
                     }
                     if (values.Length > 0)
@@ -237,13 +245,11 @@ namespace ExcelToUnity_DataConverter
                         }
                         else
                         {
-                            decimal valNumber = 0;
-                            bool valBool = false;
-                            if (!longestValue.Contains(',') && decimal.TryParse(longestValue, out valNumber))
+                            if (!longestValue.Contains(',') && decimal.TryParse(longestValue, out decimal _))
                             {
                                 fieldValueType.type = "array-number";
                             }
-                            else if (bool.TryParse(longestValue.ToLower(), out valBool))
+                            else if (bool.TryParse(longestValue.ToLower(), out bool _))
                             {
                                 fieldValueType.type = "array-bool";
                             }
@@ -270,11 +276,11 @@ namespace ExcelToUnity_DataConverter
             if (!Directory.Exists(pFolderPath))
                 Directory.CreateDirectory(pFolderPath);
 
-            string filePath = string.Format("{0}\\{1}", pFolderPath, pFileName);
+            string filePath = $"{pFolderPath}\\{pFileName}";
             if (!File.Exists(filePath))
                 using (File.Create(filePath)) { }
 
-            using (StreamWriter sw = new StreamWriter(filePath))
+            using (var sw = new StreamWriter(filePath))
             {
                 sw.WriteLine(pContent);
                 sw.Close();
@@ -286,7 +292,7 @@ namespace ExcelToUnity_DataConverter
             if (!File.Exists(pFilePath))
                 using (File.Create(pFilePath)) { }
 
-            using (StreamWriter sw = new StreamWriter(pFilePath))
+            using (var sw = new StreamWriter(pFilePath))
             {
                 sw.WriteLine(pContent);
                 sw.Close();
@@ -297,8 +303,8 @@ namespace ExcelToUnity_DataConverter
         {
             using (TextReader fileReader = File.OpenText(pFilePath))
             {
-                CultureInfo myCIintl = new CultureInfo("es-ES", false);
-                var csvReader = new CsvReader(fileReader, myCIintl);
+                var cultureInfo = new CultureInfo("es-ES", false);
+                var csvReader = new CsvReader(fileReader, cultureInfo);
                 var records = csvReader.GetRecords<T>().ToList();
 
                 string jsonContent = JsonConvert.SerializeObject(records);
@@ -306,77 +312,73 @@ namespace ExcelToUnity_DataConverter
             }
         }
 
-        private static void ExportLocalizationSheet(IWorkbook pWorrkBook, string pSheetName, string pExportFolder, string pFileName, List<ID> pAdditionalIds = null)
+        private static void ExportLocalizationSheet(IWorkbook pWorkBook, string pSheetName, string pExportFolder, string pFileName, List<ID> pAdditionalIds = null)
         {
-            var sheet = pWorrkBook.GetSheet(pSheetName);
+            var sheet = pWorkBook.GetSheet(pSheetName);
             if (sheet.IsNull() || sheet.LastRowNum == 0)
             {
-                MessageBox.Show(pSheetName + " is empty!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($@"{pSheetName} is empty!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             var idStrings = new List<string>();
             var textDict = new Dictionary<string, List<string>>();
-            var fristRow = sheet.GetRow(0);
-            int maxCellNum = fristRow.LastCellNum;
+            var firstRow = sheet.GetRow(0);
+            int maxCellNum = firstRow.LastCellNum;
 
             string mergeCellValue = "";
             for (int row = 0; row <= sheet.LastRowNum; row++)
             {
                 var rowData = sheet.GetRow(row);
-                if (rowData != null)
+                if (rowData == null)
+                    continue;
+                for (int col = 0; col < maxCellNum; col++)
                 {
-                    for (int col = 0; col < maxCellNum; col++)
+                    var celData = rowData.GetCell(col);
+                    var filedValue = celData == null ? "" : celData.ToString();
+                    var fieldName = sheet.GetRow(0).GetCell(col).ToString();
+                    if (celData != null && celData.IsMergedCell && !string.IsNullOrEmpty(filedValue))
+                        mergeCellValue = filedValue;
+                    if (celData != null && celData.IsMergedCell && string.IsNullOrEmpty(filedValue))
+                        filedValue = mergeCellValue;
+                    if (!string.IsNullOrEmpty(fieldName))
                     {
-                        var celData = rowData.GetCell(col);
-                        var fileldValue = celData == null ? "" : celData.ToString();
-                        var fieldName = sheet.GetRow(0).GetCell(col).ToString();
-                        if (celData != null && celData.IsMergedCell && !string.IsNullOrEmpty(fileldValue))
-                            mergeCellValue = fileldValue;
-                        if (celData != null && celData.IsMergedCell && string.IsNullOrEmpty(fileldValue))
-                            fileldValue = mergeCellValue;
-                        if (!string.IsNullOrEmpty(fieldName))
+                        if (col == 0 && row > 0)
                         {
-                            if (col == 0 && row > 0)
+                            if (string.IsNullOrEmpty(filedValue))
                             {
-                                if (string.IsNullOrEmpty(fileldValue))
+                                //MessageBox.Show(string.Format("Sheet {0}: IdString can not be empty!", pSheetName), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            }
+                            idStrings.Add(filedValue);
+                        }
+                        else if (col == 1 && row > 0)
+                        {
+                            if (string.IsNullOrEmpty(filedValue) || pAdditionalIds == null)
+                                continue;
+                            bool existId = false;
+                            foreach (var id in pAdditionalIds)
+                                if (id.Key.Trim() == filedValue.Trim())
                                 {
-                                    //MessageBox.Show(string.Format("Sheet {0}: IdString can not be empty!", pSheetName), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    filedValue = id.Value.ToString();
+                                    idStrings[idStrings.Count - 1] = $"{idStrings[idStrings.Count - 1]}_{id.Value}";
+                                    existId = true;
                                     break;
                                 }
-                                idStrings.Add(fileldValue);
-                            }
-                            else if (col == 1 && row > 0)
-                            {
-                                if (!string.IsNullOrEmpty(fileldValue) && pAdditionalIds != null)
-                                {
-                                    bool existId = false;
-                                    foreach (var id in pAdditionalIds)
-                                        if (id.Key.Trim() == fileldValue.Trim())
-                                        {
-                                            fileldValue = id.Value.ToString();
-                                            idStrings[idStrings.Count - 1] = string.Format("{0}_{1}", idStrings[idStrings.Count - 1], id.Value);
-                                            existId = true;
-                                            break;
-                                        }
 
-                                    if (!existId)
-                                    {
-                                        idStrings[idStrings.Count - 1] = string.Format("{0}_{1}", idStrings[idStrings.Count - 1], fileldValue);
-                                    }
-                                }
-                            }
-                            else if (col > 1 && row > 0)
-                            {
-                                if (!textDict.ContainsKey(fieldName))
-                                    textDict.Add(fieldName, new List<string>());
-                                textDict[fieldName].Add(fileldValue);
-                            }
+                            if (!existId)
+                                idStrings[idStrings.Count - 1] = $"{idStrings[idStrings.Count - 1]}_{filedValue}";
                         }
-                        else
+                        else if (col > 1 && row > 0)
                         {
-                            Console.Write(col);
+                            if (!textDict.ContainsKey(fieldName))
+                                textDict.Add(fieldName, new List<string>());
+                            textDict[fieldName].Add(filedValue);
                         }
+                    }
+                    else
+                    {
+                        Console.Write(col);
                     }
                 }
             }
@@ -385,29 +387,29 @@ namespace ExcelToUnity_DataConverter
             var idBuilder = new StringBuilder();
             if (idStrings.Count > 0)
             {
-                idBuilder.Append(string.Format("\tpublic const int "));
+                idBuilder.Append("\tpublic const int ");
                 for (int i = 0; i < idStrings.Count; i++)
                 {
                     if (i < idStrings.Count - 1)
-                        idBuilder.Append(string.Format("{0} = {1}, ", idStrings[i].ToUpper(), i));
+                        idBuilder.Append($"{idStrings[i].ToUpper()} = {i}, ");
                     else
-                        idBuilder.Append(string.Format("{0} = {1};", idStrings[i].ToUpper(), i));
+                        idBuilder.Append($"{idStrings[i].ToUpper()} = {i};");
                 }
             }
             var idBuilder2 = new StringBuilder();
             idBuilder2.Append("\tpublic enum ID { NONE = -1,");
             for (int i = 0; i < idStrings.Count; i++)
             {
-                idBuilder2.Append(string.Format(" {0} = {1},", idStrings[i].ToUpper(), i));
+                idBuilder2.Append($" {idStrings[i].ToUpper()} = {i},");
             }
             idBuilder2.Append(" }");
 
             //Build idString dictionary
             var idStringDictBuilder = new StringBuilder();
             idStringDictBuilder.Append("\tpublic static readonly string[] idString = new string[] {");
-            for (int i = 0; i < idStrings.Count; i++)
+            foreach (string id in idStrings)
             {
-                idStringDictBuilder.Append(string.Format(" \"{0}\",", idStrings[i]));
+                idStringDictBuilder.Append($" \"{id}\",");
             }
             idStringDictBuilder.Append(" };");
 
@@ -431,7 +433,7 @@ namespace ExcelToUnity_DataConverter
                         languagePackContent.Append("\n\t\t");
                     else
                         languagePackContent.Append("\t\t");
-                    languagePackContent.Append(string.Format("\"{0}\"", text));
+                    languagePackContent.Append($"\"{text}\"");
 
                     if (i < listText.Value.Count - 1)
                         languagePackContent.Append(", ");
@@ -439,9 +441,9 @@ namespace ExcelToUnity_DataConverter
                 languagePackContent.Append("\n\t};");
 
                 if (listText.Key != textDict.Last().Key)
-                    allLanguagePackBuilder.Append(languagePackContent.ToString()).AppendLine();
+                    allLanguagePackBuilder.Append(languagePackContent).AppendLine();
                 else
-                    allLanguagePackBuilder.Append(languagePackContent.ToString());
+                    allLanguagePackBuilder.Append(languagePackContent);
                 allLanguagePackBuilder.AppendLine();
             }
 
@@ -450,10 +452,10 @@ namespace ExcelToUnity_DataConverter
             languageDictBuilder.Append("\tpublic static readonly Dictionary<string, string[]> language = new Dictionary<string, string[]>() { ");
             foreach (var listText in textDict)
             {
-                languageDictBuilder.Append(string.Format(" {0} \"{1}\", {2} {3}", "{", listText.Key, listText.Key, "},"));
+                languageDictBuilder.Append($" {"{"} \"{listText.Key}\", {listText.Key} {"},"}");
             }
             languageDictBuilder.Append(" };\n");
-            languageDictBuilder.Append(string.Format("\tpublic static readonly string defaultLanguage = \"{0}\";", textDict.First().Key));
+            languageDictBuilder.Append($"\tpublic static readonly string defaultLanguage = \"{textDict.First().Key}\";");
 
             //Write file
             string fileTemplateContent = File.ReadAllText(LOCALIZED_TEXT_TEMPLATE);
@@ -464,14 +466,14 @@ namespace ExcelToUnity_DataConverter
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageDictBuilder.ToString());
             WriteFile(pExportFolder, pFileName, fileTemplateContent);
 
-            MessageBox.Show("Export " + pSheetName + " successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($@"Export {pSheetName} successfully!", @"Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public static void SelectFolder(TextBox pTextBox)
         {
             using (var fbd = new FolderBrowserDialog())
             {
-                DialogResult result = fbd.ShowDialog();
+                var result = fbd.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
@@ -482,7 +484,7 @@ namespace ExcelToUnity_DataConverter
 
         public static string[] SplitValueToArray(string pValue, bool pIncludeColon = true)
         {
-            string[] result = null;
+            string[] result;
             if (pIncludeColon && pValue.Contains(":"))
                 result = pValue.Split(':');
             else if (pValue.Contains("|"))
@@ -498,8 +500,8 @@ namespace ExcelToUnity_DataConverter
         {
             // Use LINQ to sort the array received and return a copy.
             var sorted = from s in e
-                         orderby s.Key.Length descending
-                         select s;
+                orderby s.Key.Length descending
+                select s;
             return sorted;
         }
 
@@ -509,9 +511,9 @@ namespace ExcelToUnity_DataConverter
             {
                 if (pCell.CachedFormulaResultType == CellType.Numeric)
                     return pCell.NumericCellValue.ToString();
-                else if (pCell.CachedFormulaResultType == CellType.String)
-                    return pCell.StringCellValue.ToString();
-                else if (pCell.CachedFormulaResultType == CellType.Boolean)
+                if (pCell.CachedFormulaResultType == CellType.String)
+                    return pCell.StringCellValue;
+                if (pCell.CachedFormulaResultType == CellType.Boolean)
                     return pCell.BooleanCellValue.ToString();
             }
             return null;
@@ -519,7 +521,7 @@ namespace ExcelToUnity_DataConverter
 
         public static string RemoveSpecialCharacters(this string str)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (char c in str)
             {
                 if (c == ' ')
@@ -530,6 +532,20 @@ namespace ExcelToUnity_DataConverter
                 }
             }
             return sb.ToString();
+        }
+        
+        public static string ToCapitalizeEachWord(string pString)
+        {
+            // Creates a TextInfo based on the "en-US" culture.
+            var textInfo = new CultureInfo("en-US", false).TextInfo;
+            return textInfo.ToTitleCase(pString);
+        }
+        
+        public static string RemoveLast(string text, string character)
+        {
+            if (text.Length < 1) return text;
+            int index = text.LastIndexOf(character, StringComparison.Ordinal);
+            return index >= 0 ? text.Remove(index, character.Length) : text;
         }
     }
 }

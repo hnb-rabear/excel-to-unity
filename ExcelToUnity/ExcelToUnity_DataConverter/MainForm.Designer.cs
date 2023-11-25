@@ -881,7 +881,6 @@
 			this.txtInputCSVFilePath.ReadOnly = true;
 			this.txtInputCSVFilePath.Size = new System.Drawing.Size(404, 20);
 			this.txtInputCSVFilePath.TabIndex = 9;
-			this.txtInputCSVFilePath.TextChanged += new System.EventHandler(this.txtInputCSVFilePath_TextChanged);
 			// 
 			// txtOutputJsonFilePath
 			// 
@@ -891,7 +890,6 @@
 			this.txtOutputJsonFilePath.ReadOnly = true;
 			this.txtOutputJsonFilePath.Size = new System.Drawing.Size(404, 20);
 			this.txtOutputJsonFilePath.TabIndex = 11;
-			this.txtOutputJsonFilePath.TextChanged += new System.EventHandler(this.txtOuputJsonFilePath_TextChanged);
 			// 
 			// btnSelectFolder3
 			// 
@@ -902,7 +900,6 @@
 			this.btnSelectFolder3.TabIndex = 13;
 			this.btnSelectFolder3.Text = "Open";
 			this.btnSelectFolder3.UseVisualStyleBackColor = false;
-			this.btnSelectFolder3.Click += new System.EventHandler(this.btnSelectOutputJsonFiles_Click);
 			// 
 			// btnSelectCSVFile
 			// 
@@ -913,7 +910,6 @@
 			this.btnSelectCSVFile.TabIndex = 8;
 			this.btnSelectCSVFile.Text = "Select File";
 			this.btnSelectCSVFile.UseVisualStyleBackColor = false;
-			this.btnSelectCSVFile.Click += new System.EventHandler(this.btnSelectCSVFile_Click);
 			// 
 			// label4
 			// 
@@ -1189,7 +1185,6 @@
 			this.BtnExportSettings.TabIndex = 15;
 			this.BtnExportSettings.Text = "Export Settings";
 			this.BtnExportSettings.UseVisualStyleBackColor = false;
-			this.BtnExportSettings.Click += new System.EventHandler(this.BtnExportSettings_Click);
 			// 
 			// btnExportLocalization
 			// 

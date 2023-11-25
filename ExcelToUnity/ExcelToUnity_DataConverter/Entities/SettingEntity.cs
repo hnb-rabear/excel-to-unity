@@ -10,10 +10,6 @@ namespace ExcelToUnity_DataConverter.Entities
     public class SettingEntity
     {
         /// <summary>
-        /// Input CSV file path (DEMO)
-        /// </summary>
-        public string inputCSVFilePath = "";
-        /// <summary>
         /// Input Excel file path
         /// </summary>
         public string inputDataFilePath = "";
@@ -53,6 +49,8 @@ namespace ExcelToUnity_DataConverter.Entities
 
         public string[] GetExcludedSheets()
         {
+            if (string.IsNullOrEmpty(excludedSheets))
+                return null;
             var strs = excludedSheets.Split(';');
             for (int i = 0; i < strs.Length; i++)
                 strs[i] = strs[i].Trim().ToLower();
