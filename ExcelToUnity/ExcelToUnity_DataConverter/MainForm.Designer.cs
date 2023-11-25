@@ -30,14 +30,14 @@ namespace ExcelToUnity_DataConverter
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -65,10 +65,11 @@ namespace ExcelToUnity_DataConverter
 			this.txtBoxHelp = new System.Windows.Forms.RichTextBox();
 			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
 			this.tabEncription = new System.Windows.Forms.TabPage();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.txtEncryptionInput = new System.Windows.Forms.TextBox();
+			this.txtEncryptionOutput = new System.Windows.Forms.TextBox();
 			this.BtnDecrypt = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
-			this.txtEncryptionOutput = new System.Windows.Forms.TextBox();
-			this.txtEncryptionInput = new System.Windows.Forms.TextBox();
 			this.tabSetUp = new System.Windows.Forms.TabPage();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
@@ -87,7 +88,7 @@ namespace ExcelToUnity_DataConverter
 			this.label3 = new System.Windows.Forms.Label();
 			this.btnSelectFolder = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.tabExportMultiExcels = new System.Windows.Forms.TabPage();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.BtnAddFile = new System.Windows.Forms.Button();
 			this.DtgFilePaths = new System.Windows.Forms.DataGridView();
@@ -120,13 +121,16 @@ namespace ExcelToUnity_DataConverter
 			this.BtnSaveSettings = new System.Windows.Forms.Button();
 			this.BtnLoadSettings = new System.Windows.Forms.Button();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.statusStrip2.SuspendLayout();
 			this.tabPage6.SuspendLayout();
 			this.tabPage5.SuspendLayout();
 			this.tabEncription.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+			this.splitContainer1.Panel1.SuspendLayout();
+			this.splitContainer1.Panel2.SuspendLayout();
+			this.splitContainer1.SuspendLayout();
 			this.tabSetUp.SuspendLayout();
-			this.tabPage2.SuspendLayout();
+			this.tabExportMultiExcels.SuspendLayout();
 			this.panel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DtgFilePaths)).BeginInit();
 			this.tabPage1.SuspendLayout();
@@ -136,10 +140,6 @@ namespace ExcelToUnity_DataConverter
 			this.panel1.SuspendLayout();
 			this.tabChangeLog.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-			this.splitContainer1.Panel1.SuspendLayout();
-			this.splitContainer1.Panel2.SuspendLayout();
-			this.splitContainer1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog
@@ -422,6 +422,54 @@ namespace ExcelToUnity_DataConverter
 			this.tabEncription.TabIndex = 4;
 			this.tabEncription.Text = "Encryption Tool";
 			// 
+			// splitContainer1
+			// 
+			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+			this.splitContainer1.Name = "splitContainer1";
+			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainer1.Panel1
+			// 
+			this.splitContainer1.Panel1.Controls.Add(this.txtEncryptionInput);
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.txtEncryptionOutput);
+			this.splitContainer1.Panel2.Controls.Add(this.BtnDecrypt);
+			this.splitContainer1.Panel2.Controls.Add(this.button1);
+			this.splitContainer1.Size = new System.Drawing.Size(690, 388);
+			this.splitContainer1.SplitterDistance = 194;
+			this.splitContainer1.TabIndex = 4;
+			// 
+			// txtEncryptionInput
+			// 
+			this.txtEncryptionInput.BackColor = System.Drawing.Color.White;
+			this.txtEncryptionInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtEncryptionInput.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtEncryptionInput.Location = new System.Drawing.Point(0, 0);
+			this.txtEncryptionInput.Margin = new System.Windows.Forms.Padding(0);
+			this.txtEncryptionInput.Multiline = true;
+			this.txtEncryptionInput.Name = "txtEncryptionInput";
+			this.txtEncryptionInput.Size = new System.Drawing.Size(690, 194);
+			this.txtEncryptionInput.TabIndex = 0;
+			// 
+			// txtEncryptionOutput
+			// 
+			this.txtEncryptionOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtEncryptionOutput.BackColor = System.Drawing.Color.White;
+			this.txtEncryptionOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtEncryptionOutput.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.txtEncryptionOutput.Location = new System.Drawing.Point(0, 37);
+			this.txtEncryptionOutput.Margin = new System.Windows.Forms.Padding(0);
+			this.txtEncryptionOutput.Multiline = true;
+			this.txtEncryptionOutput.Name = "txtEncryptionOutput";
+			this.txtEncryptionOutput.ReadOnly = true;
+			this.txtEncryptionOutput.Size = new System.Drawing.Size(690, 153);
+			this.txtEncryptionOutput.TabIndex = 1;
+			// 
 			// BtnDecrypt
 			// 
 			this.BtnDecrypt.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -445,34 +493,6 @@ namespace ExcelToUnity_DataConverter
 			this.button1.Text = "Encrypt";
 			this.button1.UseVisualStyleBackColor = false;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// txtEncryptionOutput
-			// 
-			this.txtEncryptionOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtEncryptionOutput.BackColor = System.Drawing.Color.White;
-			this.txtEncryptionOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtEncryptionOutput.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.txtEncryptionOutput.Location = new System.Drawing.Point(0, 37);
-			this.txtEncryptionOutput.Margin = new System.Windows.Forms.Padding(0);
-			this.txtEncryptionOutput.Multiline = true;
-			this.txtEncryptionOutput.Name = "txtEncryptionOutput";
-			this.txtEncryptionOutput.ReadOnly = true;
-			this.txtEncryptionOutput.Size = new System.Drawing.Size(690, 153);
-			this.txtEncryptionOutput.TabIndex = 1;
-			// 
-			// txtEncryptionInput
-			// 
-			this.txtEncryptionInput.BackColor = System.Drawing.Color.White;
-			this.txtEncryptionInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtEncryptionInput.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtEncryptionInput.Location = new System.Drawing.Point(0, 0);
-			this.txtEncryptionInput.Margin = new System.Windows.Forms.Padding(0);
-			this.txtEncryptionInput.Multiline = true;
-			this.txtEncryptionInput.Name = "txtEncryptionInput";
-			this.txtEncryptionInput.Size = new System.Drawing.Size(690, 194);
-			this.txtEncryptionInput.TabIndex = 0;
 			// 
 			// tabSetUp
 			// 
@@ -715,16 +735,16 @@ namespace ExcelToUnity_DataConverter
 			this.label2.TabIndex = 12;
 			this.label2.Text = "Json Data Output";
 			// 
-			// tabPage2
+			// tabExportMultiExcels
 			// 
-			this.tabPage2.Controls.Add(this.panel3);
-			this.tabPage2.Controls.Add(this.txtLog2);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(696, 394);
-			this.tabPage2.TabIndex = 2;
-			this.tabPage2.Text = "Export Multi Excels (All In One)";
+			this.tabExportMultiExcels.Controls.Add(this.panel3);
+			this.tabExportMultiExcels.Controls.Add(this.txtLog2);
+			this.tabExportMultiExcels.Location = new System.Drawing.Point(4, 22);
+			this.tabExportMultiExcels.Name = "tabExportMultiExcels";
+			this.tabExportMultiExcels.Padding = new System.Windows.Forms.Padding(3);
+			this.tabExportMultiExcels.Size = new System.Drawing.Size(696, 394);
+			this.tabExportMultiExcels.TabIndex = 2;
+			this.tabExportMultiExcels.Text = "Export Multi Excels (All In One)";
 			// 
 			// panel3
 			// 
@@ -755,26 +775,26 @@ namespace ExcelToUnity_DataConverter
 			this.DtgFilePaths.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.DtgFilePaths.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgFilePaths.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.path,
             this.exportIds,
             this.exportConstants,
             this.BtnDelete});
-			dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle19;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle3;
 			this.DtgFilePaths.Location = new System.Drawing.Point(0, 29);
 			this.DtgFilePaths.Margin = new System.Windows.Forms.Padding(0);
 			this.DtgFilePaths.MultiSelect = false;
@@ -806,10 +826,10 @@ namespace ExcelToUnity_DataConverter
 			// 
 			// BtnDelete
 			// 
-			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle18;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle2;
 			this.BtnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BtnDelete.HeaderText = "Delete";
 			this.BtnDelete.Name = "BtnDelete";
@@ -895,18 +915,18 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.DtgIDs.AllowUserToAddRows = false;
 			this.DtgIDs.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
+			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
 			this.DtgIDs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
 			this.DtgIDs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgIDs.Location = new System.Drawing.Point(259, 60);
 			this.DtgIDs.Name = "DtgIDs";
@@ -960,26 +980,26 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.DtgSheets.AllowUserToAddRows = false;
 			this.DtgSheets.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle22;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
 			this.DtgSheets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
+			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
 			this.DtgSheets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle24;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle8;
 			this.DtgSheets.Location = new System.Drawing.Point(0, 60);
 			this.DtgSheets.Name = "DtgSheets";
 			this.DtgSheets.Size = new System.Drawing.Size(253, 214);
@@ -1119,7 +1139,7 @@ namespace ExcelToUnity_DataConverter
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabChangeLog.Controls.Add(this.tabPage1);
-			this.tabChangeLog.Controls.Add(this.tabPage2);
+			this.tabChangeLog.Controls.Add(this.tabExportMultiExcels);
 			this.tabChangeLog.Controls.Add(this.tabSetUp);
 			this.tabChangeLog.Controls.Add(this.tabEncription);
 			this.tabChangeLog.Controls.Add(this.tabPage5);
@@ -1167,26 +1187,6 @@ namespace ExcelToUnity_DataConverter
 			this.BtnLoadSettings.UseVisualStyleBackColor = true;
 			this.BtnLoadSettings.Click += new System.EventHandler(this.BtnLoadSettings_Click);
 			// 
-			// splitContainer1
-			// 
-			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.Location = new System.Drawing.Point(3, 3);
-			this.splitContainer1.Name = "splitContainer1";
-			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-			// 
-			// splitContainer1.Panel1
-			// 
-			this.splitContainer1.Panel1.Controls.Add(this.txtEncryptionInput);
-			// 
-			// splitContainer1.Panel2
-			// 
-			this.splitContainer1.Panel2.Controls.Add(this.txtEncryptionOutput);
-			this.splitContainer1.Panel2.Controls.Add(this.BtnDecrypt);
-			this.splitContainer1.Panel2.Controls.Add(this.button1);
-			this.splitContainer1.Size = new System.Drawing.Size(690, 388);
-			this.splitContainer1.SplitterDistance = 194;
-			this.splitContainer1.TabIndex = 4;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1208,10 +1208,16 @@ namespace ExcelToUnity_DataConverter
 			this.tabPage6.PerformLayout();
 			this.tabPage5.ResumeLayout(false);
 			this.tabEncription.ResumeLayout(false);
+			this.splitContainer1.Panel1.ResumeLayout(false);
+			this.splitContainer1.Panel1.PerformLayout();
+			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+			this.splitContainer1.ResumeLayout(false);
 			this.tabSetUp.ResumeLayout(false);
 			this.tabSetUp.PerformLayout();
-			this.tabPage2.ResumeLayout(false);
-			this.tabPage2.PerformLayout();
+			this.tabExportMultiExcels.ResumeLayout(false);
+			this.tabExportMultiExcels.PerformLayout();
 			this.panel3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.DtgFilePaths)).EndInit();
 			this.tabPage1.ResumeLayout(false);
@@ -1223,12 +1229,6 @@ namespace ExcelToUnity_DataConverter
 			this.panel1.ResumeLayout(false);
 			this.tabChangeLog.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
-			this.splitContainer1.Panel1.ResumeLayout(false);
-			this.splitContainer1.Panel1.PerformLayout();
-			this.splitContainer1.Panel2.ResumeLayout(false);
-			this.splitContainer1.Panel2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-			this.splitContainer1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1268,7 +1268,7 @@ namespace ExcelToUnity_DataConverter
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSelectFolder;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabExportMultiExcels;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button BtnAddFile;
         private System.Windows.Forms.DataGridView DtgFilePaths;
