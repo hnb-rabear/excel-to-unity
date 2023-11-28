@@ -1,3 +1,5 @@
+Download via [Releases page](https://github.com/nbhung100914/excel-to-unity/releases)
+
 # 1. Introduction
 
 The core idea behind this tool is to create a tool that serves Indie Game Developers. This is a tool that helps design and manage databases that both Dev and Designer can use. Designers can easily check the stats in the game without the support of Dev.
@@ -11,7 +13,7 @@ After a long expansion process, the tool has added many new data types, taking a
 - Support for managing the Database entirely with Excel.
 - Efficiently manage IDs and Constants, allowing for batch adjustments without affecting the Database.
 - Easily manage multiple languages through the Localization system, which can be powerfully integrated with Unity.
-- Export Data Table to JSON data files for easy integration into Unity.
+- Export Data Table to JSON Data files for easy integration into Unity.
 - Provide many data formats, which can be flexibly changed according to Data design requirements.
 
 # 3. Introduce features and installation instructions
@@ -27,14 +29,14 @@ The important functions are in the buttons on the right:
 - **Export IDs:** export IDs sheets to C# files.
 - **Export Constants:** export Constants sheets to C# files.
 - **Export Localization:** export Localization Data and corresponding Localization Component, Localization API.
-- **Export JSON:** export Data Table sheets to JSON data.
+- **Export Json:** export Data Table sheets to JSON Data.
 
 Settings:
 
 - **Data File:** enter the address of the excel file containing the Static Database.
 - **Separate Constants:** select this option if you want to export _[%IDs]_ and _[%Constants]_ sheets to separate C# files, with file names structured as _[SheetName] + IDs.cs_ and _[SheetName] + Constants.cs_.
 - **Encrypt Data:** select this option if you want to encrypt JSON Data exported from Data Table.
-- **Merge JSONs:** select this option if you want to export all Data Tables to a single JSON file. The JSON file name will be the excel file name or a custom name in the adjacent TextBox.
+- **Merge Jsons:** select this option if you want to export all Data Tables to a single json file. The json file name will be the excel file name or a custom name in the adjacent TextBox.
 
 Display information:
 
@@ -56,7 +58,7 @@ This is a comprehensive function, everything will be processed with just one but
 
 ![excel-2-unity-tab-3](https://github.com/nbhung100914/excel-to-unity/assets/9100041/a0268340-6198-4e38-bc97-c04f900ef2eb)
 
-- **JSON Data Output:** The data table will be converted to JSON data and saved at this address.
+- **Json Data Output:** The data table will be converted to JSON Data and saved at this address.
 - **Constants Output:** IDs, Constants, Localization Component, and Localization API will be saved at this address.
 - **Localization Output:** Localization Data will be saved at this address. This address should be in the _Resources_ folder.
 - **Namespace:** Declare the namespace for the C# files that the tool exports.
@@ -75,10 +77,10 @@ This is a comprehensive function, everything will be processed with just one but
     - Localization Data: _Localization\_ + [language].txt_
     - Component: _LocalizationText.cs_
     - API: _Localization.cs_
-- **Encrypt JSON:** Encrypt JSON Data before exporting to a text file
+- **Encrypt Json:** Encrypt JSON Data before exporting to a text file
 - **Only enum as ID:** Applies to _[%IDs]_ sheets, columns with the extension _[enum]_. If selected, that IDs column will be exported as enum and ignore the Integer Constant form.
-- **One JSON - One Excel:** Consolidate Data Table in one excel file into a single JSON file, the file name is structured as _[ExcelName].txt_
-- **Encryption Key:** Key to encrypt JSON data
+- **One Json - One Excel:** Consolidate Data Table in one excel file into a single json file, the file name is structured as _[ExcelName].txt_
+- **Encryption Key:** Key to encrypt JSON Data
 - **Language maps:** Applies to Localization combined with TextMeshPro, used to compile the character table of a language. Mainly applied for Korean, Japanese, and Chinese, these are languages with an extremely large character system.
 - **Excluded Sheets:** Enter the names of Sheets to be excluded when processing Data Table.
 - **Excluded Sheets:** Enter the names of fields to be excluded when processing Data Table.
@@ -87,7 +89,7 @@ This is a comprehensive function, everything will be processed with just one but
 
 ![excel-2-unity-tab-4](https://github.com/nbhung100914/excel-to-unity/assets/9100041/58034c2f-97e3-44e5-907d-559294960358)
 
-This function allows you to encrypt or decrypt a string of characters based on the Key provided in the Settings Tab. You can use this function to secure the content of a text, or to open and read the encrypted JSON data files after they have been exported.
+This function allows you to encrypt or decrypt a string of characters based on the Key provided in the Settings Tab. You can use this function to secure the content of a text, or to open and read the encrypted JSON Data files after they have been exported.
 
 # 4. Data Design Rules in Excel
 
@@ -191,7 +193,7 @@ Sheets named according to the syntax _[%Localization%]_ are called Localization 
 | -------- | ---------- | ------- | ------- | ----- | ---- |
 ```
 
-# 4.4 Data table - JSON data
+# 4.4 Data table - JSON Data
 
 ### Basic data type: Boolean, Number, String
 
@@ -227,7 +229,7 @@ Sheets named according to the syntax _[%Localization%]_ are called Localization 
 | ATT_ATK    | 30     | 2       | 1         | 8    | ATT_CRIT   | 10 \| 1  | 1 \| 12   | 1.5 \| 1    | 10 \| 20 | ... |            |
 |            |        |         |           |      | ATT_CRIT   | 10 \| 1  | 1 \| 12   | 1.5 \| 1    | 10 \| 20 | ... |            |
 
-Attribute là một dạng dữ liệu đặc thù, được tạo ra đặc biệt cho các trò chơi thuộc thể loại RPG - nơi mà nhân vật và trang bị có thể sở hữu nhiều thuộc tính và chỉ số khác nhau, không cố định. Dạng dữ liệu này giúp việc tùy chỉnh nhân vật và trang bị trở nên linh hoạt hơn, không bị hạn chế.
+Attribute is a specific data type, specially created for RPG genre games - where characters and equipment can possess various different and non-fixed attributes and stats. This data type makes character and equipment customization more flexible, without restrictions.
 
 ![attribute](https://github.com/nbhung100914/excel-to-unity/assets/9100041/2d619d56-5fa9-4371-b212-3e857bcbbead)
 
