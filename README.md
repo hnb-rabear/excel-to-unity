@@ -1,5 +1,7 @@
 Download via [Releases page](https://github.com/nbhung100914/excel-to-unity/releases)
 
+You can download the demo project [Here](https://github.com/nbhung100914/excel-to-unity-example)
+
 # 1. Introduction
 
 The core idea behind this tool is to create a tool that serves Indie Game Developers. This is a tool that helps design and manage databases that both Dev and Designer can use. Designers can easily check the stats in the game without the support of Dev.
@@ -231,7 +233,7 @@ Sheets named according to the syntax _[%Localization%]_ are called Localization 
 
 Attribute is a specific data type, specially created for RPG genre games - where characters and equipment can possess various different and non-fixed attributes and stats. This data type makes character and equipment customization more flexible, without restrictions.
 
-![attribute](https://github.com/nbhung100914/excel-to-unity/assets/9100041/2d619d56-5fa9-4371-b212-3e857bcbbead)
+![attribute example](https://github.com/nbhung100914/excel-to-unity/assets/9100041/2d619d56-5fa9-4371-b212-3e857bcbbead)
 
 To define an attribute object type, the following rules should be followed:
 
