@@ -221,11 +221,11 @@ Sheets named according to the syntax _[%Localization%]_ are called Localization 
 
 | attribute0 | value0 | unlock0 | increase0 | max0 | attribute1 | value1[] | unlock1[] | increase1[] | max1[]   | ... | attributeN |
 | ---------- | ------ | ------- | --------- | ---- | ---------- | -------- | --------- | ----------- | -------- | --- | ---------- |
-| ATT_1      | 30     | 2       | 1.2       | 8    |            |          |           |             |          | ... |            |
-| ATT_9      | 25     | 3       | 1.5       | 8    |            |          |           |             |          | ... |            |
-| ATT_5      | 30     | 2       | 1         | 5    | ATT_10     | 3 \| 2   | 0 \| 11   | 0.5 \| 1    | 10 \| 20 | ... |            |
-| ATT_2      | 30     | 2       | 1         | 8    | ATT_10     | 10 \| 1  | 1 \| 12   | 1.5 \| 1    | 10 \| 20 | ... |            |
-|            |        |         |           |      | ATT_10     | 10 \| 1  | 1 \| 12   | 1.5 \| 1    | 10 \| 20 | ... |            |
+| ATT_HP     | 30     | 2       | 1.2       | 8    |            |          |           |             |          | ... |            |
+| ATT_AGI    | 25     | 3       | 1.5       | 8    |            |          |           |             |          | ... |            |
+| ATT_INT    | 30     | 2       | 1         | 5    | ATT_CRIT   | 3 \| 2   | 0 \| 11   | 0.5 \| 1    | 10 \| 20 | ... |            |
+| ATT_ATK    | 30     | 2       | 1         | 8    | ATT_CRIT   | 10 \| 1  | 1 \| 12   | 1.5 \| 1    | 10 \| 20 | ... |            |
+|            |        |         |           |      | ATT_CRIT   | 10 \| 1  | 1 \| 12   | 1.5 \| 1    | 10 \| 20 | ... |            |
 
 Attribute là một dạng dữ liệu đặc thù, được tạo ra đặc biệt cho các trò chơi thuộc thể loại RPG - nơi mà nhân vật và trang bị có thể sở hữu nhiều thuộc tính và chỉ số khác nhau, không cố định. Dạng dữ liệu này giúp việc tùy chỉnh nhân vật và trang bị trở nên linh hoạt hơn, không bị hạn chế.
 
