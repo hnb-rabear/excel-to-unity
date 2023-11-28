@@ -64,7 +64,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 			return;
 		Init();
 		int localizedID = -1;
-		LocalizationCommon.Get(m_LocalizedIDString, ref localizedID);
+		LOCALIZATION_CLASS_NAME.Get(m_LocalizedIDString, ref localizedID);
 		if (localizedID == -1)
 		{
 			string path = name;
@@ -74,7 +74,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 				path = $"{parent.name}.{path}";
 				parent = parent.parent;
 			}
-			Debug.LogError($"{path}: not found {m_LocalizedIDString} in {nameof(LocalizationCommon)}");
+			Debug.LogError($"{path}: not found {m_LocalizedIDString} in {nameof(LOCALIZATION_CLASS_NAME)}");
 		}
     }
 	
