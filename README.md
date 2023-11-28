@@ -4,11 +4,11 @@ You can download the demo project [Here](https://github.com/nbhung100914/excel-t
 
 # 1. Introduction
 
-The core idea behind this tool is to create a tool that serves Indie Game Developers. This is a tool that helps design and manage databases that both Dev and Designer can use. Designers can easily check the stats in the game without the support of Dev.
+This tool is designed to assist independent game developers by providing a simple way to design and manage databases that can be used by both developers and designers. It allows designers to easily modify game statistics without needing developer assistance.
 
-Game projects, regardless of large or small scale, all need a Static Database. Depending on the scale of the project, the number of Data Tables increases, Constants and Ids will also increase accordingly. The problem will become more complicated if there is no effective management solution. Therefore, the initial goal of this tool is to manage IDs, Constants, and find a way to easily search, change IDs and Constants in a single place where the Data Table is also updated accordingly.
+Every game project, regardless of size, requires a static database. As the project grows, so does the need for data tables, constants, and IDs. Without an effective management solution, this can become complex. This tool aims to simplify this process by managing IDs and constants, and providing a single location to search, modify, and update these elements along with the data table.
 
-After a long expansion process, the tool has added many new data types, taking advantage of the power of Excel for design and management. Although this tool is mainly developed for RPG games - a genre of games that usually have a large Static Database, it can be completely applied to other game genres that need a large Static Database.
+Over time, the tool has evolved to include new data types and leverages the capabilities of Excel for design and management. While it was primarily developed for RPG games, which typically have large static databases, it can also be used for other game genres that require extensive static databases.
 
 # 2. Main functions
 
