@@ -1,6 +1,6 @@
 Download via [Releases page](https://github.com/nbhung100914/excel-to-unity/releases)
 
-You can download the demo project [Here](https://github.com/nbhung100914/excel-to-unity-example)
+You can view the demo project [Here](https://github.com/nbhung100914/excel-to-unity-example)
 
 # 1. Introduction
 
@@ -251,3 +251,7 @@ To define an attribute object type, the following rules should be followed:
     Example 1: attribute0, value0, increase0, value0, max0.
     Example 2: attribute1, value1[], increase1[], value1[], max1[].
     ```
+
+# 5. Setup for a Unity Project
+
+You can view the demo project [Here](https://github.com/nbhung100914/excel-to-unity-example)
