@@ -18,7 +18,7 @@ After a long expansion process, the tool has added many new data types, taking a
 
 ## 3.1. Export single excel
 
-![Export Single Excel](/media/excel-2-unity-tab-1.png)
+![excel-2-unity-tab-1](https://github.com/nbhung100914/excel-to-unity/assets/9100041/e1a9f646-fe47-480b-a71b-4a0e79f627ca)
 
 This is a basic but very important function, helping you get acquainted with the tools. If your Static Database is not too large or complex, and only needs an excel file to contain all data, then this function is enough for your needs. However, if your Static Database is complex and needs to be stored in multiple Excel files, you will need to use the **Export Multi Excels** function. This function will be introduced in the next section.
 
@@ -44,7 +44,7 @@ Display information:
 
 ## 3.2. Export multi excels (All in one)
 
-![Export Multi Excels (All in one)](/media/excel-2-unity-tab-2.png)
+![excel-2-unity-tab-2](https://github.com/nbhung100914/excel-to-unity/assets/9100041/82288317-29d9-4a1a-aadd-6bf730fa2e82)
 
 This is a comprehensive function, everything will be processed with just one button press:
 
@@ -54,7 +54,7 @@ This is a comprehensive function, everything will be processed with just one but
 
 ## 3.3. Settings
 
-![Settings](/media/excel-2-unity-tab-3.png)
+![excel-2-unity-tab-3](https://github.com/nbhung100914/excel-to-unity/assets/9100041/a0268340-6198-4e38-bc97-c04f900ef2eb)
 
 - **JSON Data Output:** The data table will be converted to JSON data and saved at this address.
 - **Constants Output:** IDs, Constants, Localization Component, and Localization API will be saved at this address.
@@ -85,7 +85,7 @@ This is a comprehensive function, everything will be processed with just one but
 
 ## 3.4. Encrypt & Decrypt Text
 
-![Encryption](/media/excel-2-unity-tab-4.png)
+![excel-2-unity-tab-4](https://github.com/nbhung100914/excel-to-unity/assets/9100041/58034c2f-97e3-44e5-907d-559294960358)
 
 This function allows you to encrypt or decrypt a string of characters based on the Key provided in the Settings Tab. You can use this function to secure the content of a text, or to open and read the encrypted JSON data files after they have been exported.
 
@@ -229,7 +229,7 @@ Sheets named according to the syntax _[%Localization%]_ are called Localization 
 
 Attribute là một dạng dữ liệu đặc thù, được tạo ra đặc biệt cho các trò chơi thuộc thể loại RPG - nơi mà nhân vật và trang bị có thể sở hữu nhiều thuộc tính và chỉ số khác nhau, không cố định. Dạng dữ liệu này giúp việc tùy chỉnh nhân vật và trang bị trở nên linh hoạt hơn, không bị hạn chế.
 
-![Attribute example](/media/attribute.png)
+![attribute](https://github.com/nbhung100914/excel-to-unity/assets/9100041/2d619d56-5fa9-4371-b212-3e857bcbbead)
 
 To define an attribute object type, the following rules should be followed:
 
