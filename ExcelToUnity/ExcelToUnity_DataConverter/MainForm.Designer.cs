@@ -102,13 +102,9 @@ namespace ExcelToUnity_DataConverter
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.btnSelectFile = new System.Windows.Forms.Button();
 			this.DtgIDs = new System.Windows.Forms.DataGridView();
-			this.txtMegedJsonCustomName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.chkMergeJsonIntoSingleOne = new System.Windows.Forms.CheckBox();
 			this.txtInputXLSXFilePath = new System.Windows.Forms.TextBox();
 			this.DtgSheets = new System.Windows.Forms.DataGridView();
-			this.chkEncrypt = new System.Windows.Forms.CheckBox();
-			this.chkSeperateConstants1 = new System.Windows.Forms.CheckBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.BtnReloadGrid = new System.Windows.Forms.Button();
 			this.BtnExportJson = new System.Windows.Forms.Button();
@@ -885,13 +881,9 @@ namespace ExcelToUnity_DataConverter
 			this.panel2.BackColor = System.Drawing.Color.Transparent;
 			this.panel2.Controls.Add(this.btnSelectFile);
 			this.panel2.Controls.Add(this.DtgIDs);
-			this.panel2.Controls.Add(this.txtMegedJsonCustomName);
 			this.panel2.Controls.Add(this.label1);
-			this.panel2.Controls.Add(this.chkMergeJsonIntoSingleOne);
 			this.panel2.Controls.Add(this.txtInputXLSXFilePath);
 			this.panel2.Controls.Add(this.DtgSheets);
-			this.panel2.Controls.Add(this.chkEncrypt);
-			this.panel2.Controls.Add(this.chkSeperateConstants1);
 			this.panel2.Location = new System.Drawing.Point(0, 0);
 			this.panel2.Margin = new System.Windows.Forms.Padding(0);
 			this.panel2.Name = "panel2";
@@ -928,21 +920,11 @@ namespace ExcelToUnity_DataConverter
 			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
 			this.DtgIDs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.DtgIDs.Location = new System.Drawing.Point(259, 60);
+			this.DtgIDs.Location = new System.Drawing.Point(259, 35);
 			this.DtgIDs.Name = "DtgIDs";
 			this.DtgIDs.ReadOnly = true;
-			this.DtgIDs.Size = new System.Drawing.Size(332, 214);
+			this.DtgIDs.Size = new System.Drawing.Size(332, 239);
 			this.DtgIDs.TabIndex = 17;
-			// 
-			// txtMegedJsonCustomName
-			// 
-			this.txtMegedJsonCustomName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtMegedJsonCustomName.Location = new System.Drawing.Point(316, 35);
-			this.txtMegedJsonCustomName.Name = "txtMegedJsonCustomName";
-			this.txtMegedJsonCustomName.Size = new System.Drawing.Size(168, 20);
-			this.txtMegedJsonCustomName.TabIndex = 25;
-			this.txtMegedJsonCustomName.Text = "Output Json File Name";
-			this.txtMegedJsonCustomName.TextChanged += new System.EventHandler(this.txtMegedJsonCustomName_TextChanged);
 			// 
 			// label1
 			// 
@@ -952,18 +934,6 @@ namespace ExcelToUnity_DataConverter
 			this.label1.Size = new System.Drawing.Size(49, 13);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Data File";
-			// 
-			// chkMergeJsonIntoSingleOne
-			// 
-			this.chkMergeJsonIntoSingleOne.AutoSize = true;
-			this.chkMergeJsonIntoSingleOne.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.chkMergeJsonIntoSingleOne.Location = new System.Drawing.Point(216, 37);
-			this.chkMergeJsonIntoSingleOne.Name = "chkMergeJsonIntoSingleOne";
-			this.chkMergeJsonIntoSingleOne.Size = new System.Drawing.Size(94, 17);
-			this.chkMergeJsonIntoSingleOne.TabIndex = 24;
-			this.chkMergeJsonIntoSingleOne.Text = "Combine Jsons";
-			this.chkMergeJsonIntoSingleOne.UseVisualStyleBackColor = true;
-			this.chkMergeJsonIntoSingleOne.CheckedChanged += new System.EventHandler(this.chkMergeJsonInSingleExcel_CheckedChanged);
 			// 
 			// txtInputXLSXFilePath
 			// 
@@ -1000,34 +970,10 @@ namespace ExcelToUnity_DataConverter
 			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
 			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle8;
-			this.DtgSheets.Location = new System.Drawing.Point(0, 60);
+			this.DtgSheets.Location = new System.Drawing.Point(0, 35);
 			this.DtgSheets.Name = "DtgSheets";
-			this.DtgSheets.Size = new System.Drawing.Size(253, 214);
+			this.DtgSheets.Size = new System.Drawing.Size(253, 239);
 			this.DtgSheets.TabIndex = 11;
-			// 
-			// chkEncrypt
-			// 
-			this.chkEncrypt.AutoSize = true;
-			this.chkEncrypt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.chkEncrypt.Location = new System.Drawing.Point(125, 37);
-			this.chkEncrypt.Name = "chkEncrypt";
-			this.chkEncrypt.Size = new System.Drawing.Size(84, 17);
-			this.chkEncrypt.TabIndex = 22;
-			this.chkEncrypt.Text = "Encrypt Json";
-			this.chkEncrypt.UseVisualStyleBackColor = true;
-			this.chkEncrypt.CheckedChanged += new System.EventHandler(this.chkEncrypt_CheckedChanged);
-			// 
-			// chkSeperateConstants1
-			// 
-			this.chkSeperateConstants1.AutoSize = true;
-			this.chkSeperateConstants1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.chkSeperateConstants1.Location = new System.Drawing.Point(3, 37);
-			this.chkSeperateConstants1.Name = "chkSeperateConstants1";
-			this.chkSeperateConstants1.Size = new System.Drawing.Size(116, 17);
-			this.chkSeperateConstants1.TabIndex = 21;
-			this.chkSeperateConstants1.Text = "Seperate Constants";
-			this.chkSeperateConstants1.UseVisualStyleBackColor = true;
-			this.chkSeperateConstants1.CheckedChanged += new System.EventHandler(this.chkSeperateConstants1_CheckedChanged);
 			// 
 			// panel1
 			// 
@@ -1067,7 +1013,7 @@ namespace ExcelToUnity_DataConverter
 			this.BtnExportJson.Cursor = System.Windows.Forms.Cursors.Default;
 			this.BtnExportJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BtnExportJson.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.BtnExportJson.Location = new System.Drawing.Point(7, 37);
+			this.BtnExportJson.Location = new System.Drawing.Point(6, 186);
 			this.BtnExportJson.Name = "BtnExportJson";
 			this.BtnExportJson.Size = new System.Drawing.Size(90, 23);
 			this.BtnExportJson.TabIndex = 3;
@@ -1278,13 +1224,9 @@ namespace ExcelToUnity_DataConverter
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnSelectFile;
         private System.Windows.Forms.DataGridView DtgIDs;
-        private System.Windows.Forms.TextBox txtMegedJsonCustomName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox chkMergeJsonIntoSingleOne;
         private System.Windows.Forms.TextBox txtInputXLSXFilePath;
         private System.Windows.Forms.DataGridView DtgSheets;
-        private System.Windows.Forms.CheckBox chkEncrypt;
-        private System.Windows.Forms.CheckBox chkSeperateConstants1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button BtnReloadGrid;
         private System.Windows.Forms.Button BtnExportJson;

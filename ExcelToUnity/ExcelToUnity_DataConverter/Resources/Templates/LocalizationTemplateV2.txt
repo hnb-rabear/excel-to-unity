@@ -1,6 +1,6 @@
-/**
- * Author RadBear - nbhung71711@gmail.com - 2017-2021
- **/
+/***
+ * Author RadBear - nbhung71711@gmail.com - 2017-2023
+ ***/
 
 using System.Collections.Generic;
 using System.Text;
@@ -373,8 +373,8 @@ public static class LOCALIZATION_CLASS_NAME
 
                     if (obj.TryGetComponent(out TMPro.TextMeshProUGUI txtPro))
                         txtPro.text = value;
-                        else if (obj.TryGetComponent(out Text txt))
-                    txt.text = value;
+                    else if (obj.TryGetComponent(out Text txt))
+                        txt.text = value;
 
 					curLangIndex = LOCALIZATION_CLASS_NAME.curLangIndex;
 #if UNITY_EDITOR
@@ -402,7 +402,7 @@ public static class LOCALIZATION_CLASS_NAME
 		foreach (var guid in assetIds)
 		{
 			var obj = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(UnityEditor.AssetDatabase.GUIDToAssetPath(guid));
-			var components = obj.GetComponentsInChildren<LocalizationText>(true);
+			var components = obj.GetComponentsInChildren<LOCALIZATION_CLASS_NAMEText>(true);
 			foreach (var com in components)
 			{
 				string id = com.LocalizedIDString;

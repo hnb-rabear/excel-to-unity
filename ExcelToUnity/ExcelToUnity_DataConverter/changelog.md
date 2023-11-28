@@ -60,4 +60,9 @@
 # Version 1.4.6
 - Removed obsoleted features
 - Updated localization templates
-- Fixed IDx exporting of Single Excel
+- Fixed IDs exporting in Single Excel feature
+
+# Version 1.4.7
+- Removed settings in Single Excel feature
+- Fixed LocalizationText Component
+- Fixed Separation Localization feature in Single Excel feature

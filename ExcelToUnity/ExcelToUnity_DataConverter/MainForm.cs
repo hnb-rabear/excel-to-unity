@@ -115,19 +115,6 @@ namespace ExcelToUnity_DataConverter
         private List<string> m_localizedSheetsExported;
         private List<string> m_localizedLanguages;
 
-        ////--------- Setup for single files
-        /// <summary>
-        /// No Merge IDs Sheets
-        /// No Merge Constants Sheets
-        /// No Merge Localizations Sheets
-        /// </summary>
-        private bool m_separateConstants1;
-        /// <summary>
-        /// Encrypt json data
-        /// </summary>
-        private bool m_encryptData1;
-        private bool m_mergeJsonsIntoSingleJson1; // Merge all json data to an json array object
-
 #endregion
 
         //=========================================
@@ -1083,9 +1070,9 @@ namespace ExcelToUnity_DataConverter
             {
                 Helper.WriteFile(Config.Settings.outputDataFilePath, pOutputFile + ".txt", finalContent);
                 if (pEncrypt && m_encryption != null)
-                    Log(LogType.Message, $"Exported Sheet {pSheetName} as encrypted JSON data.");
+                    Log(LogType.Message, $"Exported all Data Tables {pSheetName} as encrypted JSON data.");
                 else
-                    Log(LogType.Message, $"Exported Sheet {pSheetName} as JSON data.");
+                    Log(LogType.Message, $"Exported all Data Tables {pSheetName} as JSON data.");
             }
             return finalContent;
         }
@@ -1791,10 +1778,6 @@ namespace ExcelToUnity_DataConverter
             LoadWorkBook();
             InitializeDtgFiles();
 
-            chkSeperateConstants1.Checked = m_separateConstants1;
-            chkEncrypt.Checked = m_encryptData1;
-            chkMergeJsonIntoSingleOne.Checked = m_mergeJsonsIntoSingleJson1;
-            txtMegedJsonCustomName.ReadOnly = !m_mergeJsonsIntoSingleJson1;
             btnOpenGoogleSheet.Visible = false;
             tabChangeLog.TabPages.RemoveByKey("tabPage2");
 
@@ -1815,7 +1798,7 @@ namespace ExcelToUnity_DataConverter
                 txtBoxHelp.Text = content;
             }
 
-            txtVersion.Text = "1.4.6";
+            txtVersion.Text = "1.4.7";
         }
 
         private void btnSelectInputFile_Click(object sender, EventArgs e)
@@ -1851,10 +1834,7 @@ namespace ExcelToUnity_DataConverter
             {
                 SetupConfigFolders(txtInputXLSXFilePath, ref Config.Settings.inputDataFilePath);
                 LoadWorkBook();
-                txtMegedJsonCustomName.Text = Path.GetFileNameWithoutExtension(Config.Settings.inputDataFilePath).Trim().Replace(" ", "_");
             }
-            else
-                txtMegedJsonCustomName.Text = @"Json custom name";
         }
 
         private void txtOutputDataFilePath_TextChanged(object sender, EventArgs e)
@@ -1884,7 +1864,7 @@ namespace ExcelToUnity_DataConverter
                     LoadIdSheet(m_workBook, m_sheets[i].SheetName);
 
                     //Create IDs Files
-                    if (m_sheets[i].Check && m_separateConstants1)
+                    if (m_sheets[i].Check && Config.Settings.seperateConstants)
                     {
                         var builder = m_idsBuilderDict[m_sheets[i].SheetName];
                         CreateIDsFile(m_sheets[i].SheetName, builder.ToString());
@@ -1892,7 +1872,7 @@ namespace ExcelToUnity_DataConverter
                 }
             }
 
-            if (!m_separateConstants1)
+            if (!Config.Settings.seperateConstants)
             {
                 //Export all IDs in one file
                 var iDsBuilder = new StringBuilder();
@@ -1905,17 +1885,17 @@ namespace ExcelToUnity_DataConverter
                 Log(LogType.Message, "Export IDs successfully!");
             }
 
-            bool writeJsonFileForSingleSheet = !m_mergeJsonsIntoSingleJson1;
+            bool writeJsonFileForSingleSheet = !Config.Settings.mergeJsonsIntoSingleJson;
             var allJsons = new Dictionary<string, string>();
             for (int i = 0; i < m_sheets.Count; i++)
             {
                 if (m_sheets[i].Check && IsJsonSheet(m_sheets[i].SheetName))
                 {
                     string fileName = m_sheets[i].SheetName.Trim().Replace(" ", "_");
-                    string json = ConvertSheetToJson(m_workBook, m_sheets[i].SheetName, fileName, m_encryptData1, writeJsonFileForSingleSheet);
+                    string json = ConvertSheetToJson(m_workBook, m_sheets[i].SheetName, fileName, Config.Settings.encryption, writeJsonFileForSingleSheet);
 
                     //Merge all json into a single file
-                    if (m_mergeJsonsIntoSingleJson1)
+                    if (Config.Settings.mergeJsonsIntoSingleJson)
                     {
                         if (allJsons.ContainsKey(fileName))
                         {
@@ -1928,16 +1908,17 @@ namespace ExcelToUnity_DataConverter
                     allSheets.Add(m_sheets[i].SheetName);
                 }
             }
-            if (m_mergeJsonsIntoSingleJson1)
+            if (Config.Settings.mergeJsonsIntoSingleJson)
             {
-                //Build json file for all jsons content
-                string mergedJson = JsonConvert.SerializeObject(allJsons);
-                Helper.WriteFile(Config.Settings.outputDataFilePath, txtMegedJsonCustomName.Text + ".txt", mergedJson);
+				//Build json file for all jsons content
+				string mergedJson = JsonConvert.SerializeObject(allJsons);
+				string mergedFileName = Path.GetFileNameWithoutExtension(Config.Settings.inputDataFilePath).Trim().Replace(" ", "_");
+				Helper.WriteFile(Config.Settings.outputDataFilePath, mergedFileName + ".txt", mergedJson);
 
-                if (m_encryptData1)
-                    Log(LogType.Message, $"Exported Sheet {txtMegedJsonCustomName.Text} as encrypted JSON data.");
+                if (Config.Settings.encryption)
+                    Log(LogType.Message, $"Exported all Data Tables in {mergedFileName} as encrypted JSON data.");
                 else
-                    Log(LogType.Message, $"Exported Sheet {txtMegedJsonCustomName.Text} as JSON data.");
+                    Log(LogType.Message, $"Exported all Data Tables in {mergedFileName} as JSON data.");
             }
 
             if (m_sheets.Count > 0)
@@ -1970,7 +1951,7 @@ namespace ExcelToUnity_DataConverter
                     LoadIdSheet(m_workBook, m.SheetName);
 
                     //Create IDs Files
-                    if (m_separateConstants1)
+                    if (Config.Settings.seperateConstants)
                     {
                         var content = m_idsBuilderDict[m.SheetName].ToString();
                         CreateIDsFile(m.SheetName, content);
@@ -1979,7 +1960,7 @@ namespace ExcelToUnity_DataConverter
                 }
             }
 
-            if (!m_separateConstants1)
+            if (!Config.Settings.seperateConstants)
             {
                 var iDsBuilder = new StringBuilder();
                 foreach (var builder in m_idsBuilderDict)
@@ -2006,14 +1987,14 @@ namespace ExcelToUnity_DataConverter
                 {
                     LoadConstantsSheet(m_workBook, m_sheets[i].SheetName);
 
-                    if (m_constantsBuilderDict.ContainsKey(m_sheets[i].SheetName) && m_separateConstants1)
+                    if (m_constantsBuilderDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateConstants)
                     {
                         CreateConstantsFile(m_constantsBuilderDict[m_sheets[i].SheetName].ToString(), m_sheets[i].SheetName);
                     }
                 }
             }
 
-            if (!m_separateConstants1)
+            if (!Config.Settings.seperateConstants)
             {
                 var builder = new StringBuilder();
                 foreach (var b in m_constantsBuilderDict)
@@ -2068,7 +2049,7 @@ namespace ExcelToUnity_DataConverter
                 {
                     LoadLocalizationSheet(m_workBook, m_sheets[i].SheetName);
 
-                    if (m_localizationsDict.ContainsKey(m_sheets[i].SheetName) && m_separateConstants1)
+                    if (m_localizationsDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateLocalizations)
                     {
                         var builder = m_localizationsDict[m_sheets[i].SheetName];
                         //CreateLocalizationFile(builder.idsString, builder.languageTextDict, mSheets[i].SheetName);
@@ -2078,7 +2059,7 @@ namespace ExcelToUnity_DataConverter
                 }
             }
 
-            if (!m_separateConstants1)
+            if (!Config.Settings.seperateLocalizations)
             {
                 var builder = new LocalizationBuilder();
                 foreach (var b in m_localizationsDict)
@@ -2101,14 +2082,6 @@ namespace ExcelToUnity_DataConverter
             CreateLocalizationsManagerFile();
         }
 
-        private void BtnTest_Click(object sender, EventArgs e)
-        {
-            m_sheets = (List<Sheet>)DtgSheets.DataSource;
-
-            foreach (var i in m_sheets)
-                Debug.WriteLine(i.SheetName + " " + i.Check);
-        }
-
         private Dictionary<string, string> GenereteCharacterMaps(Dictionary<string, string> pCharacterMaps)
         {
             var output = new Dictionary<string, string>();
@@ -2122,11 +2095,6 @@ namespace ExcelToUnity_DataConverter
                 output.Add(map.Key, combinedStr);
             }
             return output;
-        }
-
-        private void chkSeperateConstants1_CheckedChanged(object sender, EventArgs e)
-        {
-            m_separateConstants1 = chkSeperateConstants1.Checked;
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -2260,10 +2228,10 @@ namespace ExcelToUnity_DataConverter
                     string mergedFileName = Path.GetFileNameWithoutExtension(file.path).Trim().Replace(" ", "_");
                     Helper.WriteFile(Config.Settings.outputDataFilePath, mergedFileName + ".txt", mergedJson);
 
-                    if (m_encryptData1)
-                        Log(LogType.Message, $"Exported Sheet {mergedFileName} as encrypted JSON data.");
+                    if (Config.Settings.encryption)
+                        Log(LogType.Message, $"Exported all Data Tables {mergedFileName} as encrypted JSON data.");
                     else
-                        Log(LogType.Message, $"Exported Sheet {mergedFileName} as JSON data.");
+                        Log(LogType.Message, $"Exported all Data Tables {mergedFileName} as JSON data.");
                 }
 
                 //Load and write constants
@@ -2472,11 +2440,6 @@ namespace ExcelToUnity_DataConverter
             Config.Save();
         }
 
-        private void chkEncrypt_CheckedChanged(object sender, EventArgs e)
-        {
-            m_encryptData1 = chkEncrypt.Checked;
-        }
-
         private void ClearLog()
         {
             txtLog.Text = "";
@@ -2645,12 +2608,6 @@ namespace ExcelToUnity_DataConverter
                     @"168, 220, 184, 133, 78, 149, 8, 249, 171, 138, 98, 170, 95, 15, 211, 200, 51, 242, 4, 193, 219, 181, 232, 99, 16, 240, 142, 128, 29, 163, 245, 24, 204, 73, 173, 32, 214, 76, 31, 99, 91, 239, 232, 53, 138, 195, 93, 195, 185, 210, 155, 184, 243, 216, 204, 42, 138, 101, 100, 241, 46, 145, 198, 66, 11, 17, 19, 86, 157, 27, 132, 201, 246, 112, 121, 7, 195, 148, 143, 125, 158, 29, 184, 67, 187, 100, 31, 129, 64, 130, 26, 67, 240, 128, 233, 129, 63, 169, 5, 211, 248, 200, 199, 96, 54, 128, 111, 147, 100, 6, 185, 0, 188, 143, 25, 103, 211, 18, 17, 249, 106, 54, 162, 188, 25, 34, 147, 3, 222, 61, 218, 49, 164, 165, 133, 12, 65, 92, 48, 40, 129, 76, 194, 229, 109, 76, 150, 203, 251, 62, 54, 251, 70, 224, 162, 167, 183, 78, 103, 28, 67, 183, 23, 80, 156, 97, 83, 164, 24, 183, 81, 56, 103, 77, 112, 248, 4, 168, 5, 72, 109, 18, 75, 219, 99, 181, 160, 76, 65, 16, 41, 175, 87, 195, 181, 19, 165, 172, 138, 172, 84, 40, 167, 97, 214, 90, 26, 124, 0, 166, 217, 97, 246, 117, 237, 99, 46, 15, 141, 69, 4, 245, 98, 73, 3, 8, 161, 98, 79, 161, 127, 19, 55, 158, 139, 247, 39, 59, 72, 161, 82, 158, 25, 65, 107, 173, 5, 255, 53, 28, 179, 182, 65, 162, 17";
         }
 
-        private void chkMergeJsonInSingleExcel_CheckedChanged(object sender, EventArgs e)
-        {
-            m_mergeJsonsIntoSingleJson1 = chkMergeJsonIntoSingleOne.Checked;
-            txtMegedJsonCustomName.ReadOnly = !m_mergeJsonsIntoSingleJson1;
-        }
-
         private void txtMegedJsonCustomName_TextChanged(object sender, EventArgs e) { }
 
         private void btnOpenGoogleSheet_Click(object sender, EventArgs e)
@@ -2668,8 +2625,6 @@ namespace ExcelToUnity_DataConverter
             chkSeperateIDs.Checked = false;
             chkSeperateConstants.Checked = false;
             chkSeperateLocalization.Checked = false;
-            chkEncrypt.Checked = false;
-            chkMergeJsonIntoSingleOne.Checked = false;
             chkMergeJsonIntoSingleOne2.Checked = false;
             chkKeepOnlyEnumAsIds.Checked = false;
             txtSettingEncryptionKey.Text =

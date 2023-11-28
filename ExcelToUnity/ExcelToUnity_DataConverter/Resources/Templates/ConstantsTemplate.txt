@@ -1,6 +1,6 @@
-﻿/**
- * Author RadBear - nbhung71711@gmail.com - 2017-2021
- **/
+﻿/***
+ * Author RadBear - nbhung71711@gmail.com - 2017-2023
+ ***/
 
 using System;
 using UnityEngine;

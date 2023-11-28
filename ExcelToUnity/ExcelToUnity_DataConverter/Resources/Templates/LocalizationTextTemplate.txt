@@ -1,6 +1,6 @@
-/**
- * Author RadBear - nbhung71711@gmail.com - 2017-2021
- **/
+/***
+ * Author RadBear - nbhung71711@gmail.com - 2017-2023
+ ***/
 
 using System;
 using System.Collections;
@@ -60,10 +60,11 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
         if (Application.isPlaying)
             return;
 
+        if (string.IsNullOrEmpty(m_LocalizedIDString))
+			return;
 		Init();
-		
 		int localizedID = -1;
-		LOCALIZATION_CLASS_NAME.Get(m_LocalizedIDString, ref localizedID);
+		LocalizationCommon.Get(m_LocalizedIDString, ref localizedID);
 		if (localizedID == -1)
 		{
 			string path = name;
@@ -73,7 +74,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 				path = $"{parent.name}.{path}";
 				parent = parent.parent;
 			}
-			Debug.LogError($"{path}: not found {m_LocalizedIDString} in {nameof(LOCALIZATION_CLASS_NAME)}");
+			Debug.LogError($"{path}: not found {m_LocalizedIDString} in {nameof(LocalizationCommon)}");
 		}
     }
 	
