@@ -1,68 +1,70 @@
-# Version 1.3
-- Added the option to shrink all JSON sheets of an Excel file into a single JSON file.
+# Update Summaries
 
-# Version 1.3.1
-- Improved user interface with responsive design.
+## Version 1.3
+- Introduced the ability to condense all JSON sheets of an Excel file into a single JSON file.
 
-# Version 1.3.2
-- Minified JSON data type strings to a single line.
+## Version 1.3.1
+- Enhanced the user interface with a responsive design.
 
-# Version 1.3.3
-- Fixed empty cells to return a value of 0 instead of -1.
-- Updated the condition for the Values array of Attributes. The Values array is now null if it has only one element equal to 0.
+## Version 1.3.2
+- Compressed JSON data type strings into a single line.
 
-# Version 1.3.4
-- Added an Unminimized Fields box.
+## Version 1.3.3
+- Adjusted empty cells to return a value of 0 instead of -1.
+- Modified the condition for the Values array of Attributes to be null if it only contains one element equal to 0.
+
+## Version 1.3.4
+- Introduced an Unminimized Fields box.
 - Updated the Help section.
 
-# Version 1.3.5
-- Added the option to export only IDs as Enums.
+## Version 1.3.5
+- Provided the option to export only IDs as Enums.
 
-# Version 1.3.6
-- Updated the JSON data structure to allow empty cells on the Field Row in the JSON Data Sheet.
-- Added the [x] tag for JSON Column Rules. Columns with [x] in their name will be ignored during exportation.
+## Version 1.3.6
+- Updated the JSON data structure to accommodate empty cells on the Field Row in the JSON Data Sheet.
+- Introduced the [x] tag for JSON Column Rules to ignore columns with [x] in their name during exportation.
 
-# Version 1.3.7
-- Fixed an issue where the last column with an empty name in the JSON Data Sheet would throw an exception.
+## Version 1.3.7
+- Resolved an issue where the last column with an empty name in the JSON Data Sheet would cause an exception.
 - Added a comment column for the IDs and Constants Sheets.
-- Added messages for keys with no values.
+- Included messages for keys without values.
 - Updated the example.
 
-# Version 1.3.8
-- Fixed responsive user interface issues.
-- Rearranged functions for improved clarity.
+## Version 1.3.8
+- Addressed responsive user interface issues.
+- Reorganized functions for better clarity.
 
-# Version 1.3.9
-- Removed the Merge Constants Sheets Checkbox and made merging sheets the default behavior.
+## Version 1.3.9
+- Removed the Merge Constants Sheets Checkbox and set merging sheets as the default behavior.
 - Added a Checkbox for exporting Constants, IDs, and Localizations Sheets separately.
-- Added a Localizations Manager for managing multiple file localizations.
+- Introduced a Localizations Manager for handling multiple file localizations.
 
-# Version 1.4.0
-- Fixed issues with the Localization Text Component and referenced ID strings in the Constants Sheet.
+## Version 1.4.0
+- Resolved issues with the Localization Text Component and referenced ID strings in the Constants Sheet.
 
-# Version 1.4.1
+## Version 1.4.1
 - Removed license checking.
-- Fixed default settings and updated documentation link.
+- Corrected default settings and updated the documentation link.
 
-# Version 1.4.2
+## Version 1.4.2
 - Fixed comments for enum type values in the IDs Sheet.
 
-# Version 1.4.3
-- Added a localization output folder and updated localization templates.
+## Version 1.4.3
+- Introduced a localization output folder and updated localization templates.
 
-# Version 1.4.4
-- Added a language characters map generator.
+## Version 1.4.4
+- Introduced a language characters map generator.
 
-# Version 1.4.5
-- Added method for getting system language.
+## Version 1.4.5
+- Added a method for retrieving system language.
 - Updated Help
 
-# Version 1.4.6
-- Removed obsoleted features
-- Updated localization templates
-- Fixed IDs exporting in Single Excel feature
+## Version 1.4.6
+- Removed obsolete features.
+- Updated localization templates.
+- Fixed IDs exporting in Single Excel feature.
 
-# Version 1.4.7
-- Removed settings in Single Excel feature
-- Fixed LocalizationText Component
-- Fixed Separation Localization feature in Single Excel feature
+## Version 1.4.7
+- Removed Single Excel settings.
+- Fixed LocalizationText Component.
+- Fixed Separation Localization in Single Excel feature.
