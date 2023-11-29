@@ -1,6 +1,6 @@
-Download via [Releases page](https://github.com/nbhung100914/excel-to-unity/releases)
+__Download via [Releases page](https://github.com/nbhung100914/excel-to-unity/releases)__
 
-You can view the demo project [Here](https://github.com/nbhung100914/excel-to-unity-example)
+__You can find more detailed instructions and the demo project [Here](https://github.com/nbhung100914/excel-to-unity-example)__
 
 # 1. Introduction
 
