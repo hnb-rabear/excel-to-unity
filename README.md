@@ -22,7 +22,7 @@ Over time, the tool has evolved to include new data types and leverages the capa
 
 ## 3.1. Export single excel
 
-![excel-2-unity-tab-1](https://github.com/nbhung100914/excel-to-unity/assets/9100041/e1a9f646-fe47-480b-a71b-4a0e79f627ca)
+![excel-2-unity-tab-1](https://github.com/nbhung100914/excel-to-unity/assets/9100041/f2467b96-1eec-42c2-baad-806c86fe93ae)
 
 This is a basic but very important function, helping you get acquainted with the tools. If your Static Database is not too large or complex, and only needs an excel file to contain all data, then this function is enough for your needs. However, if your Static Database is complex and needs to be stored in multiple Excel files, you will need to use the **Export Multi Excels** function. This function will be introduced in the next section.
 
@@ -32,19 +32,6 @@ The important functions are in the buttons on the right:
 - **Export Constants:** export Constants sheets to C# files.
 - **Export Localization:** export Localization Data and corresponding Localization Component, Localization API.
 - **Export Json:** export Data Table sheets to JSON Data.
-
-Settings:
-
-- **Data File:** enter the address of the excel file containing the Static Database.
-- **Separate Constants:** select this option if you want to export _[%IDs]_ and _[%Constants]_ sheets to separate C# files, with file names structured as _[SheetName] + IDs.cs_ and _[SheetName] + Constants.cs_.
-- **Encrypt Data:** select this option if you want to encrypt JSON Data exported from Data Table.
-- **Merge Jsons:** select this option if you want to export all Data Tables to a single json file. The json file name will be the excel file name or a custom name in the adjacent TextBox.
-
-Display information:
-
-- The table on the left displays a list of sheets in the excel file.
-- The table in the middle displays a list of ids compiled from sheets named _[%IDs].cs_.
-- The scroll box below will display the log.
 
 ## 3.2. Export multi excels (All in one)
 
