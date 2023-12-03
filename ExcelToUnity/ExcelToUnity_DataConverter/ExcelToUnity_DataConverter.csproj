@@ -172,6 +172,8 @@
     <None Include="Resources\floppy-disk %2820x20%29.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\check.png" />
+    <None Include="Resources\cancel.png" />
     <Content Include="Resources\help.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

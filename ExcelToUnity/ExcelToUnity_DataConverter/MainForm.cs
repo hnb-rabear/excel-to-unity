@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace ExcelToUnity_DataConverter
 {
     public partial class MainForm : Form
     {
-#region Internal Class
+        #region Internal Class
 
         public class Sheet
         {
@@ -79,11 +80,11 @@ namespace ExcelToUnity_DataConverter
             }
         }
 
-#endregion
+        #endregion
 
         //=================================
 
-#region Constants
+        #region Constants
 
         private const string CONSTANTS_CS_TEMPLATE = "Resources\\Templates\\ConstantsTemplate.txt";
         private const string IDS_CS_TEMPLATE = "Resources\\Templates\\IDsTemplate.txt";
@@ -97,15 +98,15 @@ namespace ExcelToUnity_DataConverter
         private const string SETTINGS_SHEET = "Settings";
         private const string LOCALIZATION_SHEET = "Localization";
 
-#endregion
+        #endregion
 
         //==================================
 
-#region Members
+        #region Members
 
         private List<Sheet> m_sheets = new List<Sheet>();
-        private List<ID> m_allIds = new List<ID>();
-        private List<ID> m_allIDsSorted; //List sorted by length will be used for linked data, for IDs which have prefix that is exactly same with another ID
+        private Dictionary<string, int> m_allIds = new Dictionary<string, int>();
+        private Dictionary<string, int> m_allIDsSorted; //List sorted by length will be used for linked data, for IDs which have prefix that is exactly same with another ID
         private Dictionary<string, StringBuilder> m_idsBuilderDict = new Dictionary<string, StringBuilder>();
         private Dictionary<string, StringBuilder> m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
         private Dictionary<string, LocalizationBuilder> m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
@@ -115,22 +116,22 @@ namespace ExcelToUnity_DataConverter
         private List<string> m_localizedSheetsExported;
         private List<string> m_localizedLanguages;
 
-#endregion
+        #endregion
 
         //=========================================
 
-#region Constructor
+        #region Constructor
 
         public MainForm()
         {
             InitializeComponent();
         }
 
-#endregion
+        #endregion
 
         //=============================================================
 
-#region Private
+        #region Private
 
         private void ClearCaches()
         {
@@ -286,7 +287,7 @@ namespace ExcelToUnity_DataConverter
                                         break;
                                     }
                                 if (!hadKey)
-                                    m_allIds.Add(new ID(key, value));
+                                    m_allIds.Add(key, value);
                             }
                             //Header row
                             else
@@ -368,7 +369,7 @@ namespace ExcelToUnity_DataConverter
             DtgIDs.DataSource = null;
             DtgIDs.Rows.Clear();
             DtgIDs.Refresh();
-            m_allIds = m_allIds.OrderBy(m => m.Key).ToList();
+            m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
             DtgIDs.DataSource = m_allIds;
             DtgIDs.AutoResizeColumns();
 
@@ -408,15 +409,10 @@ namespace ExcelToUnity_DataConverter
                         ids.Add(new ID(key, value));
 
                         //Add to global keys
-                        bool hadKey = false;
-                        foreach (var k in m_allIds)
-                            if (k.Key == cellIdName.ToString().Trim() && k.Value == value)
-                            {
-                                hadKey = true;
-                                break;
-                            }
-                        if (!hadKey)
-                            m_allIds.Add(new ID(key, value));
+                        if (!m_allIds.ContainsKey(key))
+                            m_allIds.Add(key, value);
+                        else if (m_allIds[key].Equals(value))
+                            m_allIds[key] = value;
                     }
                     catch { }
                 }
@@ -425,7 +421,7 @@ namespace ExcelToUnity_DataConverter
             DtgIDs.DataSource = null;
             DtgIDs.Rows.Clear();
             DtgIDs.Refresh();
-            m_allIds = m_allIds.OrderBy(m => m.Key).ToList();
+            m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
             DtgIDs.DataSource = m_allIds;
             DtgIDs.AutoResizeColumns();
 
@@ -528,16 +524,13 @@ namespace ExcelToUnity_DataConverter
                         //Try to find references in ids list
                         if (int.TryParse(strValues[j].Trim(), out int _))
                             continue;
-                        
-                        GetReferenceId(null, out bool _);
 
-                        foreach (var id in m_allIDsSorted)
-                            if (strValues[j].Contains(id.Key))
-                            {
-                                strValues[j] = strValues[j].Replace(id.Key, id.Value.ToString());
-                                value = value.Replace(id.Key, id.Value.ToString());
-                                break;
-                            }
+                        int refVal = GetReferenceId(strValues[j], out bool found);
+                        if (found)
+                        {
+                            value = value.Replace(strValues[j], refVal.ToString());
+                            strValues[j] = refVal.ToString();
+                        }
                     }
                 }
 
@@ -585,18 +578,18 @@ namespace ExcelToUnity_DataConverter
                         fieldStr = $"\tpublic const string {name} = \"{value.Trim()}\";";
                         break;
                     case "string-array":
-                    {
-                        string arrayStr = "";
-                        string[] values = Helper.SplitValueToArray(value);
-                        for (int j = 0; j < values.Length; j++)
                         {
-                            if (j == values.Length - 1)
-                                arrayStr += "\"" + values[j].Trim() + "\"";
-                            else
-                                arrayStr += "\"" + values[j].Trim() + "\", ";
+                            string arrayStr = "";
+                            string[] values = Helper.SplitValueToArray(value);
+                            for (int j = 0; j < values.Length; j++)
+                            {
+                                if (j == values.Length - 1)
+                                    arrayStr += "\"" + values[j].Trim() + "\"";
+                                else
+                                    arrayStr += "\"" + values[j].Trim() + "\", ";
+                            }
+                            fieldStr = $"\tpublic static readonly string[] {name} = new string[{values.Length}] {"{"} {arrayStr} {"}"};";
                         }
-                        fieldStr = $"\tpublic static readonly string[] {name} = new string[{values.Length}] {"{"} {arrayStr} {"}"};";
-                    }
                         break;
                 }
 
@@ -630,9 +623,7 @@ namespace ExcelToUnity_DataConverter
         {
             if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
             {
-                m_allIDsSorted = new List<ID>();
-                foreach (var id in Helper.SortIDsByLength(m_allIds))
-                    m_allIDsSorted.Add(id);
+                m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
             }
 
             if (!string.IsNullOrEmpty(pKey))
@@ -643,12 +634,11 @@ namespace ExcelToUnity_DataConverter
                     return value;
                 }
 
-                foreach (var id in m_allIDsSorted)
-                    if (id.Key == pKey.Trim())
-                    {
-                        pFound = true;
-                        return id.Value;
-                    }
+                if (m_allIDsSorted.ContainsKey(pKey))
+                {
+                    pFound = true;
+                    return m_allIDsSorted[pKey];
+                }
             }
 
             pFound = false;
@@ -952,83 +942,81 @@ namespace ExcelToUnity_DataConverter
                                         break;
 
                                     case "array-number":
-                                    {
-                                        fieldName = fieldName.Replace("[]", "");
-                                        var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-                                        var arrayStr = "[";
-                                        for (int k = 0; k < arrayValue.Length; k++)
                                         {
-                                            string val = arrayValue[k].Trim();
-                                            if (referencedId)
-                                                val = GetReferenceId(val, out bool _).ToString();
-                                            if (k == 0) arrayStr += val;
-                                            else arrayStr += "," + val;
+                                            fieldName = fieldName.Replace("[]", "");
+                                            var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+                                            var arrayStr = "[";
+                                            for (int k = 0; k < arrayValue.Length; k++)
+                                            {
+                                                string val = arrayValue[k].Trim();
+                                                if (referencedId)
+                                                    val = GetReferenceId(val, out bool _).ToString();
+                                                if (k == 0) arrayStr += val;
+                                                else arrayStr += "," + val;
+                                            }
+                                            arrayStr += "]";
+                                            fieldContentStr += $"\"{fieldName}\":{arrayStr},";
                                         }
-                                        arrayStr += "]";
-                                        fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-                                    }
                                         break;
 
                                     case "array-string":
-                                    {
-                                        fieldName = fieldName.Replace("[]", "");
-                                        var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-                                        var arrayStr = "[";
-                                        for (int k = 0; k < arrayValue.Length; k++)
                                         {
-                                            if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
-                                            else arrayStr += $",\"{arrayValue[k].Trim()}\"";
+                                            fieldName = fieldName.Replace("[]", "");
+                                            var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+                                            var arrayStr = "[";
+                                            for (int k = 0; k < arrayValue.Length; k++)
+                                            {
+                                                if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
+                                                else arrayStr += $",\"{arrayValue[k].Trim()}\"";
+                                            }
+                                            arrayStr += "]";
+                                            fieldContentStr += $"\"{fieldName}\":{arrayStr},";
                                         }
-                                        arrayStr += "]";
-                                        fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-                                    }
                                         break;
 
                                     case "array-bool":
-                                    {
-                                        fieldName = fieldName.Replace("[]", "");
-                                        var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-                                        var arrayStr = "[";
-                                        for (int k = 0; k < arrayValue.Length; k++)
                                         {
-                                            if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
-                                            else arrayStr += "," + arrayValue[k].Trim().ToLower();
+                                            fieldName = fieldName.Replace("[]", "");
+                                            var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+                                            var arrayStr = "[";
+                                            for (int k = 0; k < arrayValue.Length; k++)
+                                            {
+                                                if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
+                                                else arrayStr += "," + arrayValue[k].Trim().ToLower();
+                                            }
+                                            arrayStr += "]";
+                                            fieldContentStr += $"\"{fieldName}\":{arrayStr},";
                                         }
-                                        arrayStr += "]";
-                                        fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-                                    }
                                         break;
 
                                     case "json":
-                                    {
-                                        fieldName = fieldName.Replace("{}", "");
-
-                                        //Search Id in field value
-                                        if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
                                         {
-                                            m_allIDsSorted = new List<ID>();
-                                            foreach (var id in Helper.SortIDsByLength(m_allIds))
-                                                m_allIDsSorted.Add(id);
-                                        }
-                                        foreach (var id in m_allIDsSorted)
-                                        {
-                                            if (fieldValue.Contains(id.Key))
-                                                fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
-                                        }
+                                            fieldName = fieldName.Replace("{}", "");
 
-                                        var tempObj = JsonConvert.DeserializeObject(fieldValue);
-                                        var tempJsonStr = JsonConvert.SerializeObject(tempObj);
+                                            //Search Id in field value
+                                            if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
+                                            {
+                                                m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
+                                            }
+                                            foreach (var id in m_allIDsSorted)
+                                            {
+                                                if (fieldValue.Contains(id.Key))
+                                                    fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
+                                            }
 
-                                        fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
+                                            var tempObj = JsonConvert.DeserializeObject(fieldValue);
+                                            var tempJsonStr = JsonConvert.SerializeObject(tempObj);
 
-                                        if (!Helper.IsValidJson(fieldValue))
-                                        {
-                                            inValidJson.Add(i);
-                                            MessageBox.Show($"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
-                                                @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                            Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
+                                            fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
+
+                                            if (!Helper.IsValidJson(fieldValue))
+                                            {
+                                                inValidJson.Add(i);
+                                                MessageBox.Show($"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
+                                                    @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
+                                            }
                                         }
-                                    }
                                         break;
                                 }
                             }
@@ -1766,11 +1754,11 @@ namespace ExcelToUnity_DataConverter
             return fileContent;
         }
 
-#endregion
+        #endregion
 
         //====================================================
 
-#region Events
+        #region Events
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -1783,7 +1771,7 @@ namespace ExcelToUnity_DataConverter
 
             // Set up the delays for the ToolTip.
             toolTip.ShowAlways = true;
-            
+
             string changlogPath = "changelog.md";
             using (var reader = new StreamReader(changlogPath))
             {
@@ -1910,10 +1898,10 @@ namespace ExcelToUnity_DataConverter
             }
             if (Config.Settings.mergeJsonsIntoSingleJson)
             {
-				//Build json file for all jsons content
-				string mergedJson = JsonConvert.SerializeObject(allJsons);
-				string mergedFileName = Path.GetFileNameWithoutExtension(Config.Settings.inputDataFilePath).Trim().Replace(" ", "_");
-				Helper.WriteFile(Config.Settings.outputDataFilePath, mergedFileName + ".txt", mergedJson);
+                //Build json file for all jsons content
+                string mergedJson = JsonConvert.SerializeObject(allJsons);
+                string mergedFileName = Path.GetFileNameWithoutExtension(Config.Settings.inputDataFilePath).Trim().Replace(" ", "_");
+                Helper.WriteFile(Config.Settings.outputDataFilePath, mergedFileName + ".txt", mergedJson);
 
                 if (Config.Settings.encryption)
                     Log(LogType.Message, $"Exported all Data Tables in {mergedFileName} as encrypted JSON data.");
@@ -2010,7 +1998,7 @@ namespace ExcelToUnity_DataConverter
         {
             LoadWorkBook();
         }
-        
+
 
         [Obsolete]
         private void ExportSettings()
@@ -2031,7 +2019,7 @@ namespace ExcelToUnity_DataConverter
                 }
             }
         }
-        
+
         private void btnExportLocalization_Click(object sender, EventArgs e)
         {
             if (m_workBook == null)
@@ -2101,18 +2089,18 @@ namespace ExcelToUnity_DataConverter
         {
             var tabControl = sender as TabControl;
             var tab = tabControl.SelectedTab;
-            if (tab.Name == "tabPage3")
+            if (tab.Name == "tabExportMultiExcels")
             {
                 ClearCaches();
                 RefreshDtgExcelFiles();
-                //RefreshDtgFiles();
+                ValidateAllPaths();
             }
         }
 
         private void BtnAddFile_Click(object sender, EventArgs e)
         {
             var fileDialog = new OpenFileDialog();
-            fileDialog.Filter = @"Excel Workbook (*.xlsx,*.xls,*.csv)|*.xlsx,*.xls,*.csv|All files (*.*)|*.*";
+            fileDialog.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
             fileDialog.FilterIndex = 2;
             fileDialog.RestoreDirectory = true;
             fileDialog.Multiselect = true;
@@ -2135,7 +2123,6 @@ namespace ExcelToUnity_DataConverter
                 }
 
                 RefreshDtgExcelFiles();
-                //RefreshDtgFiles();
                 Config.Save();
             }
         }
@@ -2148,7 +2135,7 @@ namespace ExcelToUnity_DataConverter
             ClearCaches();
 
             m_allIDsSorted = null;
-            m_allIds = new List<ID>();
+            m_allIds = new Dictionary<string, int>();
             m_localizedSheetsExported = new List<string>();
             m_localizedLanguages = new List<string>();
             m_characterMaps = new Dictionary<string, string>();
@@ -2335,6 +2322,8 @@ namespace ExcelToUnity_DataConverter
             if (e == null || e.RowIndex == DtgFilePaths.NewRowIndex || e.RowIndex < 0)
                 return;
 
+            var row = DtgFilePaths.Rows[e.RowIndex];
+
             if (e.ColumnIndex == DtgFilePaths.Columns["BtnDelete"].Index)
             {
                 //System.Diagnostics.Debug.WriteLine(e.RowIndex);
@@ -2345,6 +2334,8 @@ namespace ExcelToUnity_DataConverter
                 //RefreshDtgFiles();
             }
 
+            ValidatePathRow(row);
+
             //Config.Settings.allFiles = (List<FileEntity>)DtgFilePaths.DataSource;
             //string settingJson = JsonConvert.SerializeObject(mSetting);
             //WriteFile(TOOL_CONFIG_FILE, settingJson);
@@ -2352,7 +2343,51 @@ namespace ExcelToUnity_DataConverter
 
         private void DtgFilePaths_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine(e.RowIndex);
+            if (e == null || e.RowIndex == DtgFilePaths.NewRowIndex || e.RowIndex < 0)
+                return;
+
+            if (e.ColumnIndex == DtgFilePaths.Columns["path"].Index)
+            {
+                var row = DtgFilePaths.Rows[e.RowIndex];
+                ValidatePathRow(row);
+            }
+        }
+
+        private void ValidatePathRow(DataGridViewRow row)
+        {
+            // Get the column indices from the column names
+            int pathColumnIndex = DtgFilePaths.Columns["path"].Index;
+            int statusColumnIndex = DtgFilePaths.Columns["status"].Index;
+
+            // Get the path cell value
+            var value = row.Cells[pathColumnIndex].Value;
+            if (value == null)
+                return;
+            var path = value.ToString();
+
+            // Check if the file exists
+            bool fileExists = File.Exists(path);
+
+            // Get the status cell
+            DataGridViewCell statusCell = row.Cells[statusColumnIndex];
+
+            // Update the status cell image based on whether the file exists
+            if (fileExists)
+            {
+                var image = Properties.Resources.ResourceManager.GetObject("check") as Image;
+                statusCell.Value = image;
+            }
+            else
+            {
+                var image = Properties.Resources.ResourceManager.GetObject("cancel") as Image;
+                statusCell.Value = image;
+            }
+        }
+
+        private void ValidateAllPaths()
+        {
+            foreach (DataGridViewRow row in DtgFilePaths.Rows)
+                ValidatePathRow(row);
         }
 
         private void chkSettingEnableEncryption_CheckedChanged(object sender, EventArgs e)
@@ -2463,19 +2498,11 @@ namespace ExcelToUnity_DataConverter
             txtLog2.Text = txtLog.Text;
         }
 
-        private IEnumerable<ID> SortIDsByLength()
-        {
-            var sorted = from s in m_allIds
-                orderby s.Key.Length ascending
-                select s;
-            return sorted;
-        }
-
-#endregion
+        #endregion
 
         //====================================================
 
-#region Internal Class
+        #region Internal Class
 
         public enum LogType
         {
@@ -2494,7 +2521,7 @@ namespace ExcelToUnity_DataConverter
             public List<ICell> fieldCells = new List<ICell>();
         }
 
-#endregion
+        #endregion
 
         private void BtnDecrypt_Click(object sender, EventArgs e)
         {
@@ -2659,6 +2686,11 @@ namespace ExcelToUnity_DataConverter
                 LoadSettings();
                 InitializeDtgFiles();
             }
+        }
+
+        private void DtgFilePaths_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

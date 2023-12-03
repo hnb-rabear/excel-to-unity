@@ -1,4 +1,4 @@
-﻿using ChoETL;
+using ChoETL;
 using CsvHelper;
 using Newtonsoft.Json;
 using NPOI.SS.UserModel;
@@ -484,25 +484,26 @@ namespace ExcelToUnity_DataConverter
 
         public static string[] SplitValueToArray(string pValue, bool pIncludeColon = true)
         {
-            string[] result;
-            if (pIncludeColon && pValue.Contains(":"))
-                result = pValue.Split(':');
-            else if (pValue.Contains("|"))
-                result = pValue.Split('|');
-            else if (pValue.Contains("\n") || pValue.Contains("\r\n"))
-                result = pValue.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-            else
-                result = new string[] { pValue };
+            string[] splits = new[] { ":", "|", "\r\n", "\r", "\n" };
+            if (!pIncludeColon)
+                splits = new[] { "|", "\r\n", "\r", "\n" };
+            string[] result = pValue.Split(splits, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
             return result;
         }
 
-        public static IEnumerable<ID> SortIDsByLength(IEnumerable<ID> e)
+        public static IEnumerable<ID> SortIDsByLength(IEnumerable<ID> list)
         {
             // Use LINQ to sort the array received and return a copy.
-            var sorted = from s in e
+            var sorted = from s in list
                 orderby s.Key.Length descending
                 select s;
             return sorted;
+        }
+
+        public static Dictionary<string, int> SortIDsByLength(Dictionary<string, int> dict)
+        {
+            var sortedDict = dict.OrderBy(x => x.Key.Length).ToDictionary(x => x.Key, x => x.Value);
+            return sortedDict;
         }
 
         public static string ConvertFormulaCell(ICell pCell)
