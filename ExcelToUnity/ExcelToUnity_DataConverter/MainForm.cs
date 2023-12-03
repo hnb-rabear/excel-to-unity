@@ -1,5 +1,6 @@
 using ChoETL;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
@@ -733,6 +734,7 @@ namespace ExcelToUnity_DataConverter
                 string fieldContentStr = "";
                 bool rowIsEmpty = true; //Because Loading sheet sometime includes the empty rows, I don't know why it happen
                 var inValidJson = new List<int>();
+                var nestedObjects = new List<JObject>();
 
                 for (int j = 0; j < rowContent.fieldNames.Count; j++)
                 {
@@ -888,6 +890,7 @@ namespace ExcelToUnity_DataConverter
                         if (string.IsNullOrEmpty(fieldValue) || (fieldValue == "0" && !importantField))
                             continue;
 
+                        bool nestedFiled = fieldName.Contains(".");
                         foreach (var field in pFieldValueTypes)
                         {
                             //Find referenced Id in string and convert it to number
@@ -922,23 +925,39 @@ namespace ExcelToUnity_DataConverter
                                     }
                                 }
 
+                                var jsonObject = new JObject();
                                 switch (fieldType)
                                 {
                                     case "number":
                                         if (referencedId)
-                                            fieldContentStr += $"\"{fieldName}\":{GetReferenceId(fieldValue, out bool _)},";
+                                        {
+                                            int intValue = GetReferenceId(fieldValue, out bool _);
+                                            if (!nestedFiled)
+                                                fieldContentStr += $"\"{fieldName}\":{intValue},";
+                                            jsonObject[fieldName] = intValue;
+                                        }
                                         else
-                                            fieldContentStr += $"\"{fieldName}\":{fieldValue},";
+                                        {
+                                            if (!nestedFiled)
+                                                fieldContentStr += $"\"{fieldName}\":{fieldValue},";
+                                            jsonObject[fieldName] = fieldValue;
+                                        }
                                         break;
 
                                     case "string":
                                         fieldValue = fieldValue.Replace("\n", "\\n");
                                         fieldValue = fieldValue.Replace("\"", "\\\"");
-                                        fieldContentStr += $"\"{fieldName}\":\"{fieldValue}\",";
+                                        if (!nestedFiled)
+                                            fieldContentStr += $"\"{fieldName}\":\"{fieldValue}\",";
+                                        else
+                                            jsonObject[fieldName] = fieldValue;
                                         break;
 
                                     case "bool":
-                                        fieldContentStr += $"\"{fieldName}\":{fieldValue.ToLower()},";
+                                        if (!nestedFiled)
+                                            fieldContentStr += $"\"{fieldName}\":{fieldValue.ToLower()},";
+                                        else
+                                            jsonObject[fieldName] = fieldValue;
                                         break;
 
                                     case "array-number":
@@ -955,7 +974,13 @@ namespace ExcelToUnity_DataConverter
                                                 else arrayStr += "," + val;
                                             }
                                             arrayStr += "]";
-                                            fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+                                            if (!nestedFiled)
+                                                fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+                                            else
+                                            {
+                                                int[] array = JsonConvert.DeserializeObject<int[]>(arrayStr);
+                                                jsonObject[fieldName] = JArray.FromObject(array);
+                                            }
                                         }
                                         break;
 
@@ -970,7 +995,13 @@ namespace ExcelToUnity_DataConverter
                                                 else arrayStr += $",\"{arrayValue[k].Trim()}\"";
                                             }
                                             arrayStr += "]";
-                                            fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+                                            if (!nestedFiled)
+                                                fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+                                            else
+                                            {
+                                                string[] array = JsonConvert.DeserializeObject<string[]>(arrayStr);
+                                                jsonObject[fieldName] = JArray.FromObject(array);
+                                            }
                                         }
                                         break;
 
@@ -985,7 +1016,13 @@ namespace ExcelToUnity_DataConverter
                                                 else arrayStr += "," + arrayValue[k].Trim().ToLower();
                                             }
                                             arrayStr += "]";
-                                            fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+                                            if (!nestedFiled)
+                                                fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+                                            else
+                                            {
+                                                bool[] array = JsonConvert.DeserializeObject<bool[]>(arrayStr);
+                                                jsonObject[fieldName] = JArray.FromObject(array);
+                                            }
                                         }
                                         break;
 
@@ -1003,12 +1040,6 @@ namespace ExcelToUnity_DataConverter
                                                 if (fieldValue.Contains(id.Key))
                                                     fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
                                             }
-
-                                            var tempObj = JsonConvert.DeserializeObject(fieldValue);
-                                            var tempJsonStr = JsonConvert.SerializeObject(tempObj);
-
-                                            fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
-
                                             if (!Helper.IsValidJson(fieldValue))
                                             {
                                                 inValidJson.Add(i);
@@ -1016,12 +1047,29 @@ namespace ExcelToUnity_DataConverter
                                                     @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                                 Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
                                             }
+                                            var tempObj = JsonConvert.DeserializeObject(fieldValue);
+                                            var tempJsonStr = JsonConvert.SerializeObject(tempObj);
+                                            if (!nestedFiled)
+                                                fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
+                                            else
+                                            {
+                                                jsonObject[fieldName] = JObject.Parse(tempJsonStr); ;
+                                            }
                                         }
                                         break;
                                 }
+
+                                // Nested Object
+                                if (nestedFiled)
+                                    nestedObjects.Add(jsonObject);
                             }
                         }
                     }
+                }
+                if (nestedObjects.Count > 0)
+                {
+                    var nestedObjectsJson = Helper.ConvertToNestedJson(nestedObjects);
+                    fieldContentStr += $"{nestedObjectsJson.Substring(1, nestedObjectsJson.Length - 2)}";
                 }
                 if (attributes.Count > 0)
                 {
@@ -1034,16 +1082,15 @@ namespace ExcelToUnity_DataConverter
                     }
                     fieldContentStr += "],";
                 }
-                fieldContentStr = Helper.RemoveLast(fieldContentStr, ",");
+                if (nestedObjects.Count == 0)
+                    fieldContentStr = Helper.RemoveLast(fieldContentStr, ",");
+               
 
                 if (!rowIsEmpty)
                     content += $"{"{"}{fieldContentStr}{"},"}";
             }
             content = Helper.RemoveLast(content, ",");
             content += "]";
-
-            //if (toList)
-            //    content = string.Format("{0}\"list\":{1}{2}", "{", content, "}");
 
             if (content == "[]")
             {
@@ -1786,7 +1833,7 @@ namespace ExcelToUnity_DataConverter
                 txtBoxHelp.Text = content;
             }
 
-            txtVersion.Text = "1.4.7";
+            txtVersion.Text = "1.4.8";
         }
 
         private void btnSelectInputFile_Click(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 using ChoETL;
 using CsvHelper;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -548,5 +549,101 @@ namespace ExcelToUnity_DataConverter
             int index = text.LastIndexOf(character, StringComparison.Ordinal);
             return index >= 0 ? text.Remove(index, character.Length) : text;
         }
+
+        public static string ConvertToNestedJson(List<JObject> original)
+        {
+            // Parse the original JSON into a JArray
+            // var original = JArray.Parse(json);
+
+            // Create a new JArray for the converted JSON
+            var converted = new List<JObject>();
+
+            // Iterate over all JObjects in the original JArray
+            foreach (JObject obj in original)
+            {
+                // Create a new JObject for the converted JSON
+                var newObj = new JObject();
+                string root = "";
+
+                // Iterate over all properties of the original JObject
+                foreach (var property in obj.Properties())
+                {
+                    // Split the property name into parts
+                    var parts = property.Name.Split('.');
+
+                    // Create nested JObjects for each part except the last one
+                    var current = newObj;
+                    for (int i = 0; i < parts.Length - 1; i++)
+                    {
+                        if (current[parts[i]] == null)
+                        {
+                            current[parts[i]] = new JObject();
+                        }
+                        current = (JObject)current[parts[i]];
+                    }
+
+                    // Add the value to the last part
+                    current[parts[parts.Length - 1]] = property.Value;
+                    root = parts[0];
+                }
+
+                // Add the new JObject to the converted JArray
+                converted.Add(newObj);
+            }
+
+            var combineJson = CombineJsonObjects(converted);
+
+            return combineJson.ToString(Formatting.None);
+        }
+
+        public static JObject CombineJsonObjects(List<JObject> jsonArray)
+        {
+            var combined = new JObject();
+
+            foreach (var obj in jsonArray)
+            {
+                foreach (var property in obj.Properties())
+                {
+                    // Check if the property value is a JObject
+                    if (property.Value is JObject innerObj)
+                    {
+                        if (combined[property.Name] == null)
+                        {
+                            combined[property.Name] = new JObject();
+                        }
+
+                        foreach (var innerProperty in innerObj.Properties())
+                        {
+                            // Check if the inner property value is a JObject
+                            if (innerProperty.Value is JObject innerInnerObj)
+                            {
+                                if (((JObject)combined[property.Name])[innerProperty.Name] == null)
+                                {
+                                    ((JObject)combined[property.Name])[innerProperty.Name] = new JObject();
+                                }
+
+                                foreach (var innerInnerProperty in innerInnerObj.Properties())
+                                {
+                                    ((JObject)((JObject)combined[property.Name])[innerProperty.Name])[innerInnerProperty.Name] = innerInnerProperty.Value;
+                                }
+                            }
+                            else
+                            {
+                                // If the inner property value is not a JObject, just copy it
+                                ((JObject)combined[property.Name])[innerProperty.Name] = innerProperty.Value;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // If the property value is not a JObject, just copy it
+                        combined[property.Name] = property.Value;
+                    }
+                }
+            }
+
+            return combined;
+        }
+
     }
 }

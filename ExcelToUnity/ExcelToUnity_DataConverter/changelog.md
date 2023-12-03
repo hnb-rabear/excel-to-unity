@@ -68,3 +68,8 @@
 - Removed Single Excel settings.
 - Fixed LocalizationText Component.
 - Fixed Separation Localization in Single Excel feature.
+
+## Version 1.4.8
+- Introduced a status column to verify the presence of an existing Excel file
+- Resolved an issue with the filter functionality during Excel file addition
+- Enhanced feature: now supports multiple nested classes/structs
