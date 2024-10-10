@@ -10,7 +10,6 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -216,7 +215,6 @@ namespace ExcelToUnity_DataConverter
                 return false;
             }
 
-            var ids = new List<ID>();
             var idsBuilders = new List<StringBuilder>();
             var idsEnumBuilders = new List<StringBuilder>();
             var idsEnumBuilderNames = new List<string>();
@@ -231,7 +229,6 @@ namespace ExcelToUnity_DataConverter
                         var cellKey = rowData.GetCell(col);
                         if (cellKey != null)
                         {
-                            bool ignore = false;
                             int index = col / 3;
                             var sb = (index < idsBuilders.Count) ? idsBuilders[index] : new StringBuilder();
                             if (!idsBuilders.Contains(sb))
@@ -255,7 +252,6 @@ namespace ExcelToUnity_DataConverter
 
                                 string valueStr = cellValue.ToString().Trim();
                                 int.TryParse(valueStr, out int value);
-                                ids.Add(new ID(key, value));
                                 sb.Append("\tpublic const int ");
                                 sb.Append(key);
                                 sb.Append(" = ");
@@ -283,7 +279,9 @@ namespace ExcelToUnity_DataConverter
                                     }
                                     else if (k.Key == cellKey.ToString().Trim() && k.Value != value)
                                     {
-                                        MessageBox.Show($"Keys Conflicted!\nSHEET:{pIdsSheet}\nKEY:{k.Key}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        MessageBox.Show($@"Keys Conflicted!
+                                            SHEET:{pIdsSheet}
+                                            KEY:{k.Key}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         Log(LogType.Error, $"Keys Conflicted!\nSHEET:{pIdsSheet}\nKEY:{k.Key}");
                                         break;
                                     }
@@ -303,8 +301,7 @@ namespace ExcelToUnity_DataConverter
                                 sb.Append("\t#region ")
                                     .Append(cellKey);
                             }
-                            if (!ignore)
-                                sb.Append(Environment.NewLine);
+                            sb.Append(Environment.NewLine);
                         }
                     }
                 }
@@ -377,17 +374,16 @@ namespace ExcelToUnity_DataConverter
             return true;
         }
 
-        private bool LoadIDSheetOnlyValue(IWorkbook pWorkBook, string pIdsSheet)
+        private void LoadIDSheetOnlyValue(IWorkbook pWorkBook, string pIdsSheet)
         {
             var sheet = pWorkBook.GetSheet(pIdsSheet);
 
             if (sheet.IsNull() || sheet.LastRowNum == 0)
             {
                 Log(LogType.Warning, $"Sheet {pIdsSheet} is empty!");
-                return false;
+                return;
             }
 
-            var ids = new List<ID>();
             for (int row = 0; row <= sheet.LastRowNum; row++)
             {
                 var rowData = sheet.GetRow(row);
@@ -407,7 +403,6 @@ namespace ExcelToUnity_DataConverter
                             continue;
                         string key = cellIdName.ToString().Trim();
                         int value = int.Parse(cellIdValue.ToString().Trim());
-                        ids.Add(new ID(key, value));
 
                         //Add to global keys
                         if (!m_allIds.ContainsKey(key))
@@ -425,8 +420,6 @@ namespace ExcelToUnity_DataConverter
             m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
             DtgIDs.DataSource = m_allIds;
             DtgIDs.AutoResizeColumns();
-
-            return true;
         }
 
         private void CreateIDsFile(string exportFileName, string content)
@@ -708,17 +701,20 @@ namespace ExcelToUnity_DataConverter
                     for (int col = 0; col < lastCellNum; col++)
                     {
                         var cell = rowData.GetCell(col);
-                        string fieldName = fields[col];
-                        string fieldValue = cell.ToCellString().Trim();
+                        if (fields != null)
+                        {
+                            string fieldName = fields[col];
+                            string fieldValue = cell.ToCellString().Trim();
 
-                        if (cell != null && cell.IsMergedCell && !string.IsNullOrEmpty(fieldValue))
-                            mergeValues[col] = fieldValue;
-                        if (cell != null && cell.IsMergedCell && string.IsNullOrEmpty(fieldValue))
-                            fieldValue = mergeValues[col];
+                            if (cell != null && cell.IsMergedCell && !string.IsNullOrEmpty(fieldValue))
+                                mergeValues[col] = fieldValue;
+                            if (cell != null && cell.IsMergedCell && string.IsNullOrEmpty(fieldValue))
+                                fieldValue = mergeValues[col];
 
-                        fieldName = fieldName.Replace(" ", "_");
-                        rowContent.fieldNames.Add(fieldName);
-                        rowContent.fieldValues.Add(fieldValue);
+                            fieldName = fieldName.Replace(" ", "_");
+                            rowContent.fieldNames.Add(fieldName);
+                            rowContent.fieldValues.Add(fieldValue);
+                        }
                         rowContent.fieldCells.Add(cell);
                     }
                     rowContents.Add(rowContent);
@@ -733,7 +729,6 @@ namespace ExcelToUnity_DataConverter
                 var attributes = new List<Att>();
                 string fieldContentStr = "";
                 bool rowIsEmpty = true; //Because Loading sheet sometime includes the empty rows, I don't know why it happen
-                var inValidJson = new List<int>();
                 var nestedObjects = new List<JObject>();
 
                 for (int j = 0; j < rowContent.fieldNames.Count; j++)
@@ -1042,8 +1037,7 @@ namespace ExcelToUnity_DataConverter
                                             }
                                             if (!Helper.IsValidJson(fieldValue))
                                             {
-                                                inValidJson.Add(i);
-                                                MessageBox.Show($"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
+                                                MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
                                                     @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                                 Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
                                             }
@@ -1053,7 +1047,7 @@ namespace ExcelToUnity_DataConverter
                                                 fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
                                             else
                                             {
-                                                jsonObject[fieldName] = JObject.Parse(tempJsonStr); ;
+                                                jsonObject[fieldName] = JObject.Parse(tempJsonStr);
                                             }
                                         }
                                         break;
@@ -1323,37 +1317,8 @@ namespace ExcelToUnity_DataConverter
 
         private void CreateEncryption()
         {
-            string[] keysString = txtSettingEncryptionKey.Text.Trim().Replace(" ", "").Split(',');
-            if (keysString.Length > 0)
-            {
-                bool validKey = true;
-                byte[] keysByte = new byte[keysString.Length];
-                for (int i = 0; i < keysString.Length; i++)
-                {
-                    byte output = 0;
-                    if (byte.TryParse(keysString[i], out output))
-                    {
-                        keysByte[i] = output;
-                    }
-                    else
-                    {
-                        validKey = false;
-                    }
-                }
-                if (validKey)
-                {
-                    Config.Settings.encryptionKey = txtSettingEncryptionKey.Text.Trim();
-                    m_encryption = new Encryption(keysByte);
-                }
-                else
-                {
-                    m_encryption = null;
-
-                    MessageBox.Show(@"Encryption key is invalid", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Log(LogType.Error, "Encryption key is invalid");
-                }
-            }
-            else
+            m_encryption = Helper.CreateEncryption(txtSettingEncryptionKey.Text);
+            if (m_encryption == null)
             {
                 MessageBox.Show(@"Encryption key is invalid", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Log(LogType.Error, "Encryption key is invalid");
@@ -1819,8 +1784,8 @@ namespace ExcelToUnity_DataConverter
             // Set up the delays for the ToolTip.
             toolTip.ShowAlways = true;
 
-            string changlogPath = "changelog.md";
-            using (var reader = new StreamReader(changlogPath))
+            const string changelogPath = "changelog.md";
+            using (var reader = new StreamReader(changelogPath))
             {
                 string content = reader.ReadToEnd();
                 txtChangesLog.Text = content;
@@ -1833,7 +1798,7 @@ namespace ExcelToUnity_DataConverter
                 txtBoxHelp.Text = content;
             }
 
-            txtVersion.Text = "1.4.8";
+            txtVersion.Text = @"1.4.8";
         }
 
         private void btnSelectInputFile_Click(object sender, EventArgs e)
@@ -2134,20 +2099,22 @@ namespace ExcelToUnity_DataConverter
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var tabControl = sender as TabControl;
-            var tab = tabControl.SelectedTab;
-            if (tab.Name == "tabExportMultiExcels")
+            if (sender is TabControl tabControl)
             {
-                ClearCaches();
-                RefreshDtgExcelFiles();
-                ValidateAllPaths();
+                var tab = tabControl.SelectedTab;
+                if (tab.Name == "tabExportMultiExcels")
+                {
+                    ClearCaches();
+                    RefreshDtgExcelFiles();
+                    ValidateAllPaths();
+                }
             }
         }
 
         private void BtnAddFile_Click(object sender, EventArgs e)
         {
             var fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
+            fileDialog.Filter = @"Excel Files|*.xls;*.xlsx;*.xlsm";
             fileDialog.FilterIndex = 2;
             fileDialog.RestoreDirectory = true;
             fileDialog.Multiselect = true;
@@ -2410,10 +2377,10 @@ namespace ExcelToUnity_DataConverter
             var value = row.Cells[pathColumnIndex].Value;
             if (value == null)
                 return;
-            var path = value.ToString();
+            var path1 = value.ToString();
 
             // Check if the file exists
-            bool fileExists = File.Exists(path);
+            bool fileExists = File.Exists(path1);
 
             // Get the status cell
             DataGridViewCell statusCell = row.Cells[statusColumnIndex];
@@ -2614,7 +2581,7 @@ namespace ExcelToUnity_DataConverter
             if (Directory.Exists(txtSettingOutputDataFilePath.Text))
                 Process.Start(txtSettingOutputDataFilePath.Text);
             else
-                MessageBox.Show("Folder not exists!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"Folder not exists!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void btnOpenFolder2_Click(object sender, EventArgs e)
@@ -2625,7 +2592,7 @@ namespace ExcelToUnity_DataConverter
             if (Directory.Exists(txtSettingOuputConstantsFilePath.Text))
                 Process.Start(txtSettingOuputConstantsFilePath.Text);
             else
-                MessageBox.Show("Folder not exists!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"Folder not exists!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void btnOpenFolderLocalization_Click(object sender, EventArgs e)
@@ -2636,7 +2603,7 @@ namespace ExcelToUnity_DataConverter
             if (Directory.Exists(txtSettingOutputLocalizationFilePath.Text))
                 Process.Start(txtSettingOutputLocalizationFilePath.Text);
             else
-                MessageBox.Show("Folder not exists!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"Folder not exists!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void btnSelectFolderLocalization_Click(object sender, EventArgs e)
@@ -2681,8 +2648,6 @@ namespace ExcelToUnity_DataConverter
                 txtSettingEncryptionKey.Text =
                     @"168, 220, 184, 133, 78, 149, 8, 249, 171, 138, 98, 170, 95, 15, 211, 200, 51, 242, 4, 193, 219, 181, 232, 99, 16, 240, 142, 128, 29, 163, 245, 24, 204, 73, 173, 32, 214, 76, 31, 99, 91, 239, 232, 53, 138, 195, 93, 195, 185, 210, 155, 184, 243, 216, 204, 42, 138, 101, 100, 241, 46, 145, 198, 66, 11, 17, 19, 86, 157, 27, 132, 201, 246, 112, 121, 7, 195, 148, 143, 125, 158, 29, 184, 67, 187, 100, 31, 129, 64, 130, 26, 67, 240, 128, 233, 129, 63, 169, 5, 211, 248, 200, 199, 96, 54, 128, 111, 147, 100, 6, 185, 0, 188, 143, 25, 103, 211, 18, 17, 249, 106, 54, 162, 188, 25, 34, 147, 3, 222, 61, 218, 49, 164, 165, 133, 12, 65, 92, 48, 40, 129, 76, 194, 229, 109, 76, 150, 203, 251, 62, 54, 251, 70, 224, 162, 167, 183, 78, 103, 28, 67, 183, 23, 80, 156, 97, 83, 164, 24, 183, 81, 56, 103, 77, 112, 248, 4, 168, 5, 72, 109, 18, 75, 219, 99, 181, 160, 76, 65, 16, 41, 175, 87, 195, 181, 19, 165, 172, 138, 172, 84, 40, 167, 97, 214, 90, 26, 124, 0, 166, 217, 97, 246, 117, 237, 99, 46, 15, 141, 69, 4, 245, 98, 73, 3, 8, 161, 98, 79, 161, 127, 19, 55, 158, 139, 247, 39, 59, 72, 161, 82, 158, 25, 65, 107, 173, 5, 255, 53, 28, 179, 182, 65, 162, 17";
         }
-
-        private void txtMegedJsonCustomName_TextChanged(object sender, EventArgs e) { }
 
         private void btnOpenGoogleSheet_Click(object sender, EventArgs e)
         {

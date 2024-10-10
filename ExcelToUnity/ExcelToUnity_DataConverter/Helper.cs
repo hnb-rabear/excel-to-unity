@@ -92,12 +92,12 @@ namespace ExcelToUnity_DataConverter
         public static bool IsValidJson(string strInput)
         {
             strInput = strInput.Trim();
-            if ((strInput.StartsWith("{") && strInput.EndsWith("}")) || //For object
-                (strInput.StartsWith("[") && strInput.EndsWith("]"))) //For array
+            if (strInput.StartsWith("{") && strInput.EndsWith("}") || //For object
+                strInput.StartsWith("[") && strInput.EndsWith("]")) //For array
             {
                 try
                 {
-                    Newtonsoft.Json.Linq.JToken.Parse(strInput);
+                    JToken.Parse(strInput);
                     return true;
                 }
                 catch (JsonReaderException jex)
@@ -111,10 +111,7 @@ namespace ExcelToUnity_DataConverter
                     return false;
                 }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         //public static int GetLastCellNum(ISheet sheet)
@@ -528,7 +525,7 @@ namespace ExcelToUnity_DataConverter
             {
                 if (c == ' ')
                     sb.Append('_');
-                else if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_')
+                else if (c >= '0' && c <= '9' || c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c == '.' || c == '_')
                 {
                     sb.Append(c);
                 }
@@ -643,6 +640,30 @@ namespace ExcelToUnity_DataConverter
             }
 
             return combined;
+        }
+        
+        public static Encryption CreateEncryption(string text)
+        {
+            string[] keysString = text.Trim().Replace(" ", "").Split(',');
+            if (keysString.Length > 0)
+            {
+                bool validKey = true;
+                byte[] keysByte = new byte[keysString.Length];
+                for (int i = 0; i < keysString.Length; i++)
+                {
+                    if (byte.TryParse(keysString[i], out byte output))
+                    {
+                        keysByte[i] = output;
+                    }
+                    else
+                    {
+                        validKey = false;
+                    }
+                }
+                if (validKey)
+                    return new Encryption(keysByte);
+            }
+            return null;
         }
 
     }
