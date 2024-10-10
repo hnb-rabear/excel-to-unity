@@ -47,6 +47,11 @@ public abstract class LocalizationsManager
 //LOCALIZATION_SET_FOLDER
 	}
 
+    public static void UseAddressable(bool pValue)
+    {
+//LOCALIZATION_USE_ADDRESSABLE
+    }
+
     public static string GetSystemLanguage()
 	{
 		if (PlayerPrefs.HasKey("CurrentLanguage"))

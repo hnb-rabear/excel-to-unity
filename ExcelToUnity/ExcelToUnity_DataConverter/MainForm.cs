@@ -1729,6 +1729,7 @@ namespace ExcelToUnity_DataConverter
                 var initLines = new StringBuilder();
                 var initAsynLines = new StringBuilder();
                 var setFolder = new StringBuilder();
+                var useAddressable = new StringBuilder();
 
                 for (int i = 0; i < m_localizedSheetsExported.Count; i++)
                 {
@@ -1743,14 +1744,19 @@ namespace ExcelToUnity_DataConverter
                     setFolder.Append($"\t\t{m_localizedSheetsExported[i]}.Folder = pFolder;");
                     if (i < m_localizedSheetsExported.Count - 1)
                         setFolder.Append(Environment.NewLine);
-                }
+
+					useAddressable.Append($"\t\t{m_localizedSheetsExported[i]}.Addressable = pValue;");
+					if (i < m_localizedSheetsExported.Count - 1)
+						useAddressable.Append(Environment.NewLine);
+				}
 
                 string fileContent = File.ReadAllText(LOCALIZATION_MANAGER_TEMPLATE);
                 fileContent = fileContent.Replace("//LOCALIZATION_INIT_ASYNC", initAsynLines.ToString());
                 fileContent = fileContent.Replace("//LOCALIZATION_INIT", initLines.ToString());
                 fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
                 fileContent = fileContent.Replace("//LOCALIZATION_SET_FOLDER", setFolder.ToString());
-                fileContent = fileContent.Replace("//LOCALIZATION_SYSTEM_LANGUAGE", systemLanguages.ToString());
+				fileContent = fileContent.Replace("//LOCALIZATION_USE_ADDRESSABLE", useAddressable.ToString());
+				fileContent = fileContent.Replace("//LOCALIZATION_SYSTEM_LANGUAGE", systemLanguages.ToString());
                 fileContent = AddNamespace(fileContent);
                 Helper.WriteFile(Config.Settings.outputConstantsFilePath, "LocalizationsManager.cs", fileContent);
             }

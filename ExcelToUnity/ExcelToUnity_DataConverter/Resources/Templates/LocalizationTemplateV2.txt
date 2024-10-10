@@ -169,31 +169,24 @@ public static class LOCALIZATION_CLASS_NAME
         }
     }
 
-    private static string[] GetTexts()
-    {
-        if (m_Texts == null)
-            Init();
-        return m_Texts;
-    }
-
     public static StringBuilder Get(ID pId)
     {
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
-        return m_StringBuilder.Append(GetTexts()[(int)pId]);
+        return m_StringBuilder.Append(m_Texts[(int)pId]);
     }
 
     public static StringBuilder Get(ID pId, params object[] pArgs)
     {
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
-        m_StringBuilder.AppendFormat(GetTexts()[(int)pId], pArgs);
+        m_StringBuilder.AppendFormat(m_Texts[(int)pId], pArgs);
         return m_StringBuilder;
     }
 
     public static StringBuilder Get(int pId)
     {
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
-        if (pId >= 0 && pId < GetTexts().Length)
-            m_StringBuilder.Append(GetTexts()[pId]);
+        if (pId >= 0 && pId < m_Texts.Length)
+            m_StringBuilder.Append(m_Texts[pId]);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found id " + pId);
@@ -204,7 +197,7 @@ public static class LOCALIZATION_CLASS_NAME
     public static StringBuilder Get(int pId, params object[] pArgs)
     {
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
-        m_StringBuilder.AppendFormat(GetTexts()[pId], pArgs);
+        m_StringBuilder.AppendFormat(m_Texts[pId], pArgs);
         return m_StringBuilder;
     }
 
@@ -213,7 +206,7 @@ public static class LOCALIZATION_CLASS_NAME
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
         int index = GetIndex(pIdString);
         if (index >= 0)
-            m_StringBuilder.Append(GetTexts()[index]);
+            m_StringBuilder.Append(m_Texts[index]);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found idString " + pIdString);
@@ -237,7 +230,7 @@ public static class LOCALIZATION_CLASS_NAME
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
         int index = GetIndex(pIdString);
         if (index >= 0)
-            m_StringBuilder.AppendFormat(GetTexts()[index], pArgs);
+            m_StringBuilder.AppendFormat(m_Texts[index], pArgs);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found idString " + pIdString);
@@ -250,7 +243,7 @@ public static class LOCALIZATION_CLASS_NAME
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
         pIndex = GetIndex(pIdString);
         if (pIndex >= 0)
-            m_StringBuilder.Append(GetTexts()[pIndex]);
+            m_StringBuilder.Append(m_Texts[pIndex]);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found idString " + pIdString);
@@ -263,7 +256,7 @@ public static class LOCALIZATION_CLASS_NAME
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
         pIndex = GetIndex(pIdString);
         if (pIndex >= 0)
-            m_StringBuilder.AppendFormat(GetTexts()[pIndex], pArgs);
+            m_StringBuilder.AppendFormat(m_Texts[pIndex], pArgs);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found idString " + pIdString);
@@ -278,7 +271,7 @@ public static class LOCALIZATION_CLASS_NAME
         if (index >= 0)
         {
             pId = (ID)index;
-            m_StringBuilder.Append(GetTexts()[index]);
+            m_StringBuilder.Append(m_Texts[index]);
         }
         else
         {
@@ -297,7 +290,7 @@ public static class LOCALIZATION_CLASS_NAME
         if (index >= 0)
         {
             pId = (ID)index;
-            m_StringBuilder.AppendFormat(GetTexts()[index], pArgs);
+            m_StringBuilder.AppendFormat(m_Texts[index], pArgs);
         }
         else
         {
