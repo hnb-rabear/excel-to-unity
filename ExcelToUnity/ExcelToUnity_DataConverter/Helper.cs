@@ -446,14 +446,14 @@ namespace ExcelToUnity_DataConverter
             }
 
             //Build language dictionary
-            var languageDictBuilder = new StringBuilder();
-            languageDictBuilder.Append("\tpublic static readonly Dictionary<string, string[]> language = new Dictionary<string, string[]>() { ");
+            var languageFilesBuilder = new StringBuilder();
+            languageFilesBuilder.Append("\tpublic static readonly Dictionary<string, string[]> language = new Dictionary<string, string[]>() { ");
             foreach (var listText in textDict)
             {
-                languageDictBuilder.Append($" {"{"} \"{listText.Key}\", {listText.Key} {"},"}");
+                languageFilesBuilder.Append($" {"{"} \"{listText.Key}\", {listText.Key} {"},"}");
             }
-            languageDictBuilder.Append(" };\n");
-            languageDictBuilder.Append($"\tpublic static readonly string defaultLanguage = \"{textDict.First().Key}\";");
+            languageFilesBuilder.Append(" };\n");
+            languageFilesBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{textDict.First().Key}\";");
 
             //Write file
             string fileTemplateContent = File.ReadAllText(LOCALIZED_TEXT_TEMPLATE);
@@ -461,8 +461,9 @@ namespace ExcelToUnity_DataConverter
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_LIST", allLanguagePackBuilder.ToString());
-            fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageDictBuilder.ToString());
-            WriteFile(pExportFolder, pFileName, fileTemplateContent);
+            fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageFilesBuilder.ToString());
+			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", folder);
+			WriteFile(pExportFolder, pFileName, fileTemplateContent);
 
             MessageBox.Show($@"Export {pSheetName} successfully!", @"Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -665,6 +666,5 @@ namespace ExcelToUnity_DataConverter
             }
             return null;
         }
-
-    }
+	}
 }

@@ -15,7 +15,7 @@ public class LOCALIZATION_CLASS_NAME
 
     public static string CurrentLanguage
     {
-        get { return PlayerPrefs.GetString("CurrentLanguage", defaultLanguage); }
+        get { return PlayerPrefs.GetString("CurrentLanguage", DefaultLanguage); }
         set { PlayerPrefs.SetString("CurrentLanguage", value); }
     }
 
@@ -65,7 +65,7 @@ public class LOCALIZATION_CLASS_NAME
     {
         try
         {
-            return language[defaultLanguage][(int)pId];
+            return language[DefaultLanguage][(int)pId];
         }
         catch
         {
@@ -77,7 +77,7 @@ public class LOCALIZATION_CLASS_NAME
     {
         try
         {
-            return language[defaultLanguage][pId];
+            return language[DefaultLanguage][pId];
         }
         catch
         {
@@ -108,7 +108,7 @@ public class LOCALIZATION_CLASS_NAME
             if (pIdString == idString[i])
             {
                 index = i;
-                return Get(index, defaultLanguage);
+                return Get(index, DefaultLanguage);
             }
         }
         Debug.LogError("Not found idString " + pIdString);
@@ -123,7 +123,7 @@ public class LOCALIZATION_CLASS_NAME
             if (pIdString == idString[i])
             {
                 pIndex = i;
-                return Get(pIndex, defaultLanguage);
+                return Get(pIndex, DefaultLanguage);
             }
         }
         Debug.LogError("Not found idString " + pIdString);
@@ -139,7 +139,7 @@ public class LOCALIZATION_CLASS_NAME
             {
                 index = i;
                 pId = (ID)index;
-                return Get(pId, defaultLanguage);
+                return Get(pId, DefaultLanguage);
             }
         }
         Debug.LogError("Not found idString " + pIdString);

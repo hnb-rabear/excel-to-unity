@@ -21,32 +21,32 @@ public static class LOCALIZATION_CLASS_NAME
 //LOCALIZED_DICTIONARY
 
     public static bool Addressable;
-	public static string Folder = "Localization";
+	public static string Folder = "LOCALIZTION_FOLDER";
     private static StringBuilder m_StringBuilder = new StringBuilder();
     public static Action OnLanguageChanged;
     private static string[] m_Texts;
     private static string m_LanguageTemp;
     public static string CurrentLanguage
     {
-        get => PlayerPrefs.GetString("CurrentLanguage", defaultLanguage);
+        get => PlayerPrefs.GetString("CurrentLanguage", DefaultLanguage);
         set
         {
-            if (CurrentLanguage != value && languageDict.ContainsKey(value))
+            if (CurrentLanguage != value && LanguageFiles.ContainsKey(value))
             {
                 PlayerPrefs.SetString("CurrentLanguage", value);
                 Init();
             }
         }
     }
-	public static int curLangIndex = -1;
+	public static int CurLangIndex = -1;
 
     public static async void Init()
 	{
         var lang = m_LanguageTemp;
-		if (!languageDict.ContainsKey(CurrentLanguage))
+		if (!LanguageFiles.ContainsKey(CurrentLanguage))
 		{
 			if (string.IsNullOrEmpty(m_LanguageTemp))
-				lang = defaultLanguage;
+				lang = DefaultLanguage;
 		}
 		else lang = CurrentLanguage;
 				
@@ -55,7 +55,7 @@ public static class LOCALIZATION_CLASS_NAME
 #if UNITY_EDITOR
 			Debug.Log($"Init {nameof(LOCALIZATION_CLASS_NAME)}");
 #endif
-		    string file = languageDict[lang];
+		    string file = LanguageFiles[lang];
             string address = $"{Folder}/{file}";
 #if ADDRESSABLES
             if (Addressable)
@@ -81,11 +81,11 @@ public static class LOCALIZATION_CLASS_NAME
             }
 			m_LanguageTemp = lang;
 			int index = 0;
-            foreach (var item in languageDict)
+            foreach (var item in LanguageFiles)
             {
                 if (lang == item.Key)
                 {
-                    curLangIndex = index;
+                    CurLangIndex = index;
                     break;
                 }
                 index++;
@@ -107,10 +107,10 @@ public static class LOCALIZATION_CLASS_NAME
     public static IEnumerator InitAsync()
     {
         var lang = m_LanguageTemp;
-        if (!languageDict.ContainsKey(CurrentLanguage))
+        if (!LanguageFiles.ContainsKey(CurrentLanguage))
         {
             if (string.IsNullOrEmpty(m_LanguageTemp))
-                lang = defaultLanguage;
+                lang = DefaultLanguage;
         }
         else lang = CurrentLanguage;
 
@@ -119,7 +119,7 @@ public static class LOCALIZATION_CLASS_NAME
 #if UNITY_EDITOR
             Debug.Log($"Init {nameof(LocalizationTask)}");
 #endif
-            string file = languageDict[lang];
+            string file = LanguageFiles[lang];
             string address = $"{Folder}/{file}";
 #if ADDRESSABLES
             if (Addressable)
@@ -146,11 +146,11 @@ public static class LOCALIZATION_CLASS_NAME
             }
             m_LanguageTemp = lang;
             int index = 0;
-            foreach (var item in languageDict)
+            foreach (var item in LanguageFiles)
             {
                 if (lang == item.Key)
                 {
-                    curLangIndex = index;
+                    CurLangIndex = index;
                     break;
                 }
                 index++;
@@ -302,18 +302,18 @@ public static class LOCALIZATION_CLASS_NAME
         return m_StringBuilder;
     }
 
-    public static string[] GetJsonList(string json)
+    private static string[] GetJsonList(string json)
     {
         var sb = new StringBuilder();
         string newJson = sb.Append("{").Append("\"array\":").Append(json).Append("}").ToString();
-        StringArray wrapper = JsonUtility.FromJson<StringArray>(newJson);
+        var wrapper = JsonUtility.FromJson<StringArray>(newJson);
         return wrapper.array;
     }
 	
 	public static string GetLanguage(int index)
 	{
 		int i = 0;
-		foreach (var lang in languageDict)
+		foreach (var lang in LanguageFiles)
 		{
 			if (i == index)
 				return lang.Key;
@@ -329,12 +329,23 @@ public static class LOCALIZATION_CLASS_NAME
     }
 
     private static List<DynamicText> m_DynamicTexts = new List<DynamicText>();
+    /// <summary>
+    /// Used this if you are unable to add LOCALIZATION_CLASS_NAMEText component to the gameObject
+    /// </summary>
+    /// <param name="pObj">gameObject contain Text or TextMeshProUGUI component</param>
+    /// <param name="pLocalizedKey">string Id of localized text</param>
+    /// <param name="pArgs">Value put into localized text</param>
     public static void RegisterDynamicText(GameObject pObj, string pLocalizedKey, params string[] pArgs)
     {
         int key = GetIndex(pLocalizedKey);
         RegisterDynamicText(pObj, key, pArgs);
     }
-
+    /// <summary>
+    /// Used this if you are unable to add LOCALIZATION_CLASS_NAMEText component to the gameObject
+    /// </summary>
+    /// <param name="pObj">gameObject contain Text or TextMeshProUGUI component</param>
+    /// <param name="pLocalizedKey">integer Id of localized text</param>
+    /// <param name="pArgs">Value put into localized text</param>
     public static void RegisterDynamicText(GameObject pObj, int pLocalizedKey, params string[] pArgs)
     {
         if (pObj == null)
@@ -355,12 +366,8 @@ public static class LOCALIZATION_CLASS_NAME
         text.Refresh();
         m_DynamicTexts.Add(text);
 #if UNITY_EDITOR
-        var localizedText = pObj.GetComponent<LOCALIZATION_CLASS_NAMEText>();
-        if (localizedText != null)
-        {
+        if (pObj.TryGetComponent(out LOCALIZATION_CLASS_NAMEText _))
             Debug.LogError($"{pObj.name} should not have LOCALIZATION_CLASS_NAMEText!");
-            UnityEngine.Object.Destroy(localizedText);
-        }
 #endif
     }
 
@@ -388,7 +395,7 @@ public static class LOCALIZATION_CLASS_NAME
         }
         public void Refresh()
         {
-            if (curLangIndex != LOCALIZATION_CLASS_NAME.curLangIndex)
+            if (curLangIndex != CurLangIndex)
             {
 #if UNITY_EDITOR
                 var text = Get(key);
@@ -406,7 +413,7 @@ public static class LOCALIZATION_CLASS_NAME
                     else if (obj.TryGetComponent(out Text txt))
                         txt.text = value;
 
-					curLangIndex = LOCALIZATION_CLASS_NAME.curLangIndex;
+					curLangIndex = CurLangIndex;
 #if UNITY_EDITOR
                 }
                 catch (Exception ex)
@@ -496,65 +503,4 @@ public static class LOCALIZATION_CLASS_NAME
 		CreateClassContainsRefinedIds(currentPath);
 	}
 #endif
-}
-
-public class LOCALIZATION_CLASS_NAMEGetter
-{
-    private static Dictionary<string, int> cachedTexts = new Dictionary<string, int>();
-
-    public string key;
-    public string defaultStr;
-
-    private int mIndex = -1;
-    private bool mCheckKey;
-
-    public LOCALIZATION_CLASS_NAMEGetter(string pKey, string pDefault)
-    {
-        key = pKey;
-        defaultStr = pDefault;
-
-#if UNITY_EDITOR
-        //In Editor we check it soon to find missing localization
-        LOCALIZATION_CLASS_NAME.Get(key, ref mIndex);
-        mCheckKey = true;
-#endif
-    }
-
-    public string Get()
-    {
-        if (!mCheckKey)
-        {
-            LOCALIZATION_CLASS_NAME.Get(key, ref mIndex);
-            mCheckKey = true;
-        }
-
-        if (mIndex == -1)
-            return defaultStr;
-        var text = LOCALIZATION_CLASS_NAME.Get(mIndex).ToString();
-        if (string.IsNullOrEmpty(text))
-            return defaultStr;
-        else
-            return LOCALIZATION_CLASS_NAME.Get(mIndex).ToString().Replace("\\n", "\u000a");
-    }
-
-    public static string GetCached(string pKey)
-    {
-        if (cachedTexts.ContainsKey(pKey))
-        {
-            int id = cachedTexts[pKey];
-            if (id != -1)
-            {
-                string text = LOCALIZATION_CLASS_NAME.Get(cachedTexts[pKey]).ToString();
-                return !string.IsNullOrEmpty(text) ? text : pKey;
-            }
-            return pKey;
-        }
-        else
-        {
-            int id = -1;
-            string text = LOCALIZATION_CLASS_NAME.Get(pKey, ref id).ToString();
-            cachedTexts.Add(pKey, id);
-            return !string.IsNullOrEmpty(text) ? text : pKey;
-        }
-    }
 }

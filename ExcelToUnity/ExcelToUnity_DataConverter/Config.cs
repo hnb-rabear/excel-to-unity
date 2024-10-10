@@ -1,4 +1,4 @@
-﻿using ExcelToUnity_DataConverter.Entities;
+using ExcelToUnity_DataConverter.Entities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -41,13 +41,9 @@ namespace ExcelToUnity_DataConverter
 
         public static void Save()
         {
-            try
-            {
-                string settingsJson = JsonConvert.SerializeObject(m_Settings);
-                Helper.WriteFile(FILE_PATH_SETTINGS, settingsJson);
-            }
-            catch { }
-        }
+			string settingsJson = JsonConvert.SerializeObject(m_Settings);
+			Helper.WriteFile(FILE_PATH_SETTINGS, settingsJson);
+		}
 
         public static void SaveSettingsToFile()
         {
@@ -61,7 +57,6 @@ namespace ExcelToUnity_DataConverter
             saveFileDialog1.CheckPathExists = true;
             saveFileDialog1.RestoreDirectory = true;
             saveFileDialog1.DefaultExt = "rad";
-            //saveFileDialog1.Filter = "Rad files (*.rad)|*.rad|All files (*.*)|*.*";
             saveFileDialog1.Filter = "Rad files (*.rad)|*.rad";
             saveFileDialog1.FilterIndex = 2;
             saveFileDialog1.RestoreDirectory = true;
@@ -71,7 +66,6 @@ namespace ExcelToUnity_DataConverter
             {
                 string settingsJson = JsonConvert.SerializeObject(m_Settings);
                 Helper.WriteFile(saveFileDialog1.FileName, settingsJson);
-                MessageBox.Show(string.Format("Export Successfully!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information));
             }
         }
 

@@ -15,7 +15,7 @@ public abstract class LocalizationsManager
 	
     public static string CurrentLanguage
     {
-        get { return PlayerPrefs.GetString("CurrentLanguage", defaultLanguage); }
+        get { return PlayerPrefs.GetString("CurrentLanguage", DefaultLanguage); }
         set
         {
             if (CurrentLanguage != value && languages.Contains(value))

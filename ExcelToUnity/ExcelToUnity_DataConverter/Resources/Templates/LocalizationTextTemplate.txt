@@ -112,8 +112,8 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 
     public void Refresh()
     {
-		int curLangIndex = LOCALIZATION_CLASS_NAME.curLangIndex;
-        if (Application.isPlaying && m_LanguageIndex == curLangIndex)
+		int CurLangIndex = LOCALIZATION_CLASS_NAME.CurLangIndex;
+        if (Application.isPlaying && m_LanguageIndex == CurLangIndex)
 			return;
 		if (m_IgnoredLangs.Count > 0 && m_IgnoredLangs.Contains(LOCALIZATION_CLASS_NAME.CurrentLanguage))
 			return;
@@ -144,7 +144,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
         if (m_TxtPro != null && !string.IsNullOrEmpty(text))
             m_TxtPro.text = text;
 			
-		m_LanguageIndex = curLangIndex;
+		m_LanguageIndex = CurLangIndex;
     }
 	
 	private void OnLanguageChanged()
@@ -196,9 +196,9 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
             if (GUILayout.Button("Refresh"))
                 m_Target.Refresh();
 				
-			if (LOCALIZATION_CLASS_NAME.CurrentLanguage != LOCALIZATION_CLASS_NAME.defaultLanguage && GUILayout.Button("Reset Default Language"))
+			if (LOCALIZATION_CLASS_NAME.CurrentLanguage != LOCALIZATION_CLASS_NAME.DefaultLanguage && GUILayout.Button("Reset Default Language"))
             {
-				LOCALIZATION_CLASS_NAME.CurrentLanguage = LOCALIZATION_CLASS_NAME.defaultLanguage;
+				LOCALIZATION_CLASS_NAME.CurrentLanguage = LOCALIZATION_CLASS_NAME.DefaultLanguage;
 				m_Target.Refresh();
 			}
 			
@@ -213,13 +213,13 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 					if (GUILayout.Button("<"))
 					{
 						m_IgnoredLangIdx--;
-						m_IgnoredLangIdx = Mathf.Clamp(m_IgnoredLangIdx, 0, LOCALIZATION_CLASS_NAME.languageDict.Count - 1);
+						m_IgnoredLangIdx = Mathf.Clamp(m_IgnoredLangIdx, 0, LOCALIZATION_CLASS_NAME.LanguageFiles.Count - 1);
 						m_Target.m_IgnoredLangs[i] = LOCALIZATION_CLASS_NAME.GetLanguage(m_IgnoredLangIdx);
 					}
 					if (GUILayout.Button(">"))
 					{
 						m_IgnoredLangIdx++;
-						m_IgnoredLangIdx = Mathf.Clamp(m_IgnoredLangIdx, 0, LOCALIZATION_CLASS_NAME.languageDict.Count - 1);
+						m_IgnoredLangIdx = Mathf.Clamp(m_IgnoredLangIdx, 0, LOCALIZATION_CLASS_NAME.LanguageFiles.Count - 1);
 						m_Target.m_IgnoredLangs[i] = LOCALIZATION_CLASS_NAME.GetLanguage(m_IgnoredLangIdx);
 					}
 					if (GUILayout.Button("Remove"))
@@ -234,17 +234,17 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 			if (GUILayout.Button("Test Next Lang"))
             {
                 int index = 0;
-                foreach (var lang in LOCALIZATION_CLASS_NAME.languageDict)
+                foreach (var lang in LOCALIZATION_CLASS_NAME.LanguageFiles)
                 {
                     if (lang.Key == LOCALIZATION_CLASS_NAME.CurrentLanguage)
                         break;
                     index++;
                 }
 
-                index = (index + 1) % LOCALIZATION_CLASS_NAME.languageDict.Count;
+                index = (index + 1) % LOCALIZATION_CLASS_NAME.LanguageFiles.Count;
 
                 int index2 = 0;
-                foreach (var lang in LOCALIZATION_CLASS_NAME.languageDict)
+                foreach (var lang in LOCALIZATION_CLASS_NAME.LanguageFiles)
                 {
                     if (index2 == index)
                     {

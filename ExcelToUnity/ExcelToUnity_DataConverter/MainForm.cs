@@ -1539,14 +1539,14 @@ namespace ExcelToUnity_DataConverter
             }
 
             //Build language dictionary
-            var languageDictBuilder = new StringBuilder();
-            languageDictBuilder.Append("\tpublic static readonly Dictionary<string, string[]> language = new Dictionary<string, string[]>() { ");
+            var languageFilesBuilder = new StringBuilder();
+            languageFilesBuilder.Append("\tpublic static readonly Dictionary<string, string[]> language = new Dictionary<string, string[]>() { ");
             foreach (var listText in pLanguageTextDict)
             {
-                languageDictBuilder.Append($" {"{"} \"{listText.Key}\", {listText.Key} {"},"}");
+                languageFilesBuilder.Append($" {"{"} \"{listText.Key}\", {listText.Key} {"},"}");
             }
-            languageDictBuilder.Append(" };\n");
-            languageDictBuilder.Append($"\tpublic static readonly string defaultLanguage = \"{pLanguageTextDict.First().Key}\";");
+            languageFilesBuilder.Append(" };\n");
+            languageFilesBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{pLanguageTextDict.First().Key}\";");
 
             //Write file
             string fileTemplateContent = File.ReadAllText(LOCALIZATION_TEMPLATE);
@@ -1555,8 +1555,9 @@ namespace ExcelToUnity_DataConverter
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_LIST", allLanguagePackBuilder.ToString());
-            fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageDictBuilder.ToString());
-            Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileTemplateContent);
+            fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageFilesBuilder.ToString());
+			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", folder);
+			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileTemplateContent);
             Log(LogType.Message, "Export " + pFileName + ".cs successfully!");
         }
 
@@ -1646,7 +1647,7 @@ namespace ExcelToUnity_DataConverter
 
             //Build language dictionary
             var languagesDictBuilder = new StringBuilder();
-            languagesDictBuilder.Append("\tpublic static readonly Dictionary<string, string> languageDict = new Dictionary<string, string>() { ");
+            languagesDictBuilder.Append("\tpublic static readonly Dictionary<string, string> LanguageFiles = new Dictionary<string, string>() { ");
             foreach (var textsList in pLanguageTextDict)
             {
                 languagesDictBuilder.Append($" {"{"} \"{textsList.Key}\", {$"\"{pFileName}_{textsList.Key}\""} {"},"}");
@@ -1655,7 +1656,7 @@ namespace ExcelToUnity_DataConverter
                     m_localizedLanguages.Add(textsList.Key);
             }
             languagesDictBuilder.Append(" };\n");
-            languagesDictBuilder.Append($"\tpublic static readonly string defaultLanguage = \"{pLanguageTextDict.First().Key}\";");
+            languagesDictBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{pLanguageTextDict.First().Key}\";");
 
             //Write file localization constants
             string fileContent = File.ReadAllText(LOCALIZATION_TEMPLATE_V2);
@@ -1664,7 +1665,8 @@ namespace ExcelToUnity_DataConverter
             fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
             fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
             fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
-            fileContent = AddNamespace(fileContent);
+			fileContent = fileContent.Replace("LOCALIZATION_FOLDER", folder);
+			fileContent = AddNamespace(fileContent);
             Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileContent);
 
             //Write file localized text component
@@ -1683,7 +1685,7 @@ namespace ExcelToUnity_DataConverter
         {
             //if (m_localizedSheetsExported.Count > 1)
             {
-                //Build language dictionary
+				//Build language dictionary
                 var languagesDictBuilder = new StringBuilder();
                 var systemLanguages = new StringBuilder();
                 languagesDictBuilder.Append("\tpublic static readonly List<string> languages = new List<string>() { ");
@@ -1723,7 +1725,7 @@ namespace ExcelToUnity_DataConverter
 				}
                 systemLanguages.Append($"\t\t\t_ => \"{m_localizedLanguages[0]}\",").AppendLine();
                 languagesDictBuilder.Append("};\n");
-                languagesDictBuilder.Append($"\tpublic static readonly string defaultLanguage = \"{m_localizedLanguages.First()}\";");
+                languagesDictBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{m_localizedLanguages.First()}\";");
 
                 //Build initialization code
                 var initLines = new StringBuilder();
@@ -1757,7 +1759,8 @@ namespace ExcelToUnity_DataConverter
                 fileContent = fileContent.Replace("//LOCALIZATION_SET_FOLDER", setFolder.ToString());
 				fileContent = fileContent.Replace("//LOCALIZATION_USE_ADDRESSABLE", useAddressable.ToString());
 				fileContent = fileContent.Replace("//LOCALIZATION_SYSTEM_LANGUAGE", systemLanguages.ToString());
-                fileContent = AddNamespace(fileContent);
+				fileContent = fileContent.Replace("LOCALIZATION_FOLDER", folder);
+				fileContent = AddNamespace(fileContent);
                 Helper.WriteFile(Config.Settings.outputConstantsFilePath, "LocalizationsManager.cs", fileContent);
             }
         }
