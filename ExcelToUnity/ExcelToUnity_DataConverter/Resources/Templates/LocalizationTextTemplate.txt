@@ -1,14 +1,12 @@
 /***
- * Author RadBear - nbhung71711@gmail.com - 2017-2023
+ * Author RadBear - nbhung71711@gmail.com - 2018
  ***/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Globalization;
 using System.Text.RegularExpressions;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -32,11 +30,12 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
     [SerializeField] private CaseType m_CaseType;
 	[SerializeField] private string[] m_Args;
 	[SerializeField] private List<string> m_IgnoredLangs = new List<string>(); //Used for TMPPRo
-
+    [SerializeField, HideInInspector] private LOCALIZATION_CLASS_NAME.ID m_LocalizedEnumId = LOCALIZATION_CLASS_NAME.ID.NONE; //Used to search for the usage of an ID within the project
     [NonSerialized] private int m_LocalizedID = -1;
 	
 	private int m_LanguageIndex = -1;
 	public string LocalizedIDString => m_LocalizedIDString;
+    public LOCALIZATION_CLASS_NAME.ID LocalizedEnumId => m_LocalizedEnumId;
 
 	private void Awake()
     {
@@ -47,12 +46,12 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
     {
         Refresh();
 		
-		LOCALIZATION_CLASS_NAME.onLanguageChanged += OnLanguageChanged;
+		LOCALIZATION_CLASS_NAME.OnLanguageChanged += OnLanguageChanged;
     }
 	
     private void OnDisable()
     {
-		LOCALIZATION_CLASS_NAME.onLanguageChanged -= OnLanguageChanged;
+		LOCALIZATION_CLASS_NAME.OnLanguageChanged -= OnLanguageChanged;
 	}
 
     private void OnValidate()
@@ -83,6 +82,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
         if (m_LocalizedID != pId)
         {
             m_LocalizedID = pId;
+            m_LocalizedEnumId = (LOCALIZATION_CLASS_NAME.ID)pId;
             m_LocalizedIDString = LOCALIZATION_CLASS_NAME.idString[m_LocalizedID];
         }
 		m_Args = pArgs;
@@ -95,6 +95,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
         {
             m_LocalizedIDString = pId;
             m_LocalizedID = -1;
+            m_LocalizedEnumId = LOCALIZATION_CLASS_NAME.ID.NONE;
         }
 		m_Args = pArgs;
 		Refresh();
@@ -114,7 +115,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 		int curLangIndex = LOCALIZATION_CLASS_NAME.curLangIndex;
         if (Application.isPlaying && m_LanguageIndex == curLangIndex)
 			return;
-		if (m_IgnoredLangs.Count > 0 && m_IgnoredLangs.Contains(LOCALIZATION_CLASS_NAME.currentLanguage))
+		if (m_IgnoredLangs.Count > 0 && m_IgnoredLangs.Contains(LOCALIZATION_CLASS_NAME.CurrentLanguage))
 			return;
         string text = "";
         if (m_LocalizedID >= 0)
@@ -195,9 +196,9 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
             if (GUILayout.Button("Refresh"))
                 m_Target.Refresh();
 				
-			if (LOCALIZATION_CLASS_NAME.currentLanguage != LOCALIZATION_CLASS_NAME.defaultLanguage && GUILayout.Button("Reset Default Language"))
+			if (LOCALIZATION_CLASS_NAME.CurrentLanguage != LOCALIZATION_CLASS_NAME.defaultLanguage && GUILayout.Button("Reset Default Language"))
             {
-				LOCALIZATION_CLASS_NAME.currentLanguage = LOCALIZATION_CLASS_NAME.defaultLanguage;
+				LOCALIZATION_CLASS_NAME.CurrentLanguage = LOCALIZATION_CLASS_NAME.defaultLanguage;
 				m_Target.Refresh();
 			}
 			
@@ -235,7 +236,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
                 int index = 0;
                 foreach (var lang in LOCALIZATION_CLASS_NAME.languageDict)
                 {
-                    if (lang.Key == LOCALIZATION_CLASS_NAME.currentLanguage)
+                    if (lang.Key == LOCALIZATION_CLASS_NAME.CurrentLanguage)
                         break;
                     index++;
                 }
@@ -247,7 +248,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
                 {
                     if (index2 == index)
                     {
-                        LOCALIZATION_CLASS_NAME.currentLanguage = lang.Key;
+                        LOCALIZATION_CLASS_NAME.CurrentLanguage = lang.Key;
                         m_Target.Refresh();
                         break;
                     }
@@ -292,6 +293,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
                     {
                         m_Target.m_LocalizedIDString = idString;
                         m_Target.m_LocalizedID = -1;
+                        m_Target.m_LocalizedEnumId = LOCALIZATION_CLASS_NAME.ID.NONE;
                         m_Target.Init();
                         m_Target.Refresh();
                     }

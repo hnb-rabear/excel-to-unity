@@ -1,5 +1,5 @@
 /***
- * Author RadBear - nbhung71711@gmail.com - 2017-2023
+ * Author RadBear - nbhung71711@gmail.com - 2018
  ***/
 
 using System.Collections.Generic;
@@ -13,10 +13,10 @@ public class LOCALIZATION_CLASS_NAME
 //LOCALIZED_LIST
 //LOCALIZED_DICTIONARY
 
-    public static string currentLanguage
+    public static string CurrentLanguage
     {
-        get { return PlayerPrefs.GetString("currentLanguage", defaultLanguage); }
-        set { PlayerPrefs.SetString("currentLanguage", value); }
+        get { return PlayerPrefs.GetString("CurrentLanguage", defaultLanguage); }
+        set { PlayerPrefs.SetString("CurrentLanguage", value); }
     }
 
     public static string Get(int pId, string pLang)
@@ -32,9 +32,9 @@ public class LOCALIZATION_CLASS_NAME
 
     public static string Get(ID pId)
     {
-        if (language.ContainsKey(currentLanguage))
+        if (language.ContainsKey(CurrentLanguage))
         {
-            return language[currentLanguage][(int)pId];
+            return language[CurrentLanguage][(int)pId];
         }
         Debug.LogError("Not found id " + pId);
         return "";
@@ -42,10 +42,10 @@ public class LOCALIZATION_CLASS_NAME
 
     public static string Get(int pId)
     {
-        if (language.ContainsKey(currentLanguage))
+        if (language.ContainsKey(CurrentLanguage))
         {
-            if (pId >= 0 && pId < language[currentLanguage].Length)
-                return language[currentLanguage][pId];
+            if (pId >= 0 && pId < language[CurrentLanguage].Length)
+                return language[CurrentLanguage][pId];
         }
         Debug.LogError("Not found id " + pId);
         return "";

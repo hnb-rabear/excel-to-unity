@@ -1,5 +1,5 @@
 /***
- * Author RadBear - nbhung71711@gmail.com - 2017-2023
+ * Author RadBear - nbhung71711@gmail.com - 2018
  ***/
 
 using System.Collections.Generic;
@@ -8,6 +8,10 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using System.Collections;
+#if ADDRESSABLES
+using Cysharp.Threading.Tasks;
+using UnityEngine.AddressableAssets;
+#endif
 
 public static class LOCALIZATION_CLASS_NAME
 {
@@ -16,172 +20,205 @@ public static class LOCALIZATION_CLASS_NAME
 //LOCALIZED_DICTIONARY_KEY_STRING
 //LOCALIZED_DICTIONARY
 
-	public static string Folder = "Data";
-    private static StringBuilder mStringBuilder = new StringBuilder();
-    public static Action onLanguageChanged;
-    private static string[] mTexts;
-    private static string mLanguageTemp;
-    public static string currentLanguage
+    public static bool Addressable;
+	public static string Folder = "Localization";
+    private static StringBuilder m_StringBuilder = new StringBuilder();
+    public static Action OnLanguageChanged;
+    private static string[] m_Texts;
+    private static string m_LanguageTemp;
+    public static string CurrentLanguage
     {
-        get { return PlayerPrefs.GetString("currentLanguage", defaultLanguage); }
+        get => PlayerPrefs.GetString("CurrentLanguage", defaultLanguage);
         set
         {
-            if (currentLanguage != value && languageDict.ContainsKey(value))
+            if (CurrentLanguage != value && languageDict.ContainsKey(value))
             {
-                PlayerPrefs.SetString("currentLanguage", value);
+                PlayerPrefs.SetString("CurrentLanguage", value);
                 Init();
             }
         }
     }
 	public static int curLangIndex = -1;
 
-    public static void Init()
+    public static async void Init()
 	{
-        var lang = mLanguageTemp;
-		if (!languageDict.ContainsKey(currentLanguage))
+        var lang = m_LanguageTemp;
+		if (!languageDict.ContainsKey(CurrentLanguage))
 		{
-			if (string.IsNullOrEmpty(mLanguageTemp))
+			if (string.IsNullOrEmpty(m_LanguageTemp))
 				lang = defaultLanguage;
 		}
-		else lang = currentLanguage;
+		else lang = CurrentLanguage;
 				
-		if (mLanguageTemp != lang)
+		if (m_LanguageTemp != lang)
 		{
 #if UNITY_EDITOR
 			Debug.Log($"Init {nameof(LOCALIZATION_CLASS_NAME)}");
 #endif
-			string file = languageDict[lang];
-			var asset = Resources.Load<TextAsset>(Folder + "/" + file);
-			if (asset != null)
-			{
-				string json = asset.text;
-				mTexts = GetJsonList(json);
-				mLanguageTemp = lang;
-				int index = 0;
-                foreach (var item in languageDict)
+		    string file = languageDict[lang];
+            string address = $"{Folder}/{file}";
+#if ADDRESSABLES
+            if (Addressable)
+            {
+                var operation = Addressables.LoadAssetAsync<TextAsset>(address);
+                await operation;
+                var textAsset = operation.Result;
+                if (textAsset != null)
                 {
-                    if (lang == item.Key)
-                    {
-                        curLangIndex = index;
-                        break;
-                    }
-                    index++;
+                    m_Texts = GetJsonList(textAsset.text);
+                    Addressables.Release(operation);
                 }
-                for (int i = 0; i < mDynamicTexts.Count; i++)
+            }
+            else
+#endif
+            {
+                var asset = Resources.Load<TextAsset>(address);
+                if (asset == null)
+                    return;
+                string json = asset.text;
+                m_Texts = GetJsonList(json);
+                Resources.UnloadAsset(asset);
+            }
+			m_LanguageTemp = lang;
+			int index = 0;
+            foreach (var item in languageDict)
+            {
+                if (lang == item.Key)
                 {
-                    if (mDynamicTexts[i].obj == null)
-                    {
-                        mDynamicTexts.RemoveAt(i);
-                        i--;
-                        continue;
-                    }
-                    mDynamicTexts[i].Refresh();
+                    curLangIndex = index;
+                    break;
                 }
-				onLanguageChanged?.Invoke();
-				Resources.UnloadAsset(asset);
-			}
+                index++;
+            }
+            for (int i = 0; i < m_DynamicTexts.Count; i++)
+            {
+                if (m_DynamicTexts[i].obj == null)
+                {
+                    m_DynamicTexts.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                m_DynamicTexts[i].Refresh();
+            }
+		    OnLanguageChanged?.Invoke();
 		}
 	}
 	
-	public static IEnumerator InitAsync()
-	{
-        var lang = mLanguageTemp;
-		if (!languageDict.ContainsKey(currentLanguage))
-		{
-			if (string.IsNullOrEmpty(mLanguageTemp))
-				lang = defaultLanguage;
-		}
-		else lang = currentLanguage;
-				
-		if (mLanguageTemp != lang)
-		{
+    public static IEnumerator InitAsync()
+    {
+        var lang = m_LanguageTemp;
+        if (!languageDict.ContainsKey(CurrentLanguage))
+        {
+            if (string.IsNullOrEmpty(m_LanguageTemp))
+                lang = defaultLanguage;
+        }
+        else lang = CurrentLanguage;
+
+        if (m_LanguageTemp != lang)
+        {
 #if UNITY_EDITOR
-			Debug.Log($"Init {nameof(LOCALIZATION_CLASS_NAME)}");
+            Debug.Log($"Init {nameof(LocalizationTask)}");
 #endif
-			string file = languageDict[lang];
-			var request = Resources.LoadAsync<TextAsset>(Folder + "/" + file);
-			while (!request.isDone)
-				yield return null;
-			if (request.asset != null)
-			{
-				mTexts = GetJsonList((request.asset as TextAsset).text);
-				mLanguageTemp = lang;
-				int index = 0;
-                foreach (var item in languageDict)
+            string file = languageDict[lang];
+            string address = $"{Folder}/{file}";
+#if ADDRESSABLES
+            if (Addressable)
+            {
+                var operation = Addressables.LoadAssetAsync<TextAsset>(address);
+                yield return operation;
+                var textAsset = operation.Result;
+                if (textAsset != null)
                 {
-                    if (lang == item.Key)
-                    {
-                        curLangIndex = index;
-                        break;
-                    }
-                    index++;
+                    m_Texts = GetJsonList(textAsset.text);
+                    Addressables.Release(operation);
                 }
-                for (int i = 0; i < mDynamicTexts.Count; i++)
+            }
+            else
+#endif
+            {
+                var request = Resources.LoadAsync<TextAsset>(address);
+                while (!request.isDone)
+                    yield return null;
+                if (request.asset == null)
+                    yield break;
+                m_Texts = GetJsonList((request.asset as TextAsset).text);
+                Resources.UnloadAsset(request.asset);
+            }
+            m_LanguageTemp = lang;
+            int index = 0;
+            foreach (var item in languageDict)
+            {
+                if (lang == item.Key)
                 {
-                    if (mDynamicTexts[i].obj == null)
-                    {
-                        mDynamicTexts.RemoveAt(i);
-                        i--;
-                        continue;
-                    }
-                    mDynamicTexts[i].Refresh();
+                    curLangIndex = index;
+                    break;
                 }
-				onLanguageChanged?.Invoke();
-				Resources.UnloadAsset(request.asset);
-			}
-		}
-	}
+                index++;
+            }
+            for (int i = 0; i < m_DynamicTexts.Count; i++)
+            {
+                if (m_DynamicTexts[i].obj == null)
+                {
+                    m_DynamicTexts.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                m_DynamicTexts[i].Refresh();
+            }
+            OnLanguageChanged?.Invoke();
+        }
+    }
 
     private static string[] GetTexts()
     {
-        if (mTexts == null)
+        if (m_Texts == null)
             Init();
-        return mTexts;
+        return m_Texts;
     }
 
     public static StringBuilder Get(ID pId)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
-        return mStringBuilder.Append(GetTexts()[(int)pId]);
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
+        return m_StringBuilder.Append(GetTexts()[(int)pId]);
     }
 
     public static StringBuilder Get(ID pId, params object[] pArgs)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
-        mStringBuilder.AppendFormat(GetTexts()[(int)pId], pArgs);
-        return mStringBuilder;
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
+        m_StringBuilder.AppendFormat(GetTexts()[(int)pId], pArgs);
+        return m_StringBuilder;
     }
 
     public static StringBuilder Get(int pId)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
         if (pId >= 0 && pId < GetTexts().Length)
-            mStringBuilder.Append(GetTexts()[pId]);
+            m_StringBuilder.Append(GetTexts()[pId]);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found id " + pId);
 #endif
-        return mStringBuilder;
+        return m_StringBuilder;
     }
 
     public static StringBuilder Get(int pId, params object[] pArgs)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
-        mStringBuilder.AppendFormat(GetTexts()[pId], pArgs);
-        return mStringBuilder;
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
+        m_StringBuilder.AppendFormat(GetTexts()[pId], pArgs);
+        return m_StringBuilder;
     }
 
     public static StringBuilder Get(string pIdString)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
         int index = GetIndex(pIdString);
         if (index >= 0)
-            mStringBuilder.Append(GetTexts()[index]);
+            m_StringBuilder.Append(GetTexts()[index]);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found idString " + pIdString);
 #endif
-        return mStringBuilder;
+        return m_StringBuilder;
     }
 
     public static int GetIndex(string pIdString)
@@ -197,51 +234,51 @@ public static class LOCALIZATION_CLASS_NAME
 
     public static StringBuilder Get(string pIdString, params object[] pArgs)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
         int index = GetIndex(pIdString);
         if (index >= 0)
-            mStringBuilder.AppendFormat(GetTexts()[index], pArgs);
+            m_StringBuilder.AppendFormat(GetTexts()[index], pArgs);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found idString " + pIdString);
 #endif
-        return mStringBuilder;
+        return m_StringBuilder;
     }
 
     public static StringBuilder Get(string pIdString, ref int pIndex)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
         pIndex = GetIndex(pIdString);
         if (pIndex >= 0)
-            mStringBuilder.Append(GetTexts()[pIndex]);
+            m_StringBuilder.Append(GetTexts()[pIndex]);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found idString " + pIdString);
 #endif
-        return mStringBuilder;
+        return m_StringBuilder;
     }
 
     public static StringBuilder Get(string pIdString, ref int pIndex, params object[] pArgs)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
         pIndex = GetIndex(pIdString);
         if (pIndex >= 0)
-            mStringBuilder.AppendFormat(GetTexts()[pIndex], pArgs);
+            m_StringBuilder.AppendFormat(GetTexts()[pIndex], pArgs);
 #if UNITY_EDITOR
         else
             Debug.LogError("Not found idString " + pIdString);
 #endif
-        return mStringBuilder;
+        return m_StringBuilder;
     }
 
     public static StringBuilder Get(string pIdString, ref ID pId)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
         int index = GetIndex(pIdString);
         if (index >= 0)
         {
             pId = (ID)index;
-            mStringBuilder.Append(GetTexts()[index]);
+            m_StringBuilder.Append(GetTexts()[index]);
         }
         else
         {
@@ -250,17 +287,17 @@ public static class LOCALIZATION_CLASS_NAME
             Debug.LogError("Not found idString " + pIdString);
 #endif
         }
-        return mStringBuilder;
+        return m_StringBuilder;
     }
 
     public static StringBuilder Get(string pIdString, ref ID pId, params object[] pArgs)
     {
-        mStringBuilder.Remove(0, mStringBuilder.Length);
+        m_StringBuilder.Remove(0, m_StringBuilder.Length);
         int index = GetIndex(pIdString);
         if (index >= 0)
         {
             pId = (ID)index;
-            mStringBuilder.AppendFormat(GetTexts()[index], pArgs);
+            m_StringBuilder.AppendFormat(GetTexts()[index], pArgs);
         }
         else
         {
@@ -269,7 +306,7 @@ public static class LOCALIZATION_CLASS_NAME
             Debug.LogError("Not found idString " + pIdString);
 #endif
         }
-        return mStringBuilder;
+        return m_StringBuilder;
     }
 
     public static string[] GetJsonList(string json)
@@ -298,7 +335,7 @@ public static class LOCALIZATION_CLASS_NAME
         public string[] array;
     }
 
-    private static List<DynamicText> mDynamicTexts = new List<DynamicText>();
+    private static List<DynamicText> m_DynamicTexts = new List<DynamicText>();
     public static void RegisterDynamicText(GameObject pObj, string pLocalizedKey, params string[] pArgs)
     {
         int key = GetIndex(pLocalizedKey);
@@ -309,37 +346,37 @@ public static class LOCALIZATION_CLASS_NAME
     {
         if (pObj == null)
             return;
-        for (int i = 0; i < mDynamicTexts.Count; i++)
-        	if (mDynamicTexts[i].obj == pObj)
+        for (int i = 0; i < m_DynamicTexts.Count; i++)
+        	if (m_DynamicTexts[i].obj == pObj)
             {
-                if (mDynamicTexts[i].key != pLocalizedKey || mDynamicTexts[i].args != pArgs)
+                if (m_DynamicTexts[i].key != pLocalizedKey || m_DynamicTexts[i].args != pArgs)
                 {
-                    mDynamicTexts[i].curLangIndex = -1;
-                    mDynamicTexts[i].key = pLocalizedKey;
-                    mDynamicTexts[i].args = pArgs;
+                    m_DynamicTexts[i].curLangIndex = -1;
+                    m_DynamicTexts[i].key = pLocalizedKey;
+                    m_DynamicTexts[i].args = pArgs;
                 }
-                mDynamicTexts[i].Refresh();
+                m_DynamicTexts[i].Refresh();
                 return;
             }
         var text = new DynamicText(pLocalizedKey, pObj, pArgs);
         text.Refresh();
-        mDynamicTexts.Add(text);
+        m_DynamicTexts.Add(text);
 #if UNITY_EDITOR
         var localizedText = pObj.GetComponent<LOCALIZATION_CLASS_NAMEText>();
         if (localizedText != null)
         {
             Debug.LogError($"{pObj.name} should not have LOCALIZATION_CLASS_NAMEText!");
-            GameObject.Destroy(localizedText);
+            UnityEngine.Object.Destroy(localizedText);
         }
 #endif
     }
 
     public static void UnregisterDynamicText(GameObject pObj)
     {
-        for (int i = 0; i < mDynamicTexts.Count; i++)
-            if (mDynamicTexts[i].obj == pObj)
+        for (int i = 0; i < m_DynamicTexts.Count; i++)
+            if (m_DynamicTexts[i].obj == pObj)
             {
-                mDynamicTexts.RemoveAt(i);
+                m_DynamicTexts.RemoveAt(i);
                 return;
             }
     }
@@ -389,13 +426,13 @@ public static class LOCALIZATION_CLASS_NAME
     }
 	
 #if UNITY_EDITOR
-	public static void CreateClassContainsRefinedIds(string pPath)
+	private static void CreateClassContainsRefinedIds(string pPath)
 	{
-		var ids = FindUsingIDs(pPath);
+		var ids = FindUsedIDs(pPath);
 		Debug.Log($"Writing {ids.Count} ids to {pPath}");
 		CreateClassContainsRefinedIds(ids);
 	}
-	public static List<string> FindUsingIDs(string pPath)
+	private static List<string> FindUsedIDs(string pPath)
 	{
 		var results = new List<string>();
 		var assetIds = UnityEditor.AssetDatabase.FindAssets("t:prefab", new[] { pPath });
@@ -405,16 +442,24 @@ public static class LOCALIZATION_CLASS_NAME
 			var components = obj.GetComponentsInChildren<LOCALIZATION_CLASS_NAMEText>(true);
 			foreach (var com in components)
 			{
-				string id = com.LocalizedIDString;
-				id = id.Replace(" ", "_");
-				id = System.Text.RegularExpressions.Regex.Replace(id, "[^a-zA-Z0-9_.]+", "", System.Text.RegularExpressions.RegexOptions.Compiled);
-				if (!results.Contains(id))
-					results.Add(id);
+                if (com.LocalizedEnumId != ID.NONE)
+                {
+                    if (!results.Contains(com.LocalizedEnumId.ToString()))
+                        results.Add(com.LocalizedEnumId.ToString());
+                }
+                else
+                {
+                    string idStr = com.LocalizedIDString;
+                    idStr = idStr.Replace(" ", "_");
+                    idStr = System.Text.RegularExpressions.Regex.Replace(idStr, "[^a-zA-Z0-9_.]+", "", System.Text.RegularExpressions.RegexOptions.Compiled);
+                    if (!results.Contains(idStr))
+                        results.Add(idStr);
+                }
 			}
 		}
 		return results;
 	}
-	public static void CreateClassContainsRefinedIds(List<string> pRefinedIds)
+	private static void CreateClassContainsRefinedIds(List<string> pRefinedIds)
 	{
 		string enumIds = "";
 		string intIds = "";

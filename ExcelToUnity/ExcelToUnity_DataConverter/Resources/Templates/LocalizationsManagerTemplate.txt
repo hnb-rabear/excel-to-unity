@@ -1,27 +1,26 @@
 /***
- * Author RadBear - nbhung71711@gmail.com - 2017-2023
+ * Author RadBear - nbhung71711@gmail.com - 2018
  ***/
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using RCore.Common;
 
-public class LocalizationsManager
+public abstract class LocalizationsManager
 {
-    public static Action onLanguageChanged;
+    public static Action OnLanguageChanged;
 
 //LOCALIZED_DICTIONARY
 	
-    public static string currentLanguage
+    public static string CurrentLanguage
     {
-        get { return PlayerPrefs.GetString("currentLanguage", defaultLanguage); }
+        get { return PlayerPrefs.GetString("CurrentLanguage", defaultLanguage); }
         set
         {
-            if (currentLanguage != value && languages.Contains(value))
+            if (CurrentLanguage != value && languages.Contains(value))
             {
-                PlayerPrefs.SetString("currentLanguage", value);
+                PlayerPrefs.SetString("CurrentLanguage", value);
                 Init("");
             }
         }
@@ -30,17 +29,17 @@ public class LocalizationsManager
     public static void Init(string pLang)
     {
 		if (languages.Contains(pLang))
-			PlayerPrefs.SetString("currentLanguage", pLang);
+			PlayerPrefs.SetString("CurrentLanguage", pLang);
 //LOCALIZATION_INIT
-        onLanguageChanged?.Invoke();
+        OnLanguageChanged?.Invoke();
     }
 
     public static IEnumerator InitAsync(string pLang)
     {
 		if (languages.Contains(pLang))
-			PlayerPrefs.SetString("currentLanguage", pLang);
-//LOCALIZATION_INIT_ASYN
-        onLanguageChanged?.Invoke();
+			PlayerPrefs.SetString("CurrentLanguage", pLang);
+//LOCALIZATION_INIT_ASYNC
+        OnLanguageChanged?.Invoke();
     }
 	
 	public static void SetFolder(string pFolder)
@@ -50,8 +49,8 @@ public class LocalizationsManager
 
     public static string GetSystemLanguage()
 	{
-		if (PlayerPrefs.HasKey("currentLanguage"))
-			return PlayerPrefs.GetString("currentLanguage");
+		if (PlayerPrefs.HasKey("CurrentLanguage"))
+			return PlayerPrefs.GetString("CurrentLanguage");
 
 		var curLang = Application.systemLanguage;
 		return curLang switch

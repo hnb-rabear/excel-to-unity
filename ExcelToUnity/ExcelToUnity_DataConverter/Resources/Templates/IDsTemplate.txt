@@ -1,5 +1,5 @@
 ﻿/***
- * Author RadBear - nbhung71711@gmail.com - 2017-2023
+ * Author RadBear - nbhung71711@gmail.com - 2018
  ***/
 
 using System;
