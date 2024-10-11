@@ -314,3 +314,5 @@ E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\E
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToU.1F0D874B.Up2Date
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.exe
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.pdb
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Markdig.dll
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Markdig.xml

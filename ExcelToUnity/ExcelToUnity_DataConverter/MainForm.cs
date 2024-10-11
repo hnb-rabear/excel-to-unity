@@ -1,4 +1,6 @@
 using ChoETL;
+using Markdig;
+using Markdig.Syntax;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPOI.SS.UserModel;
@@ -1799,15 +1801,17 @@ namespace ExcelToUnity_DataConverter
             using (var reader = new StreamReader(changelogPath))
             {
                 string content = reader.ReadToEnd();
-                txtChangesLog.Text = content;
+				string htmlContent = Markdown.ToHtml(content);
+                weboxChangelog.DocumentText = htmlContent;
             }
 
             string helpPath = "Resources\\help.md";
             using (var reader = new StreamReader(helpPath))
             {
                 string content = reader.ReadToEnd();
-                txtBoxHelp.Text = content;
-            }
+				string htmlContent = Markdown.ToHtml(content);
+                weboxHelp.DocumentText = htmlContent;
+			}
 
             txtVersion.Text = @"1.4.9";
         }
@@ -2715,5 +2719,10 @@ namespace ExcelToUnity_DataConverter
         {
 
         }
-    }
+
+		private void linkGit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start("https://github.com/hnb-rabear/excel-to-unity/");
+		}
+	}
 }
