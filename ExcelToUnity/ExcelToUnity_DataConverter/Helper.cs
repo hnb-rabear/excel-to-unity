@@ -462,7 +462,7 @@ namespace ExcelToUnity_DataConverter
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_LIST", allLanguagePackBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageFilesBuilder.ToString());
-			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", folder);
+			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 			WriteFile(pExportFolder, pFileName, fileTemplateContent);
 
             MessageBox.Show($@"Export {pSheetName} successfully!", @"Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

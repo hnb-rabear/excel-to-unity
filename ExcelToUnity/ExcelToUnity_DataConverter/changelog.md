@@ -73,3 +73,7 @@
 - Introduced a status column to verify the presence of an existing Excel file
 - Resolved an issue with the filter functionality during Excel file addition
 - Enhanced feature: now supports multiple nested classes/structs
+
+## Version 1.4.9
+- Implemented localization loading via Addressable Asset system, improving flexibility and resource management
+- Refactored and cleaned up the codebase

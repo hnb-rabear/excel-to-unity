@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ExcelToUnity_DataConverter.Entities
 {
     [System.Serializable]
-    public class SettingEntity
+    public class Settings
     {
         /// <summary>
         /// Input Excel file path
@@ -64,5 +64,27 @@ namespace ExcelToUnity_DataConverter.Entities
                 strs[i] = strs[i].Trim().ToLower();
             return strs;
         }
-    }
+
+		public string GetLocalizationFolder()
+		{
+			string path = outputLocalizationFilePath;
+			string resourcesDirName = "Resources";
+
+			// Find the index of the Resources directory
+			int resourcesIndex = path.IndexOf(resourcesDirName, StringComparison.OrdinalIgnoreCase);
+			if (resourcesIndex != -1)
+			{
+				// Add length of Resources to the index to get the part after it
+				int startAfterResources = resourcesIndex + resourcesDirName.Length;
+
+				// Get the path after Resources
+				string pathAfterResources = path.Substring(startAfterResources).TrimStart(System.IO.Path.DirectorySeparatorChar);
+
+				return pathAfterResources;
+			}
+
+			// Return empty or a default value if Resources not found
+			return string.Empty;
+		}
+	}
 }

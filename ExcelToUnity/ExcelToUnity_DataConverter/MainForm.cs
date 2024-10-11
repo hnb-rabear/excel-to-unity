@@ -1556,7 +1556,7 @@ namespace ExcelToUnity_DataConverter
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_LIST", allLanguagePackBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageFilesBuilder.ToString());
-			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", folder);
+			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileTemplateContent);
             Log(LogType.Message, "Export " + pFileName + ".cs successfully!");
         }
@@ -1665,7 +1665,7 @@ namespace ExcelToUnity_DataConverter
             fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
             fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
             fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
-			fileContent = fileContent.Replace("LOCALIZATION_FOLDER", folder);
+			fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 			fileContent = AddNamespace(fileContent);
             Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileContent);
 
@@ -1759,7 +1759,7 @@ namespace ExcelToUnity_DataConverter
                 fileContent = fileContent.Replace("//LOCALIZATION_SET_FOLDER", setFolder.ToString());
 				fileContent = fileContent.Replace("//LOCALIZATION_USE_ADDRESSABLE", useAddressable.ToString());
 				fileContent = fileContent.Replace("//LOCALIZATION_SYSTEM_LANGUAGE", systemLanguages.ToString());
-				fileContent = fileContent.Replace("LOCALIZATION_FOLDER", folder);
+				fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 				fileContent = AddNamespace(fileContent);
                 Helper.WriteFile(Config.Settings.outputConstantsFilePath, "LocalizationsManager.cs", fileContent);
             }
@@ -1809,7 +1809,7 @@ namespace ExcelToUnity_DataConverter
                 txtBoxHelp.Text = content;
             }
 
-            txtVersion.Text = @"1.4.8";
+            txtVersion.Text = @"1.4.9";
         }
 
         private void btnSelectInputFile_Click(object sender, EventArgs e)

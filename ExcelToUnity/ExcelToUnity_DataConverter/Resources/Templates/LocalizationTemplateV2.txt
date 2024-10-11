@@ -21,7 +21,7 @@ public static class LOCALIZATION_CLASS_NAME
 //LOCALIZED_DICTIONARY
 
     public static bool Addressable;
-	public static string Folder = "LOCALIZTION_FOLDER";
+	public static string Folder = "LOCALIZATION_FOLDER";
     private static StringBuilder m_StringBuilder = new StringBuilder();
     public static Action OnLanguageChanged;
     private static string[] m_Texts;
