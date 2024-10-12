@@ -241,6 +241,8 @@ public static class LOCALIZATION_CLASS_NAME
     public static StringBuilder Get(string pIdString, ref int pIndex)
     {
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
+        if (m_Texts == null)
+            return m_StringBuilder;
         pIndex = GetIndex(pIdString);
         if (pIndex >= 0)
             m_StringBuilder.Append(m_Texts[pIndex]);

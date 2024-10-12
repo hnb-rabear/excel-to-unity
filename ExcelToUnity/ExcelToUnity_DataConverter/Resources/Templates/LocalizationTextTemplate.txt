@@ -44,7 +44,8 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 
     private void OnEnable()
     {
-        Refresh();
+        if (LOCALIZATION_CLASS_NAME.CurLangIndex > -1)
+            Refresh();
 		
 		LOCALIZATION_CLASS_NAME.OnLanguageChanged += OnLanguageChanged;
     }
