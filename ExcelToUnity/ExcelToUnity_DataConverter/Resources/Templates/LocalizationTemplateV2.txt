@@ -241,8 +241,6 @@ public static class LOCALIZATION_CLASS_NAME
     public static StringBuilder Get(string pIdString, ref int pIndex)
     {
         m_StringBuilder.Remove(0, m_StringBuilder.Length);
-        if (m_Texts == null)
-            return m_StringBuilder;
         pIndex = GetIndex(pIdString);
         if (pIndex >= 0)
             m_StringBuilder.Append(m_Texts[pIndex]);
@@ -431,7 +429,7 @@ public static class LOCALIZATION_CLASS_NAME
 	private static void CreateClassContainsRefinedIds(string pPath)
 	{
 		var ids = FindUsedIDs(pPath);
-		Debug.Log($"Writing {ids.Count} ids to {pPath}");
+		Debug.Log($"Found {ids.Count} ids used in {pPath}");
 		CreateClassContainsRefinedIds(ids);
 	}
 	private static List<string> FindUsedIDs(string pPath)
@@ -484,6 +482,7 @@ public static class LOCALIZATION_CLASS_NAME
 		if (!System.IO.Directory.Exists(directoryPath))
 			System.IO.Directory.CreateDirectory(directoryPath);
 		System.IO.File.WriteAllText(path, result);
+        Debug.Log($"Created {path}");
 	}
 	private static string GetTemplateClassContainsRefinedIds()
 	{
@@ -498,11 +497,61 @@ public static class LOCALIZATION_CLASS_NAME
 			+ "}";
 		return content;
 	}
-	[UnityEditor.MenuItem("Assets/Create/RCore/Localization Refined Ids/Create LOCALIZATION_CLASS_NAMERefinedIds")]
-	public static void CreateLOCALIZATION_CLASS_NAMERefinedIds()
+	[UnityEditor.MenuItem("Assets/Create/RCore/Localization/Refine LOCALIZATION_CLASS_NAME Ids")]
+	public static void CreateLocalizationRefinedIds()
 	{
 		string currentPath = UnityEditor.AssetDatabase.GetAssetPath(UnityEditor.Selection.activeObject);
 		CreateClassContainsRefinedIds(currentPath);
 	}
+    public static void InitInEditor()
+    {
+        var lang = m_LanguageTemp;
+        if (!LanguageFiles.ContainsKey(CurrentLanguage))
+        {
+            if (string.IsNullOrEmpty(m_LanguageTemp))
+                lang = DefaultLanguage;
+        }
+        else lang = CurrentLanguage;
+
+        if (m_LanguageTemp != lang)
+        {
+            string file = LanguageFiles[lang];
+            string address = $"{Folder}/{file}";
+#if ADDRESSABLES
+            if (Addressable)
+            {
+                var operation = Addressables.LoadAssetAsync<TextAsset>(address);
+                operation.WaitForCompletion(); // Blocks the main thread until complete (Editor and Development Builds Only)
+                var textAsset = operation.Result;
+                if (textAsset != null)
+                {
+                    m_Texts = GetJsonList(textAsset.text);
+                    Addressables.Release(operation);
+                }
+            }
+            else
+#endif
+            {
+                var asset = Resources.Load<TextAsset>(address);
+                if (asset == null)
+                    return;
+                string json = asset.text;
+                m_Texts = GetJsonList(json);
+                Resources.UnloadAsset(asset);
+            }
+            m_LanguageTemp = lang;
+            int index = 0;
+            foreach (var item in LanguageFiles)
+            {
+                if (lang == item.Key)
+                {
+                    CurLangIndex = index;
+                    break;
+                }
+                index++;
+            }
+            OnLanguageChanged?.Invoke();
+        }
+    }
 #endif
 }

@@ -54,29 +54,6 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
     {
 		LOCALIZATION_CLASS_NAME.OnLanguageChanged -= OnLanguageChanged;
 	}
-
-    private void OnValidate()
-    {
-        if (Application.isPlaying)
-            return;
-
-        if (string.IsNullOrEmpty(m_LocalizedIDString))
-			return;
-		Init();
-		int localizedID = -1;
-		LOCALIZATION_CLASS_NAME.Get(m_LocalizedIDString, ref localizedID);
-		if (localizedID == -1)
-		{
-			string path = name;
-			var parent = transform.parent;
-			while (parent != null)
-			{
-				path = $"{parent.name}.{path}";
-				parent = parent.parent;
-			}
-			Debug.LogError($"{path}: not found {m_LocalizedIDString} in {nameof(LOCALIZATION_CLASS_NAME)}");
-		}
-    }
 	
     public void Set(int pId, params string[] pArgs)
     {
@@ -167,6 +144,32 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (Application.isPlaying)
+            return;
+
+        Init();
+
+        if (string.IsNullOrEmpty(m_LocalizedIDString))
+			return;
+		
+		int localizedID = -1;
+        LOCALIZATION_CLASS_NAME.InitInEditor();
+		LOCALIZATION_CLASS_NAME.Get(m_LocalizedIDString, ref localizedID);
+		if (localizedID == -1)
+		{
+			string path = name;
+			var parent = transform.parent;
+			while (parent != null)
+			{
+				path = $"{parent.name}.{path}";
+				parent = parent.parent;
+			}
+			Debug.LogError($"{path}: not found {m_LocalizedIDString} in {nameof(LOCALIZATION_CLASS_NAME)}");
+		}
+    }
+
     [CustomEditor(typeof(LOCALIZATION_CLASS_NAMEText))]
     public class LOCALIZATION_CLASS_NAMETextEditor : Editor
     {
