@@ -2852,7 +2852,7 @@ namespace ExcelToUnity_DataConverter
 					if (sheet.SheetName.EndsWith(CONSTANTS_SHEET))
 						range = $"{sheet.SheetName}!A1:D";
 					else
-						range = $"{sheet.SheetName}!A1:{GetColumnLetter(columnCount.Value)}";
+						range = $"{sheet.SheetName}!A1:{Helper.GetColumnLetter(columnCount.Value)}";
 
 					// Create a request to get the sheet data
 					var request = service.Spreadsheets.Values.Get(googleSheetsPaths[i].id, range);
@@ -2918,24 +2918,6 @@ namespace ExcelToUnity_DataConverter
 			{
 				Console.WriteLine($"No data found in sheet {sheetName}.");
 			}
-		}
-
-		/// <summary>
-		/// Helper method to convert column number to letter (e.g., 1 -> A, 2 -> B, ..., 26 -> Z, 27 -> AA)
-		/// </summary>
-		private string GetColumnLetter(int columnNumber)
-		{
-			int dividend = columnNumber;
-			string columnLetter = string.Empty;
-
-			while (dividend > 0)
-			{
-				int modulo = (dividend - 1) % 26;
-				columnLetter = (char)(65 + modulo) + columnLetter; // 65 is the ASCII value for 'A'
-				dividend = (dividend - modulo) / 26;
-			}
-
-			return columnLetter;
 		}
 	}
 }

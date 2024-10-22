@@ -694,5 +694,23 @@ namespace ExcelToUnity_DataConverter
 			Console.WriteLine("Credential file saved to: " + Config.GetSaveDirectory());
             return credential;
 		}
+
+		/// <summary>
+		/// Helper method to convert column number to letter (e.g., 1 -> A, 2 -> B, ..., 26 -> Z, 27 -> AA)
+		/// </summary>
+		public static string GetColumnLetter(int columnNumber)
+		{
+			int dividend = columnNumber;
+			string columnLetter = string.Empty;
+
+			while (dividend > 0)
+			{
+				int modulo = (dividend - 1) % 26;
+				columnLetter = (char)(65 + modulo) + columnLetter; // 65 is the ASCII value for 'A'
+				dividend = (dividend - modulo) / 26;
+			}
+
+			return columnLetter;
+		}
 	}
 }

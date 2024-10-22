@@ -12,6 +12,7 @@ using System.Threading;
 using System.Linq;
 using System.ComponentModel;
 using ChoETL;
+using NPOI.SS.Formula.Functions;
 
 namespace ExcelToUnity_DataConverter
 {
@@ -36,21 +37,6 @@ namespace ExcelToUnity_DataConverter
 			
 			if (!string.IsNullOrEmpty(googleSheetId))
 				Authenticate();
-		}
-
-		private void DtgGoogleSheets_CellClick(object sender, DataGridViewCellEventArgs e)
-		{
-			if (e == null || e.RowIndex == DtgGoogleSheets.NewRowIndex || e.RowIndex < 0)
-				return;
-
-			var row = DtgGoogleSheets.Rows[e.RowIndex];
-
-			if (e.ColumnIndex == DtgGoogleSheets.Columns["selected"].Index)
-			{
-				int selectedColumnIdx = DtgGoogleSheets.Columns["selected"].Index;
-				bool selected = row.Cells[selectedColumnIdx].Value != null && (bool)row.Cells[selectedColumnIdx].Value;
-				sheets[e.RowIndex].selected = selected;
-			}
 		}
 
 		public List<GoogleSheetsPath.Sheet> GetGoogleSheetsFromGridView()
@@ -139,6 +125,39 @@ namespace ExcelToUnity_DataConverter
 		private void TxtGoogleSheetId_TextChanged(object sender, EventArgs e)
 		{
 			BtnDownload.Enabled = !string.IsNullOrEmpty(TxtGoogleSheetId.Text);
+		}
+
+		private void DtgGoogleSheets_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e == null || e.RowIndex == DtgGoogleSheets.NewRowIndex || e.RowIndex < 0)
+				return;
+
+			var row = DtgGoogleSheets.Rows[e.RowIndex];
+
+			if (e.ColumnIndex == DtgGoogleSheets.Columns["selected"].Index)
+			{
+				int selectedColumnIdx = DtgGoogleSheets.Columns["selected"].Index;
+				bool selected = row.Cells[selectedColumnIdx].Value != null && (bool)row.Cells[selectedColumnIdx].Value;
+				sheets[e.RowIndex].selected = selected;
+			}
+		}
+
+		private void FrmGoogleSheetSample_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (DtgGoogleSheets.IsCurrentCellInEditMode)
+			{
+				DtgGoogleSheets.EndEdit();
+
+				// Save currennt cell before form closing
+				int selectedColumnIdx = DtgGoogleSheets.Columns["selected"].Index;
+				int columnIndex = DtgGoogleSheets.CurrentCell.ColumnIndex;
+				if (columnIndex == selectedColumnIdx)
+				{
+					int rowIndex = DtgGoogleSheets.CurrentCell.RowIndex;
+					bool selected = DtgGoogleSheets.CurrentRow.Cells[selectedColumnIdx].Value != null && (bool)DtgGoogleSheets.CurrentRow.Cells[selectedColumnIdx].Value;
+					sheets[rowIndex].selected = selected;
+				}
+			}
 		}
 	}
 }

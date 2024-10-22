@@ -1,4 +1,4 @@
-﻿namespace ExcelToUnity_DataConverter
+namespace ExcelToUnity_DataConverter
 {
     partial class FrmGoogleSheetSample
     {
@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
 			this.DtgGoogleSheets = new System.Windows.Forms.DataGridView();
+			this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.TxtGoogleSheetId = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.BtnDownload = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.TxtGoogleSheetName = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.DtgGoogleSheets)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -53,7 +53,21 @@
 			this.DtgGoogleSheets.Name = "DtgGoogleSheets";
 			this.DtgGoogleSheets.Size = new System.Drawing.Size(584, 284);
 			this.DtgGoogleSheets.TabIndex = 1;
-			this.DtgGoogleSheets.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DtgGoogleSheets_CellClick);
+			this.DtgGoogleSheets.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DtgGoogleSheets_CellEndEdit);
+			// 
+			// name
+			// 
+			this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.name.DataPropertyName = "name";
+			this.name.HeaderText = "Name";
+			this.name.Name = "name";
+			// 
+			// selected
+			// 
+			this.selected.DataPropertyName = "selected";
+			this.selected.HeaderText = "Selected";
+			this.selected.Name = "selected";
+			this.selected.Width = 70;
 			// 
 			// TxtGoogleSheetId
 			// 
@@ -114,20 +128,6 @@
 			this.label3.TabIndex = 15;
 			this.label3.Text = "GG Sheet Name:";
 			// 
-			// name
-			// 
-			this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.name.DataPropertyName = "name";
-			this.name.HeaderText = "Name";
-			this.name.Name = "name";
-			// 
-			// selected
-			// 
-			this.selected.DataPropertyName = "selected";
-			this.selected.HeaderText = "Selected";
-			this.selected.Name = "selected";
-			this.selected.Width = 70;
-			// 
 			// FrmGoogleSheetSample
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -143,6 +143,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "FrmGoogleSheetSample";
 			this.Text = "Google Spread Sheets";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmGoogleSheetSample_FormClosing);
 			this.Load += new System.EventHandler(this.FrmGoogleSheetSample_Load);
 			((System.ComponentModel.ISupportInitialize)(this.DtgGoogleSheets)).EndInit();
 			this.ResumeLayout(false);

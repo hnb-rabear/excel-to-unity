@@ -118,16 +118,16 @@ namespace ExcelToUnity_DataConverter
 			this.BtnExportGoogleSheets = new System.Windows.Forms.Button();
 			this.BtnAddGoogleSheet = new System.Windows.Forms.Button();
 			this.DtgGoogleSheets = new System.Windows.Forms.DataGridView();
+			this.GoogleSheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.GoogleSheetId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.BtnEditGoogleSheet = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.BtnDeleteGoogleSheet = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.BtnSaveSettings = new System.Windows.Forms.Button();
 			this.BtnLoadSettings = new System.Windows.Forms.Button();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
 			this.linkGit = new System.Windows.Forms.LinkLabel();
-			this.GoogleSheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.GoogleSheetId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.BtnEditGoogleSheet = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.BtnDeleteGoogleSheet = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.statusStrip2.SuspendLayout();
 			this.tpChangeLog.SuspendLayout();
 			this.tpHelp.SuspendLayout();
@@ -1152,6 +1152,41 @@ namespace ExcelToUnity_DataConverter
 			this.DtgGoogleSheets.TabIndex = 0;
 			this.DtgGoogleSheets.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DtgGoogleSheets_CellClick);
 			// 
+			// GoogleSheetName
+			// 
+			this.GoogleSheetName.DataPropertyName = "name";
+			this.GoogleSheetName.HeaderText = "Name";
+			this.GoogleSheetName.Name = "GoogleSheetName";
+			this.GoogleSheetName.ReadOnly = true;
+			// 
+			// GoogleSheetId
+			// 
+			this.GoogleSheetId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.GoogleSheetId.DataPropertyName = "id";
+			this.GoogleSheetId.HeaderText = "Id";
+			this.GoogleSheetId.Name = "GoogleSheetId";
+			this.GoogleSheetId.ReadOnly = true;
+			// 
+			// BtnEditGoogleSheet
+			// 
+			this.BtnEditGoogleSheet.HeaderText = "Edit";
+			this.BtnEditGoogleSheet.Name = "BtnEditGoogleSheet";
+			this.BtnEditGoogleSheet.ReadOnly = true;
+			this.BtnEditGoogleSheet.Text = "Edit";
+			this.BtnEditGoogleSheet.ToolTipText = "Edit";
+			this.BtnEditGoogleSheet.UseColumnTextForButtonValue = true;
+			this.BtnEditGoogleSheet.Width = 50;
+			// 
+			// BtnDeleteGoogleSheet
+			// 
+			this.BtnDeleteGoogleSheet.HeaderText = "Delete";
+			this.BtnDeleteGoogleSheet.Name = "BtnDeleteGoogleSheet";
+			this.BtnDeleteGoogleSheet.ReadOnly = true;
+			this.BtnDeleteGoogleSheet.Text = "Delete";
+			this.BtnDeleteGoogleSheet.ToolTipText = "Delete";
+			this.BtnDeleteGoogleSheet.UseColumnTextForButtonValue = true;
+			this.BtnDeleteGoogleSheet.Width = 50;
+			// 
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.BtnSaveSettings);
@@ -1207,41 +1242,6 @@ namespace ExcelToUnity_DataConverter
 			this.linkGit.TabStop = true;
 			this.linkGit.Text = "Git";
 			this.linkGit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGit_LinkClicked);
-			// 
-			// GoogleSheetName
-			// 
-			this.GoogleSheetName.DataPropertyName = "name";
-			this.GoogleSheetName.HeaderText = "Name";
-			this.GoogleSheetName.Name = "GoogleSheetName";
-			this.GoogleSheetName.ReadOnly = true;
-			// 
-			// GoogleSheetId
-			// 
-			this.GoogleSheetId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.GoogleSheetId.DataPropertyName = "id";
-			this.GoogleSheetId.HeaderText = "Id";
-			this.GoogleSheetId.Name = "GoogleSheetId";
-			this.GoogleSheetId.ReadOnly = true;
-			// 
-			// BtnEditGoogleSheet
-			// 
-			this.BtnEditGoogleSheet.HeaderText = "Edit";
-			this.BtnEditGoogleSheet.Name = "BtnEditGoogleSheet";
-			this.BtnEditGoogleSheet.ReadOnly = true;
-			this.BtnEditGoogleSheet.Text = "Edit";
-			this.BtnEditGoogleSheet.ToolTipText = "Edit";
-			this.BtnEditGoogleSheet.UseColumnTextForButtonValue = true;
-			this.BtnEditGoogleSheet.Width = 50;
-			// 
-			// BtnDeleteGoogleSheet
-			// 
-			this.BtnDeleteGoogleSheet.HeaderText = "Delete";
-			this.BtnDeleteGoogleSheet.Name = "BtnDeleteGoogleSheet";
-			this.BtnDeleteGoogleSheet.ReadOnly = true;
-			this.BtnDeleteGoogleSheet.Text = "Delete";
-			this.BtnDeleteGoogleSheet.ToolTipText = "Delete";
-			this.BtnDeleteGoogleSheet.UseColumnTextForButtonValue = true;
-			this.BtnDeleteGoogleSheet.Width = 50;
 			// 
 			// MainForm
 			// 
