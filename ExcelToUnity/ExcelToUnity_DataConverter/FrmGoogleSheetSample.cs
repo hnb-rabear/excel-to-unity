@@ -1,50 +1,82 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
+using Google.Apis.Util.Store;
+using System.IO;
+using System.Threading;
+using System.Linq;
 
 namespace ExcelToUnity_DataConverter
 {
-    public partial class FrmGoogleSheetSample : Form
-    {
-        public FrmGoogleSheetSample()
-        {
-            InitializeComponent();
-        }
+	public partial class FrmGoogleSheetSample : Form
+	{
+		static string CLIENT_ID = "871414866606-7b9687cp1ibjokihbbfl6nrjr94j14o8.apps.googleusercontent.com";
+		static string CLIENT_SECRET = "zF_J3qHpzX5e8i2V-ZEvOdGV";
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //string spreadsheetId = "1nJKuYnBrLiGJTo1VX3dqVGrPcRQmr6WsQIK2aRwRgqc";
-            //var values = GGConfig.DownloadSheet(spreadsheetId, "Class Data");
-            //if (values != null && values.Count > 0)
-            //{
-            //    List<TestGG> items = new List<TestGG>();
-            //    foreach (var value in values)
-            //    {
-            //        foreach (var v2 in value.Values)
-            //            Console.WriteLine(JsonConvert.ToString(v2.ToString()));
-            //    }
-            //    dataGridView1.DataSource = null;
-            //    dataGridView1.Rows.Clear();
-            //    dataGridView1.DataSource = items;
-            //}
-            //else
-            //{
-            //    Console.WriteLine("No data found.");
-            //}
-            //Console.Read();
-        }
+		public FrmGoogleSheetSample()
+		{
+			InitializeComponent();
+		}
 
-        private void BtnImportCredential_Click(object sender, EventArgs e)
-        {
-            var frm = new FrmSetupCredential();
-            frm.Show();
-        }
-    }
+		private void button1_Click(object sender, EventArgs e)
+		{
+			
+		}
 
-    public class TestGG
-    {
-        public string name { get; set; }
-        public string gender { get; set; }
-    }
+		private void BtnImportCredential_Click(object sender, EventArgs e)
+		{
+			var frm = new FrmSetupCredential();
+			frm.Show();
+		}
+
+		private void FrmGoogleSheetSample_Load(object sender, EventArgs e)
+		{
+
+		}
+
+		private void DtgGoogleSheets_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e == null || e.RowIndex == DtgGoogleSheets.NewRowIndex || e.RowIndex < 0)
+				return;
+
+			var row = DtgGoogleSheets.Rows[e.RowIndex];
+
+			if (e.ColumnIndex == DtgGoogleSheets.Columns["BtnDelete"].Index)
+			{
+				//Config.Settings.googleSheets.RemoveAt(e.RowIndex);
+
+				DtgGoogleSheets.Rows.RemoveAt(e.RowIndex);
+			}
+		}
+
+		// Method to retrieve data from DataGridView into a list
+		public List<SpreadSheetConfig> GetDataFromDataGridView(DataGridView dataGridView)
+		{
+			List<SpreadSheetConfig> dataList = new List<SpreadSheetConfig>();
+
+			// Iterate through each row in the DataGridView
+			foreach (DataGridViewRow row in dataGridView.Rows)
+			{
+				// Only process rows that are not new rows (the empty row at the end of DataGridView)
+				if (!row.IsNewRow)
+				{
+					var data = new SpreadSheetConfig()
+					{
+						path = row.Cells[0].Value?.ToString(),
+						exportIds = row.Cells[1].Value != null && (bool)row.Cells[1].Value,
+						exportConstants = row.Cells[2].Value != null && (bool)row.Cells[2].Value
+					};
+
+					dataList.Add(data);
+				}
+			}
+
+			return dataList;
+		}
+	}
 }

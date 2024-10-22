@@ -16,20 +16,20 @@ namespace ExcelToUnity_DataConverter
         public static void Init()
         {
             string configFilePath = FILE_PATH_SETTINGS;
-            if (!File.Exists(configFilePath))
+            if (!System.IO.File.Exists(configFilePath))
             {
-                File.Create(configFilePath);
-                m_Settings = new Settings();
+				System.IO.File.Create(configFilePath);
+				m_Settings = new Settings();
             }
             else
             {
-                using (StreamReader sr = new StreamReader(configFilePath))
+                using (var sr = new StreamReader(configFilePath))
                 {
                     string settingJson = sr.ReadToEnd();
                     if (!string.IsNullOrEmpty(settingJson))
-                        m_Settings = JsonConvert.DeserializeObject<Settings>(settingJson);
+						m_Settings = JsonConvert.DeserializeObject<Settings>(settingJson);
                     else
-                        m_Settings = new Settings();
+						m_Settings = new Settings();
                 }
             }
         }

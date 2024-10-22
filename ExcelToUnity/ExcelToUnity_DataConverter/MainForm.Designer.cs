@@ -600,7 +600,6 @@ namespace ExcelToUnity_DataConverter
 			this.btnOpenGoogleSheet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOpenGoogleSheet.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.btnOpenGoogleSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.btnOpenGoogleSheet.Enabled = false;
 			this.btnOpenGoogleSheet.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnOpenGoogleSheet.Location = new System.Drawing.Point(493, 361);
 			this.btnOpenGoogleSheet.Name = "btnOpenGoogleSheet";

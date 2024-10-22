@@ -275,8 +275,8 @@ namespace ExcelToUnity_DataConverter
                 Directory.CreateDirectory(pFolderPath);
 
             string filePath = $"{pFolderPath}\\{pFileName}";
-            if (!File.Exists(filePath))
-                using (File.Create(filePath)) { }
+            if (!System.IO.File.Exists(filePath))
+                using (System.IO.File.Create(filePath)) { }
 
             using (var sw = new StreamWriter(filePath))
             {
@@ -287,8 +287,8 @@ namespace ExcelToUnity_DataConverter
 
         public static void WriteFile(string pFilePath, string pContent)
         {
-            if (!File.Exists(pFilePath))
-                using (File.Create(pFilePath)) { }
+            if (!System.IO.File.Exists(pFilePath))
+                using (System.IO.File.Create(pFilePath)) { }
 
             using (var sw = new StreamWriter(pFilePath))
             {
@@ -299,7 +299,7 @@ namespace ExcelToUnity_DataConverter
 
         public static string ConvertCSVToJson<T>(string pFilePath)
         {
-            using (TextReader fileReader = File.OpenText(pFilePath))
+            using (TextReader fileReader = System.IO.File.OpenText(pFilePath))
             {
                 var cultureInfo = new CultureInfo("es-ES", false);
                 var csvReader = new CsvReader(fileReader, cultureInfo);
@@ -456,7 +456,7 @@ namespace ExcelToUnity_DataConverter
             languageFilesBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{textDict.First().Key}\";");
 
             //Write file
-            string fileTemplateContent = File.ReadAllText(LOCALIZED_TEXT_TEMPLATE);
+            string fileTemplateContent = System.IO.File.ReadAllText(LOCALIZED_TEXT_TEMPLATE);
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_ENUM", idBuilder2.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());

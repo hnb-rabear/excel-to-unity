@@ -112,7 +112,7 @@ namespace ExcelToUnity_DataConverter
         private Dictionary<string, StringBuilder> m_idsBuilderDict = new Dictionary<string, StringBuilder>();
         private Dictionary<string, StringBuilder> m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
         private Dictionary<string, LocalizationBuilder> m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
-        private BindingList<FileEntity> m_excelFilesBind = new BindingList<FileEntity>();
+        private BindingList<SpreadSheetConfig> m_excelFilesBind = new BindingList<SpreadSheetConfig>();
         private IWorkbook m_workBook;
         private Encryption m_encryption;
         private List<string> m_localizedSheetsExported;
@@ -426,7 +426,7 @@ namespace ExcelToUnity_DataConverter
 
         private void CreateIDsFile(string exportFileName, string content)
         {
-            string fileContent = File.ReadAllText(IDS_CS_TEMPLATE);
+            string fileContent = System.IO.File.ReadAllText(IDS_CS_TEMPLATE);
             fileContent = fileContent.Replace("_IDS_CLASS_NAME_", exportFileName);
             fileContent = fileContent.Replace("public const int _FIELDS_ = 0;", content /*mIDsBuilderDict.ToString()*/);
             fileContent = AddNamespace(fileContent);
@@ -606,7 +606,7 @@ namespace ExcelToUnity_DataConverter
 
         private void CreateConstantsFile(string pContent, string pExportFileName)
         {
-            string fileContent = File.ReadAllText(CONSTANTS_CS_TEMPLATE);
+            string fileContent = System.IO.File.ReadAllText(CONSTANTS_CS_TEMPLATE);
             fileContent = fileContent.Replace("_CONST_CLASS_NAME_", pExportFileName);
             fileContent = fileContent.Replace("public const int _FIELDS_ = 0;", pContent);
             fileContent = AddNamespace(fileContent);
@@ -1227,7 +1227,7 @@ namespace ExcelToUnity_DataConverter
                 builder.Append(str);
                 builder.Append(Environment.NewLine);
             }
-            string csFileTemplate = File.ReadAllText(SETTINGS_CS_TEMPLATE);
+            string csFileTemplate = System.IO.File.ReadAllText(SETTINGS_CS_TEMPLATE);
             string className = sheetName.Replace(" ", "_");
             csFileTemplate = csFileTemplate.Replace("_SETTINGS_CLASS_NAME_", className);
             csFileTemplate = csFileTemplate.Replace("//#REPLACE_FIELDS", "\t\t" + builder);
@@ -1247,8 +1247,8 @@ namespace ExcelToUnity_DataConverter
             for (int i = Config.Settings.allFiles.Count - 1; i >= 0; i--)
             {
                 //Check if file exist
-                if (!File.Exists(Config.Settings.allFiles[i].path))
-                    Config.Settings.allFiles.RemoveAt(i);
+                if (!System.IO.File.Exists(Config.Settings.allFiles[i].path))
+					Config.Settings.allFiles.RemoveAt(i);
             }
             if (Config.Settings.allFiles != null)
                 Config.Settings.allFiles.Sort();
@@ -1313,7 +1313,7 @@ namespace ExcelToUnity_DataConverter
             //});
 
             DtgFilePaths.AutoGenerateColumns = false;
-            m_excelFilesBind = new BindingList<FileEntity>(Config.Settings.allFiles);
+            m_excelFilesBind = new BindingList<SpreadSheetConfig>(Config.Settings.allFiles);
             DtgFilePaths.DataSource = m_excelFilesBind;
         }
 
@@ -1551,7 +1551,7 @@ namespace ExcelToUnity_DataConverter
             languageFilesBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{pLanguageTextDict.First().Key}\";");
 
             //Write file
-            string fileTemplateContent = File.ReadAllText(LOCALIZATION_TEMPLATE);
+            string fileTemplateContent = System.IO.File.ReadAllText(LOCALIZATION_TEMPLATE);
             fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_ENUM", idBuilder2.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
@@ -1661,7 +1661,7 @@ namespace ExcelToUnity_DataConverter
             languagesDictBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{pLanguageTextDict.First().Key}\";");
 
             //Write file localization constants
-            string fileContent = File.ReadAllText(LOCALIZATION_TEMPLATE_V2);
+            string fileContent = System.IO.File.ReadAllText(LOCALIZATION_TEMPLATE_V2);
             fileContent = fileContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
             fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_ENUM", idBuilder2.ToString());
             fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
@@ -1672,7 +1672,7 @@ namespace ExcelToUnity_DataConverter
             Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileContent);
 
             //Write file localized text component
-            fileContent = File.ReadAllText(LOCALIZATION_TEXT_TEMPLATE);
+            fileContent = System.IO.File.ReadAllText(LOCALIZATION_TEXT_TEMPLATE);
             fileContent = fileContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
             fileContent = AddNamespace(fileContent);
             Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + "Text.cs", fileContent);
@@ -1754,7 +1754,7 @@ namespace ExcelToUnity_DataConverter
 						useAddressable.Append(Environment.NewLine);
 				}
 
-                string fileContent = File.ReadAllText(LOCALIZATION_MANAGER_TEMPLATE);
+                string fileContent = System.IO.File.ReadAllText(LOCALIZATION_MANAGER_TEMPLATE);
                 fileContent = fileContent.Replace("//LOCALIZATION_INIT_ASYNC", initAsynLines.ToString());
                 fileContent = fileContent.Replace("//LOCALIZATION_INIT", initLines.ToString());
                 fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
@@ -1791,7 +1791,7 @@ namespace ExcelToUnity_DataConverter
             LoadWorkBook();
             InitializeDtgFiles();
 
-            btnOpenGoogleSheet.Visible = false;
+            // btnOpenGoogleSheet.Visible = false;
             tabChangeLog.TabPages.RemoveByKey("tabPage2");
 
             // Set up the delays for the ToolTip.
@@ -1845,10 +1845,10 @@ namespace ExcelToUnity_DataConverter
 
         private void txtInputFilePath_TextChanged(object sender, EventArgs e)
         {
-            if (File.Exists(txtInputXLSXFilePath.Text.Trim()))
+            if (System.IO.File.Exists(txtInputXLSXFilePath.Text.Trim()))
             {
-                SetupConfigFolders(txtInputXLSXFilePath, ref Config.Settings.inputDataFilePath);
-                LoadWorkBook();
+				SetupConfigFolders(txtInputXLSXFilePath, ref Config.Settings.inputDataFilePath);
+				LoadWorkBook();
             }
         }
 
@@ -2148,7 +2148,7 @@ namespace ExcelToUnity_DataConverter
                         }
                     }
                     if (!existed)
-                        Config.Settings.allFiles.Add(new FileEntity(file));
+                        Config.Settings.allFiles.Add(new SpreadSheetConfig(file));
                 }
 
                 RefreshDtgExcelFiles();
@@ -2158,7 +2158,7 @@ namespace ExcelToUnity_DataConverter
 
         private void BtnAllInOne_Click(object sender, EventArgs e)
         {
-            var bindingList = (BindingList<FileEntity>)DtgFilePaths.DataSource;
+            var bindingList = (BindingList<SpreadSheetConfig>)DtgFilePaths.DataSource;
             Config.Settings.allFiles = bindingList.ToList();
             Config.Save();
             ClearCaches();
@@ -2395,7 +2395,7 @@ namespace ExcelToUnity_DataConverter
             var path1 = value.ToString();
 
             // Check if the file exists
-            bool fileExists = File.Exists(path1);
+            bool fileExists = System.IO.File.Exists(path1);
 
             // Get the status cell
             DataGridViewCell statusCell = row.Cells[statusColumnIndex];
@@ -2630,13 +2630,13 @@ namespace ExcelToUnity_DataConverter
         {
             if (!string.IsNullOrEmpty(Config.Settings.inputDataFilePath))
             {
-                if (!File.Exists(Config.Settings.inputDataFilePath))
+                if (!System.IO.File.Exists(Config.Settings.inputDataFilePath))
                 {
-                    txtInputXLSXFilePath.Text = "";
-                    Config.Settings.inputDataFilePath = "";
+					txtInputXLSXFilePath.Text = "";
+					Config.Settings.inputDataFilePath = "";
                 }
                 else
-                    txtInputXLSXFilePath.Text = Config.Settings.inputDataFilePath;
+					txtInputXLSXFilePath.Text = Config.Settings.inputDataFilePath;
             }
             else
                 txtInputXLSXFilePath.Text = "";

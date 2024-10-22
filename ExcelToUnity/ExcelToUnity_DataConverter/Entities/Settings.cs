@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +28,8 @@ namespace ExcelToUnity_DataConverter.Entities
         /// <summary>
         /// All excel files path
         /// </summary>
-        public List<FileEntity> allFiles = new List<FileEntity>();
+        public List<SpreadSheetConfig> allFiles = new List<SpreadSheetConfig>();
+		public List<SpreadSheetConfig> googleSheets = new List<SpreadSheetConfig>();
         /// <summary>
         /// Encrypted or not
         /// </summary>
