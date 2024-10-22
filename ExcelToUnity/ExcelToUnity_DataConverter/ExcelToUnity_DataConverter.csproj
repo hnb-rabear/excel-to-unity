@@ -183,12 +183,6 @@
     <Compile Include="FrmGoogleSheetSample.Designer.cs">
       <DependentUpon>FrmGoogleSheetSample.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmSetupCredential.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmSetupCredential.Designer.cs">
-      <DependentUpon>FrmSetupCredential.cs</DependentUpon>
-    </Compile>
     <Compile Include="GGConfig.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -207,9 +201,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmGoogleSheetSample.resx">
       <DependentUpon>FrmGoogleSheetSample.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmSetupCredential.resx">
-      <DependentUpon>FrmSetupCredential.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -10,33 +10,37 @@ using Google.Apis.Util.Store;
 using System.IO;
 using System.Threading;
 using System.Linq;
+using System.ComponentModel;
+using ChoETL;
 
 namespace ExcelToUnity_DataConverter
 {
 	public partial class FrmGoogleSheetSample : Form
 	{
-		static string CLIENT_ID = "871414866606-7b9687cp1ibjokihbbfl6nrjr94j14o8.apps.googleusercontent.com";
-		static string CLIENT_SECRET = "zF_J3qHpzX5e8i2V-ZEvOdGV";
+		private static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+		private static readonly string ApplicationName = "Google Sheet to Unity - Data Converter";
+		private static string CLIENT_ID = "871414866606-7b9687cp1ibjokihbbfl6nrjr94j14o8.apps.googleusercontent.com";
+		private static string CLIENT_SECRET = "zF_J3qHpzX5e8i2V-ZEvOdGV";
+
+		private BindingList<GoogleSheetsPath.Sheet> m_bindingSheets;
+		public List<GoogleSheetsPath.Sheet> sheets;
+		public string googleSheetId;
+		public string googleSheetName;
 
 		public FrmGoogleSheetSample()
 		{
 			InitializeComponent();
 		}
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-			
-		}
-
-		private void BtnImportCredential_Click(object sender, EventArgs e)
-		{
-			var frm = new FrmSetupCredential();
-			frm.Show();
-		}
-
 		private void FrmGoogleSheetSample_Load(object sender, EventArgs e)
 		{
-
+			TxtGoogleSheetId.Text = googleSheetId;
+			TxtGoogleSheetId.ReadOnly = !string.IsNullOrEmpty(googleSheetId);
+			TxtGoogleSheetName.Text = googleSheetName;
+			TxtGoogleSheetName.ReadOnly = true;
+			
+			if (!string.IsNullOrEmpty(googleSheetId))
+				Authenticate();
 		}
 
 		private void DtgGoogleSheets_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -46,23 +50,21 @@ namespace ExcelToUnity_DataConverter
 
 			var row = DtgGoogleSheets.Rows[e.RowIndex];
 
-			if (e.ColumnIndex == DtgGoogleSheets.Columns["BtnDelete"].Index)
+			if (e.ColumnIndex == DtgGoogleSheets.Columns["selected"].Index)
 			{
-				//Config.Settings.googleSheets.RemoveAt(e.RowIndex);
-
-				DtgGoogleSheets.Rows.RemoveAt(e.RowIndex);
-
-				var list = GetDataFromDataGridView();
+				int selectedColumnIdx = DtgGoogleSheets.Columns["selected"].Index;
+				bool selected = row.Cells[selectedColumnIdx].Value != null && (bool)row.Cells[selectedColumnIdx].Value;
+				sheets[e.RowIndex].selected = selected;
 			}
 		}
 
-		public List<GoogleSpreadSheetPath.SpreadSheet> GetDataFromDataGridView()
+		public List<GoogleSheetsPath.Sheet> GetGoogleSheetsFromGridView()
 		{
-			var dataList = new List<GoogleSpreadSheetPath.SpreadSheet>();
+			var dataList = new List<GoogleSheetsPath.Sheet>();
 
 			// Get column indices by their names
-			int pathColumnIndex = DtgGoogleSheets.Columns["SheetName"].Index;
-			int selectedColumnIndex = DtgGoogleSheets.Columns["Selected"].Index;
+			int pathColumnIdx = DtgGoogleSheets.Columns["name"].Index;
+			int selectedColumnIdx = DtgGoogleSheets.Columns["selected"].Index;
 
 			// Iterate through each row in the DataGridView
 			var list = DtgGoogleSheets.Rows;
@@ -72,10 +74,10 @@ namespace ExcelToUnity_DataConverter
 				// Only process rows that are not new rows (the empty row at the end of DataGridView)
 				if (!row.IsNewRow)
 				{
-					var data = new GoogleSpreadSheetPath.SpreadSheet()
+					var data = new GoogleSheetsPath.Sheet()
 					{
-						name = row.Cells[pathColumnIndex].Value?.ToString(),
-						selected = row.Cells[selectedColumnIndex].Value != null && (bool)row.Cells[selectedColumnIndex].Value,
+						name = row.Cells[pathColumnIdx].Value?.ToString(),
+						selected = row.Cells[selectedColumnIdx].Value != null && (bool)row.Cells[selectedColumnIdx].Value,
 					};
 
 					dataList.Add(data);
@@ -83,6 +85,82 @@ namespace ExcelToUnity_DataConverter
 			}
 
 			return dataList;
+		}
+
+		private void BtnDownload_Click(object sender, EventArgs e)
+		{
+			string key = TxtGoogleSheetId.Text;
+			if (string.IsNullOrEmpty(key))
+			{
+				Console.WriteLine("Key can not be empty");
+				return;
+			}
+
+			Authenticate();
+		}
+
+		private void Authenticate()
+		{
+			UserCredential credential;
+
+			var clientSecrets = new ClientSecrets();
+			clientSecrets.ClientId = CLIENT_ID;
+			clientSecrets.ClientSecret = CLIENT_SECRET;
+
+			// The file token.json stores the user's access and refresh tokens, and is created
+			// automatically when the authorization flow completes for the first time.
+			credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+				clientSecrets,
+				Scopes,
+				"user",
+				CancellationToken.None,
+				new FileDataStore(Config.GetSaveDirectory(), true)).Result;
+
+			Console.WriteLine("Credential file saved to: " + Config.GetSaveDirectory());
+
+			// Create Google Sheets API service.
+			var service = new SheetsService(new BaseClientService.Initializer()
+			{
+				HttpClientInitializer = credential,
+				ApplicationName = ApplicationName,
+			});
+
+			googleSheetId = TxtGoogleSheetId.Text;
+
+			// Fetch metadata for the entire spreadsheet.
+			var spreadsheet = service.Spreadsheets.Get(googleSheetId).Execute();
+			googleSheetName = spreadsheet.Properties.Title;
+			TxtGoogleSheetName.Text = spreadsheet.Properties.Title;
+			sheets = new List<GoogleSheetsPath.Sheet>();
+			foreach (var sheet in spreadsheet.Sheets)
+			{
+				var sheetName = sheet.Properties.Title;
+				sheets.Add(new GoogleSheetsPath.Sheet()
+				{
+					name = sheetName,
+					selected = true,
+				});
+			}
+
+			// Sync with current save
+			var savedSheets = Config.Settings.googleSheetsPaths.Find(x => x.id == googleSheetId);
+			if (savedSheets != null && savedSheets.sheets != null)
+			{
+                foreach (var sheet in sheets)
+                {
+					var existedSheet = savedSheets.sheets.Find(x => x.name == sheet.name);
+					if (existedSheet != null)
+						sheet.selected = existedSheet.selected;
+				}
+            }
+
+			m_bindingSheets = new BindingList<GoogleSheetsPath.Sheet>(sheets);
+			DtgGoogleSheets.DataSource = m_bindingSheets;
+		}
+
+		private void TxtGoogleSheetId_TextChanged(object sender, EventArgs e)
+		{
+			BtnDownload.Enabled = !string.IsNullOrEmpty(TxtGoogleSheetId.Text);
 		}
 	}
 }

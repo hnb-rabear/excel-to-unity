@@ -8,46 +8,46 @@ namespace ExcelToUnity_DataConverter
 {
 	public static class Config
     {
-        private const string FILE_PATH_SETTINGS = "Resources\\Configs.txt";
         private static Settings m_Settings;
 
         public static Settings Settings => m_Settings;
 
         public static void Init()
         {
-            string configFilePath = FILE_PATH_SETTINGS;
-			if (!File.Exists(configFilePath))
-            {
-				File.Create(configFilePath);
+            var savedSettingsFile = GetSaveFile();
+			if (!File.Exists(savedSettingsFile))
+			{
 				m_Settings = new Settings();
-            }
-            else
+                Save();
+				return;
+			}
+			using (var sr = new StreamReader(savedSettingsFile))
+			{
+				string settingJson = sr.ReadToEnd();
+				if (!string.IsNullOrEmpty(settingJson))
+					m_Settings = JsonConvert.DeserializeObject<Settings>(settingJson);
+				else
+					m_Settings = new Settings();
+			}
+            for (int i = m_Settings.googleSheetsPaths.Count - 1; i >= 0; i--)
             {
-                using (var sr = new StreamReader(configFilePath))
-                {
-                    string settingJson = sr.ReadToEnd();
-                    if (!string.IsNullOrEmpty(settingJson))
-						m_Settings = JsonConvert.DeserializeObject<Settings>(settingJson);
-                    else
-						m_Settings = new Settings();
-                }
-            }
+                if (string.IsNullOrEmpty(m_Settings.googleSheetsPaths[i].name)
+                    || string.IsNullOrEmpty(m_Settings.googleSheetsPaths[i].id))
+                    m_Settings.googleSheetsPaths.RemoveAt(i);
+
+			}
         }
 
         public static void Save()
         {
-			string settingsJson = JsonConvert.SerializeObject(m_Settings);
-			Helper.WriteFile(FILE_PATH_SETTINGS, settingsJson);
+			string content = JsonConvert.SerializeObject(m_Settings);
+			Helper.WriteFile(GetSaveFile(), content);
 		}
 
         public static void SaveSettingsToFile()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDoc‌​uments), "ExcelToUnity_DataConverter");
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-
             var saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Title = "Export Config File";
+            saveFileDialog1.Title = "Save Settings";
             saveFileDialog1.CheckFileExists = false;
             saveFileDialog1.CheckPathExists = true;
             saveFileDialog1.RestoreDirectory = true;
@@ -55,7 +55,7 @@ namespace ExcelToUnity_DataConverter
             saveFileDialog1.Filter = "Rad files (*.rad)|*.rad";
             saveFileDialog1.FilterIndex = 2;
             saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDoc‌​uments), "ExcelToUnity_DataConverter");
+            saveFileDialog1.InitialDirectory = GetSaveDirectory();
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -66,17 +66,13 @@ namespace ExcelToUnity_DataConverter
 
         public static bool LoadSettingsFromFile()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDoc‌​uments), "ExcelToUnity_DataConverter");
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-
             bool success = false;
             var openFileDialog = new OpenFileDialog();
             openFileDialog.FileName = "Select a Rad file";
             openFileDialog.Filter = "Rad files (*.rad)|*.rad";
             openFileDialog.Title = "Open rad file";
             openFileDialog.RestoreDirectory = true;
-            openFileDialog.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDoc‌​uments), "ExcelToUnity_DataConverter");
+            openFileDialog.InitialDirectory = GetSaveDirectory();
             openFileDialog.CheckPathExists = true;
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -101,5 +97,22 @@ namespace ExcelToUnity_DataConverter
             m_Settings = new Settings();
             Save();
         }
-    }
+
+		public static string GetSaveDirectory()
+		{
+			string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			var path = Path.Combine(documentsPath, "ExcelToUnity_DataConverter");
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+			return path;
+		}
+
+		public static string GetSaveFile()
+		{
+			var path = Path.Combine(GetSaveDirectory(), "save_temp.rad");
+            if (!File.Exists(path))
+                File.Create(path);
+            return path;
+		}
+	}
 }

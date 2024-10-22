@@ -29,90 +29,118 @@
         private void InitializeComponent()
         {
 			this.DtgGoogleSheets = new System.Windows.Forms.DataGridView();
-			this.BtnImportCredential = new System.Windows.Forms.Button();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.TxtGoogleSheetId = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.SheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.BtnDelete = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.BtnDownload = new System.Windows.Forms.Button();
+			this.label2 = new System.Windows.Forms.Label();
+			this.TxtGoogleSheetName = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.DtgGoogleSheets)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// DtgGoogleSheets
 			// 
+			this.DtgGoogleSheets.AllowUserToAddRows = false;
+			this.DtgGoogleSheets.AllowUserToDeleteRows = false;
 			this.DtgGoogleSheets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgGoogleSheets.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.SheetName,
-            this.Selected,
-            this.BtnDelete});
+            this.name,
+            this.selected});
 			this.DtgGoogleSheets.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.DtgGoogleSheets.Location = new System.Drawing.Point(0, 42);
+			this.DtgGoogleSheets.Location = new System.Drawing.Point(0, 77);
 			this.DtgGoogleSheets.Name = "DtgGoogleSheets";
-			this.DtgGoogleSheets.Size = new System.Drawing.Size(800, 408);
+			this.DtgGoogleSheets.Size = new System.Drawing.Size(584, 284);
 			this.DtgGoogleSheets.TabIndex = 1;
 			this.DtgGoogleSheets.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DtgGoogleSheets_CellClick);
 			// 
-			// BtnImportCredential
+			// TxtGoogleSheetId
 			// 
-			this.BtnImportCredential.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.BtnImportCredential.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.BtnImportCredential.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-			this.BtnImportCredential.Location = new System.Drawing.Point(703, 12);
-			this.BtnImportCredential.Name = "BtnImportCredential";
-			this.BtnImportCredential.Size = new System.Drawing.Size(88, 24);
-			this.BtnImportCredential.TabIndex = 6;
-			this.BtnImportCredential.Text = "Setup";
-			this.BtnImportCredential.UseVisualStyleBackColor = false;
-			this.BtnImportCredential.Click += new System.EventHandler(this.BtnImportCredential_Click);
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(111, 12);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(583, 20);
-			this.textBox1.TabIndex = 10;
+			this.TxtGoogleSheetId.Location = new System.Drawing.Point(105, 12);
+			this.TxtGoogleSheetId.Name = "TxtGoogleSheetId";
+			this.TxtGoogleSheetId.Size = new System.Drawing.Size(373, 20);
+			this.TxtGoogleSheetId.TabIndex = 10;
+			this.TxtGoogleSheetId.TextChanged += new System.EventHandler(this.TxtGoogleSheetId_TextChanged);
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 15);
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.label1.Location = new System.Drawing.Point(12, 16);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(93, 13);
+			this.label1.Size = new System.Drawing.Size(69, 13);
 			this.label1.TabIndex = 11;
-			this.label1.Text = "Spread Sheet Key";
+			this.label1.Text = "GG Sheet Id:";
 			// 
-			// SheetName
+			// BtnDownload
 			// 
-			this.SheetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.SheetName.DataPropertyName = "sheetName";
-			this.SheetName.HeaderText = "Sheet Name";
-			this.SheetName.Name = "SheetName";
+			this.BtnDownload.BackColor = System.Drawing.SystemColors.ButtonFace;
+			this.BtnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.BtnDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+			this.BtnDownload.Location = new System.Drawing.Point(484, 12);
+			this.BtnDownload.Name = "BtnDownload";
+			this.BtnDownload.Size = new System.Drawing.Size(88, 46);
+			this.BtnDownload.TabIndex = 12;
+			this.BtnDownload.Text = "Download";
+			this.BtnDownload.UseVisualStyleBackColor = false;
+			this.BtnDownload.Click += new System.EventHandler(this.BtnDownload_Click);
 			// 
-			// Selected
+			// label2
 			// 
-			this.Selected.HeaderText = "Selected";
-			this.Selected.Name = "Selected";
-			this.Selected.Width = 70;
+			this.label2.AutoSize = true;
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.label2.Location = new System.Drawing.Point(12, 61);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(99, 13);
+			this.label2.TabIndex = 13;
+			this.label2.Text = "List Spread Sheets:";
 			// 
-			// BtnDelete
+			// TxtGoogleSheetName
 			// 
-			this.BtnDelete.HeaderText = "Delete";
-			this.BtnDelete.Name = "BtnDelete";
-			this.BtnDelete.Text = "Delete";
-			this.BtnDelete.ToolTipText = "Delete";
-			this.BtnDelete.UseColumnTextForButtonValue = true;
-			this.BtnDelete.Width = 70;
+			this.TxtGoogleSheetName.Location = new System.Drawing.Point(105, 38);
+			this.TxtGoogleSheetName.Name = "TxtGoogleSheetName";
+			this.TxtGoogleSheetName.ReadOnly = true;
+			this.TxtGoogleSheetName.Size = new System.Drawing.Size(373, 20);
+			this.TxtGoogleSheetName.TabIndex = 14;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.label3.Location = new System.Drawing.Point(12, 41);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(88, 13);
+			this.label3.TabIndex = 15;
+			this.label3.Text = "GG Sheet Name:";
+			// 
+			// name
+			// 
+			this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.name.DataPropertyName = "name";
+			this.name.HeaderText = "Name";
+			this.name.Name = "name";
+			// 
+			// selected
+			// 
+			this.selected.DataPropertyName = "selected";
+			this.selected.HeaderText = "Selected";
+			this.selected.Name = "selected";
+			this.selected.Width = 70;
 			// 
 			// FrmGoogleSheetSample
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.ClientSize = new System.Drawing.Size(584, 361);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.TxtGoogleSheetName);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.BtnDownload);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textBox1);
-			this.Controls.Add(this.BtnImportCredential);
+			this.Controls.Add(this.TxtGoogleSheetId);
 			this.Controls.Add(this.DtgGoogleSheets);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "FrmGoogleSheetSample";
 			this.Text = "Google Spread Sheets";
 			this.Load += new System.EventHandler(this.FrmGoogleSheetSample_Load);
@@ -124,11 +152,13 @@
 
         #endregion
         private System.Windows.Forms.DataGridView DtgGoogleSheets;
-        private System.Windows.Forms.Button BtnImportCredential;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox TxtGoogleSheetId;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn SheetName;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn Selected;
-		private System.Windows.Forms.DataGridViewButtonColumn BtnDelete;
+		private System.Windows.Forms.Button BtnDownload;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.TextBox TxtGoogleSheetName;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.DataGridViewTextBoxColumn name;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn selected;
 	}
 }

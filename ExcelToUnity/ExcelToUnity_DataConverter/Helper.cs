@@ -287,8 +287,8 @@ namespace ExcelToUnity_DataConverter
 
         public static void WriteFile(string pFilePath, string pContent)
         {
-            if (!System.IO.File.Exists(pFilePath))
-                using (System.IO.File.Create(pFilePath)) { }
+			if (!File.Exists(pFilePath))
+                using (File.Create(pFilePath)) { }
 
             using (var sw = new StreamWriter(pFilePath))
             {

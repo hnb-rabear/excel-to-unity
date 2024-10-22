@@ -218,7 +218,6 @@ C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debu
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.SuggestedBindingRedirects.cache
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.exe.config
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.FrmGoogleSheetSample.resources
-C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.FrmSetupCredential.resources
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.MainForm.resources
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.Properties.Resources.resources
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.GenerateResource.cache

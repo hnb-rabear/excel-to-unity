@@ -112,7 +112,7 @@ namespace ExcelToUnity_DataConverter
         private Dictionary<string, StringBuilder> m_idsBuilderDict = new Dictionary<string, StringBuilder>();
         private Dictionary<string, StringBuilder> m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
         private Dictionary<string, LocalizationBuilder> m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
-        private BindingList<ExcelPath> m_excelFilesBind = new BindingList<ExcelPath>();
+        private BindingList<ExcelPath> m_bindingExcelPaths = new BindingList<ExcelPath>();
         private IWorkbook m_workBook;
         private Encryption m_encryption;
         private List<string> m_localizedSheetsExported;
@@ -1247,12 +1247,12 @@ namespace ExcelToUnity_DataConverter
             for (int i = Config.Settings.allFiles.Count - 1; i >= 0; i--)
             {
                 //Check if file exist
-                if (!System.IO.File.Exists(Config.Settings.allFiles[i].path))
+                if (!File.Exists(Config.Settings.allFiles[i].path))
 					Config.Settings.allFiles.RemoveAt(i);
             }
             if (Config.Settings.allFiles != null)
                 Config.Settings.allFiles.Sort();
-            m_excelFilesBind.ResetBindings();
+            m_bindingExcelPaths.ResetBindings();
             DtgFilePaths.Refresh();
             DtgFilePaths.AutoResizeColumns();
         }
@@ -1313,8 +1313,8 @@ namespace ExcelToUnity_DataConverter
             //});
 
             DtgFilePaths.AutoGenerateColumns = false;
-            m_excelFilesBind = new BindingList<ExcelPath>(Config.Settings.allFiles);
-            DtgFilePaths.DataSource = m_excelFilesBind;
+            m_bindingExcelPaths = new BindingList<ExcelPath>(Config.Settings.allFiles);
+            DtgFilePaths.DataSource = m_bindingExcelPaths;
         }
 
         private void CreateEncryption()
@@ -2628,58 +2628,60 @@ namespace ExcelToUnity_DataConverter
 
         private void LoadSettings()
         {
-            if (!string.IsNullOrEmpty(Config.Settings.inputDataFilePath))
+			var settings = Config.Settings;
+			if (!string.IsNullOrEmpty(settings.inputDataFilePath))
             {
-                if (!System.IO.File.Exists(Config.Settings.inputDataFilePath))
+                if (!File.Exists(settings.inputDataFilePath))
                 {
 					txtInputXLSXFilePath.Text = "";
-					Config.Settings.inputDataFilePath = "";
+					settings.inputDataFilePath = "";
                 }
                 else
-					txtInputXLSXFilePath.Text = Config.Settings.inputDataFilePath;
+					txtInputXLSXFilePath.Text = settings.inputDataFilePath;
             }
             else
                 txtInputXLSXFilePath.Text = "";
-            txtSettingOutputDataFilePath.Text = Config.Settings.outputDataFilePath;
-            txtSettingOutputLocalizationFilePath.Text = Config.Settings.outputLocalizationFilePath;
-            txtSettingOuputConstantsFilePath.Text = Config.Settings.outputConstantsFilePath;
-            chkSettingEnableEncryption.Checked = Config.Settings.encryption;
-            if (!string.IsNullOrEmpty(Config.Settings.encryptionKey))
-                txtSettingEncryptionKey.Text = Config.Settings.encryptionKey;
-            txtSettingExcludedSheet.Text = Config.Settings.excludedSheets;
-            txtSettingNamespace.Text = Config.Settings._namespace;
-            chkMergeJsonIntoSingleOne2.Checked = Config.Settings.mergeJsonsIntoSingleJson;
-            txtUnminimizeFields.Text = Config.Settings.unminizedFields;
-            txtLanguageMaps.Text = Config.Settings.languageCharactersMaps;
-            chkSeperateConstants.Checked = Config.Settings.seperateConstants;
-            chkSeperateIDs.Checked = Config.Settings.seperateIDs;
-            chkSeperateLocalization.Checked = Config.Settings.seperateLocalizations;
-            chkKeepOnlyEnumAsIds.Checked = Config.Settings.keepOnlyEnumAsIDs;
+            txtSettingOutputDataFilePath.Text = settings.outputDataFilePath;
+            txtSettingOutputLocalizationFilePath.Text = settings.outputLocalizationFilePath;
+            txtSettingOuputConstantsFilePath.Text = settings.outputConstantsFilePath;
+            chkSettingEnableEncryption.Checked = settings.encryption;
+            if (!string.IsNullOrEmpty(settings.encryptionKey))
+                txtSettingEncryptionKey.Text = settings.encryptionKey;
+            txtSettingExcludedSheet.Text = settings.excludedSheets;
+            txtSettingNamespace.Text = settings._namespace;
+            chkMergeJsonIntoSingleOne2.Checked = settings.mergeJsonsIntoSingleJson;
+            txtUnminimizeFields.Text = settings.unminizedFields;
+            txtLanguageMaps.Text = settings.languageCharactersMaps;
+            chkSeperateConstants.Checked = settings.seperateConstants;
+            chkSeperateIDs.Checked = settings.seperateIDs;
+            chkSeperateLocalization.Checked = settings.seperateLocalizations;
+            chkKeepOnlyEnumAsIds.Checked = settings.keepOnlyEnumAsIDs;
 
-            if (Config.Settings.encryption)
+            if (settings.encryption)
                 CreateEncryption();
 
-            if (string.IsNullOrEmpty(txtSettingEncryptionKey.Text.Trim()))
-                txtSettingEncryptionKey.Text =
-                    @"168, 220, 184, 133, 78, 149, 8, 249, 171, 138, 98, 170, 95, 15, 211, 200, 51, 242, 4, 193, 219, 181, 232, 99, 16, 240, 142, 128, 29, 163, 245, 24, 204, 73, 173, 32, 214, 76, 31, 99, 91, 239, 232, 53, 138, 195, 93, 195, 185, 210, 155, 184, 243, 216, 204, 42, 138, 101, 100, 241, 46, 145, 198, 66, 11, 17, 19, 86, 157, 27, 132, 201, 246, 112, 121, 7, 195, 148, 143, 125, 158, 29, 184, 67, 187, 100, 31, 129, 64, 130, 26, 67, 240, 128, 233, 129, 63, 169, 5, 211, 248, 200, 199, 96, 54, 128, 111, 147, 100, 6, 185, 0, 188, 143, 25, 103, 211, 18, 17, 249, 106, 54, 162, 188, 25, 34, 147, 3, 222, 61, 218, 49, 164, 165, 133, 12, 65, 92, 48, 40, 129, 76, 194, 229, 109, 76, 150, 203, 251, 62, 54, 251, 70, 224, 162, 167, 183, 78, 103, 28, 67, 183, 23, 80, 156, 97, 83, 164, 24, 183, 81, 56, 103, 77, 112, 248, 4, 168, 5, 72, 109, 18, 75, 219, 99, 181, 160, 76, 65, 16, 41, 175, 87, 195, 181, 19, 165, 172, 138, 172, 84, 40, 167, 97, 214, 90, 26, 124, 0, 166, 217, 97, 246, 117, 237, 99, 46, 15, 141, 69, 4, 245, 98, 73, 3, 8, 161, 98, 79, 161, 127, 19, 55, 158, 139, 247, 39, 59, 72, 161, 82, 158, 25, 65, 107, 173, 5, 255, 53, 28, 179, 182, 65, 162, 17";
-        }
+			RefreshDtgGoogleSheetsPaths();
+		}
 
-        private void btnLoadDefaultSettings_Click(object sender, EventArgs e)
+        private void BtnLoadDefaultSettings_Click(object sender, EventArgs e)
         {
             Config.ClearSettings();
-            txtSettingOutputDataFilePath.Text = "";
-            txtSettingOuputConstantsFilePath.Text = "";
-            txtSettingNamespace.Text = "";
-            chkSeperateIDs.Checked = false;
-            chkSeperateConstants.Checked = false;
-            chkSeperateLocalization.Checked = false;
-            chkMergeJsonIntoSingleOne2.Checked = false;
-            chkKeepOnlyEnumAsIds.Checked = false;
-            txtSettingEncryptionKey.Text =
-                @"168, 220, 184, 133, 78, 149, 8, 249, 171, 138, 98, 170, 95, 15, 211, 200, 51, 242, 4, 193, 219, 181, 232, 99, 16, 240, 142, 128, 29, 163, 245, 24, 204, 73, 173, 32, 214, 76, 31, 99, 91, 239, 232, 53, 138, 195, 93, 195, 185, 210, 155, 184, 243, 216, 204, 42, 138, 101, 100, 241, 46, 145, 198, 66, 11, 17, 19, 86, 157, 27, 132, 201, 246, 112, 121, 7, 195, 148, 143, 125, 158, 29, 184, 67, 187, 100, 31, 129, 64, 130, 26, 67, 240, 128, 233, 129, 63, 169, 5, 211, 248, 200, 199, 96, 54, 128, 111, 147, 100, 6, 185, 0, 188, 143, 25, 103, 211, 18, 17, 249, 106, 54, 162, 188, 25, 34, 147, 3, 222, 61, 218, 49, 164, 165, 133, 12, 65, 92, 48, 40, 129, 76, 194, 229, 109, 76, 150, 203, 251, 62, 54, 251, 70, 224, 162, 167, 183, 78, 103, 28, 67, 183, 23, 80, 156, 97, 83, 164, 24, 183, 81, 56, 103, 77, 112, 248, 4, 168, 5, 72, 109, 18, 75, 219, 99, 181, 160, 76, 65, 16, 41, 175, 87, 195, 181, 19, 165, 172, 138, 172, 84, 40, 167, 97, 214, 90, 26, 124, 0, 166, 217, 97, 246, 117, 237, 99, 46, 15, 141, 69, 4, 245, 98, 73, 3, 8, 161, 98, 79, 161, 127, 19, 55, 158, 139, 247, 39, 59, 72, 161, 82, 158, 25, 65, 107, 173, 5, 255, 53, 28, 179, 182, 65, 162, 17";
-            txtSettingExcludedSheet.Text = "";
-            txtUnminimizeFields.Text = @"id; mode; type; group; level; rank";
-            txtLanguageMaps.Text = @"japan; korean; chinese";
+            var settings = Config.Settings;
+
+			txtSettingOutputDataFilePath.Text = settings.outputDataFilePath;
+            txtSettingOuputConstantsFilePath.Text = settings.outputConstantsFilePath;
+            txtSettingNamespace.Text = settings._namespace;
+            chkSeperateIDs.Checked = settings.seperateIDs;
+            chkSeperateConstants.Checked = settings.seperateConstants;
+            chkSeperateLocalization.Checked = settings.seperateLocalizations;
+            chkMergeJsonIntoSingleOne2.Checked = settings.mergeJsonsIntoSingleJson;
+            chkKeepOnlyEnumAsIds.Checked = settings.keepOnlyEnumAsIDs;
+            txtSettingEncryptionKey.Text = settings.encryptionKey;
+			txtSettingExcludedSheet.Text = settings.excludedSheets;
+            txtUnminimizeFields.Text = settings.unminizedFields;
+            txtLanguageMaps.Text = settings.languageCharactersMaps;
+
+            RefreshDtgGoogleSheetsPaths();
         }
 
         private void chkKeepOnlyEnumAsIds_CheckedChanged(object sender, EventArgs e)
@@ -2722,13 +2724,91 @@ namespace ExcelToUnity_DataConverter
 		private void BtnAddGoogleSheet_Click(object sender, EventArgs e)
 		{
 			var form = new FrmGoogleSheetSample();
-			form.TopMost = true;
 			form.ShowDialog();
+
+            if (!string.IsNullOrEmpty(form.googleSheetId) && !string.IsNullOrEmpty(form.googleSheetName))
+            {
+				Config.Settings.SetGoogleSheet(form.googleSheetId, form.googleSheetName, form.sheets);
+				Config.Save();
+
+				RefreshDtgGoogleSheetsPaths();
+			}
 		}
+
+		private BindingList<GoogleSheetsPath> m_bindingGoogleSheetsPaths;
 
 		private void BtnExportGoogleSheets_Click(object sender, EventArgs e)
 		{
 
+		}
+
+		private void DtgGoogleSheets_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e == null || e.RowIndex == DtgGoogleSheets.NewRowIndex || e.RowIndex < 0)
+				return;
+
+			var row = DtgGoogleSheets.Rows[e.RowIndex];
+			int idColumnIdx = DtgGoogleSheets.Columns["GoogleSheetId"].Index;
+			int nameColumnIdx = DtgGoogleSheets.Columns["GoogleSheetName"].Index;
+
+			if (e.ColumnIndex == DtgGoogleSheets.Columns["BtnDeleteGoogleSheet"].Index)
+			{
+                string googleSheetId = row.Cells[idColumnIdx].Value?.ToString();
+                
+                Config.Settings.RemoveGoogleSheet(googleSheetId);
+				Config.Save();
+			
+			}
+            else if (e.ColumnIndex == DtgGoogleSheets.Columns["BtnEditGoogleSheet"].Index)
+            {
+				var form = new FrmGoogleSheetSample();
+                form.googleSheetId = row.Cells[idColumnIdx].Value?.ToString();
+                form.googleSheetName = row.Cells[nameColumnIdx].Value?.ToString();
+				form.ShowDialog();
+
+                if (!string.IsNullOrEmpty(form.googleSheetId) && !string.IsNullOrEmpty(form.googleSheetName))
+                {
+					Config.Settings.SetGoogleSheet(form.googleSheetId, form.googleSheetName, form.sheets);
+					Config.Save();
+
+					RefreshDtgGoogleSheetsPaths();
+				}
+			}
+		}
+
+        private void RefreshDtgGoogleSheetsPaths()
+        {
+			m_bindingGoogleSheetsPaths = new BindingList<GoogleSheetsPath>(Config.Settings.googleSheetsPaths);
+			DtgGoogleSheets.DataSource = m_bindingGoogleSheetsPaths;
+		}
+
+		public List<GoogleSheetsPath> GetGoogleSheetsFromGridView()
+		{
+			var dataList = new List<GoogleSheetsPath>();
+
+			// Get column indices by their names
+			int nameColumnIdx = DtgGoogleSheets.Columns["GoogleSheetName"].Index;
+			int keyColumnIdx = DtgGoogleSheets.Columns["GoogleSheetId"].Index;
+
+			// Iterate through each row in the DataGridView
+			var list = DtgGoogleSheets.Rows;
+			for (int i = 0; i < list.Count; i++)
+			{
+				DataGridViewRow row = list[i];
+				// Only process rows that are not new rows (the empty row at the end of DataGridView)
+				if (!row.IsNewRow)
+				{
+					var data = new GoogleSheetsPath()
+					{
+						name = row.Cells[nameColumnIdx].Value?.ToString(),
+						id = row.Cells[keyColumnIdx].Value?.ToString(),
+					};
+
+					dataList.Add(data);
+				}
+			}
+
+			return dataList;
 		}
 	}
 }
