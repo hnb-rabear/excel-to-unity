@@ -28,8 +28,8 @@ namespace ExcelToUnity_DataConverter.Entities
         /// <summary>
         /// All excel files path
         /// </summary>
-        public List<SpreadSheetConfig> allFiles = new List<SpreadSheetConfig>();
-		public List<SpreadSheetConfig> googleSheets = new List<SpreadSheetConfig>();
+        public List<ExcelPath> allFiles = new List<ExcelPath>();
+		public List<GoogleSpreadSheetPath> googleSpreadSheets = new List<GoogleSpreadSheetPath>();
         /// <summary>
         /// Encrypted or not
         /// </summary>

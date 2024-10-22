@@ -16,9 +16,9 @@ namespace ExcelToUnity_DataConverter
         public static void Init()
         {
             string configFilePath = FILE_PATH_SETTINGS;
-            if (!System.IO.File.Exists(configFilePath))
+			if (!File.Exists(configFilePath))
             {
-				System.IO.File.Create(configFilePath);
+				File.Create(configFilePath);
 				m_Settings = new Settings();
             }
             else

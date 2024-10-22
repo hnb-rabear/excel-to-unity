@@ -331,3 +331,16 @@ E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\G
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Sheets.v4.pdb
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Sheets.v4.xml
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.CodeDom.xml
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Auth.dll
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Core.dll
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.dll
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Sheets.v4.dll
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.pdb
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.xml
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Auth.pdb
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Auth.xml
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Core.pdb
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Core.xml
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Sheets.v4.pdb
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Google.Apis.Sheets.v4.xml
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.CodeDom.xml

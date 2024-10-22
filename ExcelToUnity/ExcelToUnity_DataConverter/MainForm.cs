@@ -112,7 +112,7 @@ namespace ExcelToUnity_DataConverter
         private Dictionary<string, StringBuilder> m_idsBuilderDict = new Dictionary<string, StringBuilder>();
         private Dictionary<string, StringBuilder> m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
         private Dictionary<string, LocalizationBuilder> m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
-        private BindingList<SpreadSheetConfig> m_excelFilesBind = new BindingList<SpreadSheetConfig>();
+        private BindingList<ExcelPath> m_excelFilesBind = new BindingList<ExcelPath>();
         private IWorkbook m_workBook;
         private Encryption m_encryption;
         private List<string> m_localizedSheetsExported;
@@ -204,7 +204,7 @@ namespace ExcelToUnity_DataConverter
             BtnAllInOne.Visible = pValue;
             BtnAddFile.Visible = pValue;
             if (!pValue)
-                tabChangeLog.TabPages.RemoveByKey("tabPage4");
+                tabMenu.TabPages.RemoveByKey("tabPage4");
         }
 
         private bool LoadIdSheet(IWorkbook pWorkBook, string pIdsSheet)
@@ -1313,7 +1313,7 @@ namespace ExcelToUnity_DataConverter
             //});
 
             DtgFilePaths.AutoGenerateColumns = false;
-            m_excelFilesBind = new BindingList<SpreadSheetConfig>(Config.Settings.allFiles);
+            m_excelFilesBind = new BindingList<ExcelPath>(Config.Settings.allFiles);
             DtgFilePaths.DataSource = m_excelFilesBind;
         }
 
@@ -1792,7 +1792,7 @@ namespace ExcelToUnity_DataConverter
             InitializeDtgFiles();
 
             // btnOpenGoogleSheet.Visible = false;
-            tabChangeLog.TabPages.RemoveByKey("tabPage2");
+            tabMenu.TabPages.RemoveByKey("tabPage2");
 
             // Set up the delays for the ToolTip.
             toolTip.ShowAlways = true;
@@ -2117,7 +2117,7 @@ namespace ExcelToUnity_DataConverter
             if (sender is TabControl tabControl)
             {
                 var tab = tabControl.SelectedTab;
-                if (tab.Name == "tabExportMultiExcels")
+                if (tab.Name == "tpExportMultiExcels")
                 {
                     ClearCaches();
                     RefreshDtgExcelFiles();
@@ -2148,7 +2148,7 @@ namespace ExcelToUnity_DataConverter
                         }
                     }
                     if (!existed)
-                        Config.Settings.allFiles.Add(new SpreadSheetConfig(file));
+                        Config.Settings.allFiles.Add(new ExcelPath(file));
                 }
 
                 RefreshDtgExcelFiles();
@@ -2158,7 +2158,7 @@ namespace ExcelToUnity_DataConverter
 
         private void BtnAllInOne_Click(object sender, EventArgs e)
         {
-            var bindingList = (BindingList<SpreadSheetConfig>)DtgFilePaths.DataSource;
+            var bindingList = (BindingList<ExcelPath>)DtgFilePaths.DataSource;
             Config.Settings.allFiles = bindingList.ToList();
             Config.Save();
             ClearCaches();
@@ -2664,12 +2664,6 @@ namespace ExcelToUnity_DataConverter
                     @"168, 220, 184, 133, 78, 149, 8, 249, 171, 138, 98, 170, 95, 15, 211, 200, 51, 242, 4, 193, 219, 181, 232, 99, 16, 240, 142, 128, 29, 163, 245, 24, 204, 73, 173, 32, 214, 76, 31, 99, 91, 239, 232, 53, 138, 195, 93, 195, 185, 210, 155, 184, 243, 216, 204, 42, 138, 101, 100, 241, 46, 145, 198, 66, 11, 17, 19, 86, 157, 27, 132, 201, 246, 112, 121, 7, 195, 148, 143, 125, 158, 29, 184, 67, 187, 100, 31, 129, 64, 130, 26, 67, 240, 128, 233, 129, 63, 169, 5, 211, 248, 200, 199, 96, 54, 128, 111, 147, 100, 6, 185, 0, 188, 143, 25, 103, 211, 18, 17, 249, 106, 54, 162, 188, 25, 34, 147, 3, 222, 61, 218, 49, 164, 165, 133, 12, 65, 92, 48, 40, 129, 76, 194, 229, 109, 76, 150, 203, 251, 62, 54, 251, 70, 224, 162, 167, 183, 78, 103, 28, 67, 183, 23, 80, 156, 97, 83, 164, 24, 183, 81, 56, 103, 77, 112, 248, 4, 168, 5, 72, 109, 18, 75, 219, 99, 181, 160, 76, 65, 16, 41, 175, 87, 195, 181, 19, 165, 172, 138, 172, 84, 40, 167, 97, 214, 90, 26, 124, 0, 166, 217, 97, 246, 117, 237, 99, 46, 15, 141, 69, 4, 245, 98, 73, 3, 8, 161, 98, 79, 161, 127, 19, 55, 158, 139, 247, 39, 59, 72, 161, 82, 158, 25, 65, 107, 173, 5, 255, 53, 28, 179, 182, 65, 162, 17";
         }
 
-        private void btnOpenGoogleSheet_Click(object sender, EventArgs e)
-        {
-            var form = new FrmGoogleSheetSample();
-            form.Show();
-        }
-
         private void btnLoadDefaultSettings_Click(object sender, EventArgs e)
         {
             Config.ClearSettings();
@@ -2723,6 +2717,18 @@ namespace ExcelToUnity_DataConverter
 		private void linkGit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Process.Start("https://github.com/hnb-rabear/excel-to-unity/");
+		}
+
+		private void BtnAddGoogleSheet_Click(object sender, EventArgs e)
+		{
+			var form = new FrmGoogleSheetSample();
+			form.TopMost = true;
+			form.ShowDialog();
+		}
+
+		private void BtnExportGoogleSheets_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

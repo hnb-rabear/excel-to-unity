@@ -176,7 +176,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Encrytion.cs" />
-    <Compile Include="Entities\SpreadSheetConfig.cs" />
+    <Compile Include="Entities\ExcelPath.cs" />
     <Compile Include="FrmGoogleSheetSample.cs">
       <SubType>Form</SubType>
     </Compile>

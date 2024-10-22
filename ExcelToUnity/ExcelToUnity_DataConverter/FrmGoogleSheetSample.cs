@@ -51,25 +51,31 @@ namespace ExcelToUnity_DataConverter
 				//Config.Settings.googleSheets.RemoveAt(e.RowIndex);
 
 				DtgGoogleSheets.Rows.RemoveAt(e.RowIndex);
+
+				var list = GetDataFromDataGridView();
 			}
 		}
 
-		// Method to retrieve data from DataGridView into a list
-		public List<SpreadSheetConfig> GetDataFromDataGridView(DataGridView dataGridView)
+		public List<GoogleSpreadSheetPath.SpreadSheet> GetDataFromDataGridView()
 		{
-			List<SpreadSheetConfig> dataList = new List<SpreadSheetConfig>();
+			var dataList = new List<GoogleSpreadSheetPath.SpreadSheet>();
+
+			// Get column indices by their names
+			int pathColumnIndex = DtgGoogleSheets.Columns["SheetName"].Index;
+			int selectedColumnIndex = DtgGoogleSheets.Columns["Selected"].Index;
 
 			// Iterate through each row in the DataGridView
-			foreach (DataGridViewRow row in dataGridView.Rows)
+			var list = DtgGoogleSheets.Rows;
+			for (int i = 0; i < list.Count; i++)
 			{
+				DataGridViewRow row = list[i];
 				// Only process rows that are not new rows (the empty row at the end of DataGridView)
 				if (!row.IsNewRow)
 				{
-					var data = new SpreadSheetConfig()
+					var data = new GoogleSpreadSheetPath.SpreadSheet()
 					{
-						path = row.Cells[0].Value?.ToString(),
-						exportIds = row.Cells[1].Value != null && (bool)row.Cells[1].Value,
-						exportConstants = row.Cells[2].Value != null && (bool)row.Cells[2].Value
+						name = row.Cells[pathColumnIndex].Value?.ToString(),
+						selected = row.Cells[selectedColumnIndex].Value != null && (bool)row.Cells[selectedColumnIndex].Value,
 					};
 
 					dataList.Add(data);
