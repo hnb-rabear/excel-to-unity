@@ -1,5 +1,8 @@
 using ChoETL;
 using CsvHelper;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Sheets.v4;
+using Google.Apis.Util.Store;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPOI.SS.UserModel;
@@ -10,6 +13,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ExcelToUnity_DataConverter
@@ -666,5 +670,29 @@ namespace ExcelToUnity_DataConverter
             }
             return null;
         }
+
+		private static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+		private static string CLIENT_ID = "871414866606-7b9687cp1ibjokihbbfl6nrjr94j14o8.apps.googleusercontent.com";
+		private static string CLIENT_SECRET = "zF_J3qHpzX5e8i2V-ZEvOdGV";
+		public static UserCredential AuthenticateGoogleStore()
+        {
+			UserCredential credential;
+
+			var clientSecrets = new ClientSecrets();
+			clientSecrets.ClientId = CLIENT_ID;
+			clientSecrets.ClientSecret = CLIENT_SECRET;
+
+			// The file token.json stores the user's access and refresh tokens, and is created
+			// automatically when the authorization flow completes for the first time.
+			credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+				clientSecrets,
+				Scopes,
+				"user",
+				CancellationToken.None,
+				new FileDataStore(Config.GetSaveDirectory(), true)).Result;
+
+			Console.WriteLine("Credential file saved to: " + Config.GetSaveDirectory());
+            return credential;
+		}
 	}
 }

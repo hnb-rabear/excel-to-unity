@@ -17,11 +17,6 @@ namespace ExcelToUnity_DataConverter
 {
 	public partial class FrmGoogleSheetSample : Form
 	{
-		private static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
-		private static readonly string ApplicationName = "Google Sheet to Unity - Data Converter";
-		private static string CLIENT_ID = "871414866606-7b9687cp1ibjokihbbfl6nrjr94j14o8.apps.googleusercontent.com";
-		private static string CLIENT_SECRET = "zF_J3qHpzX5e8i2V-ZEvOdGV";
-
 		private BindingList<GoogleSheetsPath.Sheet> m_bindingSheets;
 		public List<GoogleSheetsPath.Sheet> sheets;
 		public string googleSheetId;
@@ -101,28 +96,11 @@ namespace ExcelToUnity_DataConverter
 
 		private void Authenticate()
 		{
-			UserCredential credential;
-
-			var clientSecrets = new ClientSecrets();
-			clientSecrets.ClientId = CLIENT_ID;
-			clientSecrets.ClientSecret = CLIENT_SECRET;
-
-			// The file token.json stores the user's access and refresh tokens, and is created
-			// automatically when the authorization flow completes for the first time.
-			credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-				clientSecrets,
-				Scopes,
-				"user",
-				CancellationToken.None,
-				new FileDataStore(Config.GetSaveDirectory(), true)).Result;
-
-			Console.WriteLine("Credential file saved to: " + Config.GetSaveDirectory());
-
 			// Create Google Sheets API service.
 			var service = new SheetsService(new BaseClientService.Initializer()
 			{
-				HttpClientInitializer = credential,
-				ApplicationName = ApplicationName,
+				HttpClientInitializer = Helper.AuthenticateGoogleStore(),
+				ApplicationName = MainForm.APPLICATION_NAME,
 			});
 
 			googleSheetId = TxtGoogleSheetId.Text;
