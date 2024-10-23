@@ -22,7 +22,7 @@ namespace ExcelToUnity_DataConverter
 {
 	public partial class MainForm : Form
 	{
-		#region Internal Class
+#region Internal Class
 
 		public class Sheet
 		{
@@ -85,11 +85,11 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		#endregion
+#endregion
 
 		//=================================
 
-		#region Constants
+#region Constants
 
 		public const string APPLICATION_NAME = "Google Sheet to Unity - Data Converter";
 		private const string CONSTANTS_CS_TEMPLATE = "Resources\\Templates\\ConstantsTemplate.txt";
@@ -104,11 +104,11 @@ namespace ExcelToUnity_DataConverter
 		private const string SETTINGS_SHEET = "Settings";
 		private const string LOCALIZATION_SHEET = "Localization";
 
-		#endregion
+#endregion
 
 		//==================================
 
-		#region Members
+#region Members
 
 		private List<Sheet> m_sheets = new List<Sheet>();
 		private Dictionary<string, int> m_allIds = new Dictionary<string, int>();
@@ -122,22 +122,22 @@ namespace ExcelToUnity_DataConverter
 		private List<string> m_localizedSheetsExported;
 		private List<string> m_localizedLanguages;
 
-		#endregion
+#endregion
 
 		//=========================================
 
-		#region Constructor
+#region Constructor
 
 		public MainForm()
 		{
 			InitializeComponent();
 		}
 
-		#endregion
+#endregion
 
 		//=============================================================
 
-		#region Private
+#region Private
 
 		private void ClearCaches()
 		{
@@ -174,11 +174,7 @@ namespace ExcelToUnity_DataConverter
 			DtgIDs.DataSource = null;
 			DtgIDs.Rows.Clear();
 
-			DtgSheets.DataSource = null;
-			DtgSheets.Rows.Clear();
-			DtgSheets.Refresh();
 			m_sheets = new List<Sheet>();
-
 			if (!string.IsNullOrEmpty(txtInputXLSXFilePath.Text.Trim()))
 			{
 				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
@@ -190,10 +186,9 @@ namespace ExcelToUnity_DataConverter
 						m_sheets.Add(new Sheet(sheetName));
 					}
 					ExcludeSheets(ref m_sheets);
-					DtgSheets.DataSource = m_sheets;
-					DtgSheets.AutoResizeColumns();
 				}
 			}
+			DtgSheets.DataSource = new BindingList<Sheet>(m_sheets);
 		}
 
 		private void LoadFileSettings()
@@ -211,13 +206,15 @@ namespace ExcelToUnity_DataConverter
 				tabMenu.TabPages.RemoveByKey("tabPage4");
 		}
 
-		private bool LoadIdSheet(IWorkbook pWorkBook, string pIdsSheet)
+#region Load and create IDs
+
+		private bool BuildContentOfFileIDs(IWorkbook pWorkBook, string pSheetName)
 		{
-			var sheet = pWorkBook.GetSheet(pIdsSheet);
+			var sheet = pWorkBook.GetSheet(pSheetName);
 
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
 			{
-				Log(LogType.Warning, $"Sheet {pIdsSheet} is empty");
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty");
 				return false;
 			}
 
@@ -275,24 +272,9 @@ namespace ExcelToUnity_DataConverter
 										sb.Append(" /*").Append(cellComment).Append("*/");
 								}
 
-								//Add to global keys
-								bool hadKey = false;
-								foreach (var k in m_allIds)
-									if (k.Key == cellKey.ToString().Trim() && k.Value == value)
-									{
-										hadKey = true;
-										break;
-									}
-									else if (k.Key == cellKey.ToString().Trim() && k.Value != value)
-									{
-										MessageBox.Show($@"Keys Conflicted!
-                                            SHEET:{pIdsSheet}
-                                            KEY:{k.Key}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-										Log(LogType.Error, $"Keys Conflicted!\nSHEET:{pIdsSheet}\nKEY:{k.Key}");
-										break;
-									}
-								if (!hadKey)
-									m_allIds.Add(key, value);
+								if (m_allIds.ContainsKey(key))
+									MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+								m_allIds.AddOrUpdate(key, value);
 							}
 							//Header row
 							else
@@ -312,6 +294,8 @@ namespace ExcelToUnity_DataConverter
 					}
 				}
 			}
+
+			m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
 
 			//Build Ids Enum
 			if (idsEnumBuilders.Count > 0)
@@ -362,31 +346,24 @@ namespace ExcelToUnity_DataConverter
 				}
 			}
 
-			if (m_idsBuilderDict.ContainsKey(pIdsSheet))
+			if (m_idsBuilderDict.ContainsKey(pSheetName))
 			{
-				m_idsBuilderDict[pIdsSheet].AppendLine();
-				m_idsBuilderDict[pIdsSheet].Append(builder);
+				m_idsBuilderDict[pSheetName].AppendLine();
+				m_idsBuilderDict[pSheetName].Append(builder);
 			}
 			else
-				m_idsBuilderDict.Add(pIdsSheet, builder);
-
-			DtgIDs.DataSource = null;
-			DtgIDs.Rows.Clear();
-			DtgIDs.Refresh();
-			m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
-			DtgIDs.DataSource = m_allIds;
-			DtgIDs.AutoResizeColumns();
+				m_idsBuilderDict.Add(pSheetName, builder);
 
 			return true;
 		}
 
-		private void LoadSheetIDsValue(IWorkbook pWorkBook, string pIdsSheet)
+		private void LoadSheetIDsData(IWorkbook pWorkBook, string pSheetName)
 		{
-			var sheet = pWorkBook.GetSheet(pIdsSheet);
+			var sheet = pWorkBook.GetSheet(pSheetName);
 
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
 			{
-				Log(LogType.Warning, $"Sheet {pIdsSheet} is empty!");
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
 				return;
 			}
 
@@ -402,35 +379,24 @@ namespace ExcelToUnity_DataConverter
 						continue;
 					if (row <= 0)
 						continue;
-					try
-					{
-						var cellIdValue = rowData.GetCell(col + 1);
-						if (cellIdValue == null)
-							continue;
-						string key = cellIdName.ToString().Trim();
-						int value = int.Parse(cellIdValue.ToString().Trim());
+					var cellIdValue = rowData.GetCell(col + 1);
+					if (cellIdValue == null)
+						continue;
+					string key = cellIdName.ToString().Trim();
+					int value = int.Parse(cellIdValue.ToString().Trim());
 
-						//Add to global keys
-						if (!m_allIds.ContainsKey(key))
-							m_allIds.Add(key, value);
-						else if (m_allIds[key].Equals(value))
-							m_allIds[key] = value;
-					}
-					catch { }
+					if (m_allIds.ContainsKey(key))
+						MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					m_allIds.AddOrUpdate(key, value);
 				}
 			}
 
-			DtgIDs.DataSource = null;
-			DtgIDs.Rows.Clear();
-			DtgIDs.Refresh();
 			m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
-			DtgIDs.DataSource = m_allIds;
-			DtgIDs.AutoResizeColumns();
 		}
 
-		private void CreateIDsFile(string exportFileName, string content)
+		private void CreateFileIDs(string exportFileName, string content)
 		{
-			string fileContent = System.IO.File.ReadAllText(IDS_CS_TEMPLATE);
+			string fileContent = File.ReadAllText(IDS_CS_TEMPLATE);
 			fileContent = fileContent.Replace("_IDS_CLASS_NAME_", exportFileName);
 			fileContent = fileContent.Replace("public const int _FIELDS_ = 0;", content /*mIDsBuilderDict.ToString()*/);
 			fileContent = AddNamespace(fileContent);
@@ -438,13 +404,50 @@ namespace ExcelToUnity_DataConverter
 			Helper.WriteFile(Config.Settings.outputConstantsFilePath, exportFileName + ".cs", fileContent);
 		}
 
-		private void LoadConstantsSheet(IWorkbook workbook, string constantsSheet)
+		private bool CheckExistId(string pKey)
 		{
-			var sheet = workbook.GetSheet(constantsSheet);
+			foreach (var id in m_allIds)
+				if (id.Key == pKey.Trim())
+					return true;
+			return false;
+		}
 
+		private int GetReferenceId(string pKey, out bool pFound)
+		{
+			if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
+			{
+				m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
+			}
+
+			if (!string.IsNullOrEmpty(pKey))
+			{
+				if (int.TryParse(pKey, out int value))
+				{
+					pFound = true;
+					return value;
+				}
+
+				if (m_allIDsSorted.TryGetValue(pKey, out int id))
+				{
+					pFound = true;
+					return id;
+				}
+			}
+
+			pFound = false;
+			return 0;
+		}
+
+#endregion
+
+#region Load and create Constants
+
+		private void LoadSheetConstantsData(IWorkbook workbook, string sheetName)
+		{
+			var sheet = workbook.GetSheet(sheetName);
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
 			{
-				Log(LogType.Warning, $"Sheet {constantsSheet} is empty!");
+				Log(LogType.Warning, $"Sheet {sheetName} is empty!");
 				return;
 			}
 
@@ -500,6 +503,11 @@ namespace ExcelToUnity_DataConverter
 			}
 			constants.Sort();
 
+			BuildContentOfFileConstants(constants, sheetName);
+		}
+
+		private void BuildContentOfFileConstants(List<ConstantBuilder> constants, string constantsSheet)
+		{
 			var constantsSB = new StringBuilder("");
 			for (int i = 0; i < constants.Count; i++)
 			{
@@ -578,18 +586,18 @@ namespace ExcelToUnity_DataConverter
 						fieldStr = $"\tpublic const string {name} = \"{value.Trim()}\";";
 						break;
 					case "string-array":
+					{
+						string arrayStr = "";
+						string[] values = Helper.SplitValueToArray(value);
+						for (int j = 0; j < values.Length; j++)
 						{
-							string arrayStr = "";
-							string[] values = Helper.SplitValueToArray(value);
-							for (int j = 0; j < values.Length; j++)
-							{
-								if (j == values.Length - 1)
-									arrayStr += "\"" + values[j].Trim() + "\"";
-								else
-									arrayStr += "\"" + values[j].Trim() + "\", ";
-							}
-							fieldStr = $"\tpublic static readonly string[] {name} = new string[{values.Length}] {"{"} {arrayStr} {"}"};";
+							if (j == values.Length - 1)
+								arrayStr += "\"" + values[j].Trim() + "\"";
+							else
+								arrayStr += "\"" + values[j].Trim() + "\", ";
 						}
+						fieldStr = $"\tpublic static readonly string[] {name} = new string[{values.Length}] {"{"} {arrayStr} {"}"};";
+					}
 						break;
 				}
 
@@ -608,9 +616,9 @@ namespace ExcelToUnity_DataConverter
 			m_constantsBuilderDict[constantsSheet].Append(constantsSB);
 		}
 
-		private void CreateConstantsFile(string pContent, string pExportFileName)
+		private void CreateFileConstants(string pContent, string pExportFileName)
 		{
-			string fileContent = System.IO.File.ReadAllText(CONSTANTS_CS_TEMPLATE);
+			string fileContent = File.ReadAllText(CONSTANTS_CS_TEMPLATE);
 			fileContent = fileContent.Replace("_CONST_CLASS_NAME_", pExportFileName);
 			fileContent = fileContent.Replace("public const int _FIELDS_ = 0;", pContent);
 			fileContent = AddNamespace(fileContent);
@@ -619,39 +627,7 @@ namespace ExcelToUnity_DataConverter
 			Log(LogType.Message, "Export " + pExportFileName + ".cs successfully!");
 		}
 
-		private int GetReferenceId(string pKey, out bool pFound)
-		{
-			if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
-			{
-				m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
-			}
-
-			if (!string.IsNullOrEmpty(pKey))
-			{
-				if (int.TryParse(pKey, out int value))
-				{
-					pFound = true;
-					return value;
-				}
-
-				if (m_allIDsSorted.ContainsKey(pKey))
-				{
-					pFound = true;
-					return m_allIDsSorted[pKey];
-				}
-			}
-
-			pFound = false;
-			return 0;
-		}
-
-		private bool CheckExistId(string pKey)
-		{
-			foreach (var id in m_allIds)
-				if (id.Key == pKey.Trim())
-					return true;
-			return false;
-		}
+#endregion
 
 		private string ConvertSheetToJson(IWorkbook pWorkBook, string pSheetName, string pOutputFile, List<FieldValueType> pFieldValueTypes, bool pEncrypt, bool pAutoWriteFile)
 		{
@@ -687,8 +663,8 @@ namespace ExcelToUnity_DataConverter
 					{
 						var cell = rowData.GetCell(col);
 						if (cell != null
-							&& !string.IsNullOrEmpty(cell.StringCellValue)
-							&& !cell.StringCellValue.Contains("[x]"))
+						    && !string.IsNullOrEmpty(cell.StringCellValue)
+						    && !cell.StringCellValue.Contains("[x]"))
 						{
 							validCols[col] = true;
 							fields[col] = cell.ToString().Trim();
@@ -962,100 +938,100 @@ namespace ExcelToUnity_DataConverter
 										break;
 
 									case "array-number":
+									{
+										fieldName = fieldName.Replace("[]", "");
+										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+										var arrayStr = "[";
+										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											fieldName = fieldName.Replace("[]", "");
-											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-											var arrayStr = "[";
-											for (int k = 0; k < arrayValue.Length; k++)
-											{
-												string val = arrayValue[k].Trim();
-												if (referencedId)
-													val = GetReferenceId(val, out bool _).ToString();
-												if (k == 0) arrayStr += val;
-												else arrayStr += "," + val;
-											}
-											arrayStr += "]";
-											if (!nestedFiled)
-												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-											else
-											{
-												int[] array = JsonConvert.DeserializeObject<int[]>(arrayStr);
-												jsonObject[fieldName] = JArray.FromObject(array);
-											}
+											string val = arrayValue[k].Trim();
+											if (referencedId)
+												val = GetReferenceId(val, out bool _).ToString();
+											if (k == 0) arrayStr += val;
+											else arrayStr += "," + val;
 										}
+										arrayStr += "]";
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+										else
+										{
+											int[] array = JsonConvert.DeserializeObject<int[]>(arrayStr);
+											jsonObject[fieldName] = JArray.FromObject(array);
+										}
+									}
 										break;
 
 									case "array-string":
+									{
+										fieldName = fieldName.Replace("[]", "");
+										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+										var arrayStr = "[";
+										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											fieldName = fieldName.Replace("[]", "");
-											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-											var arrayStr = "[";
-											for (int k = 0; k < arrayValue.Length; k++)
-											{
-												if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
-												else arrayStr += $",\"{arrayValue[k].Trim()}\"";
-											}
-											arrayStr += "]";
-											if (!nestedFiled)
-												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-											else
-											{
-												string[] array = JsonConvert.DeserializeObject<string[]>(arrayStr);
-												jsonObject[fieldName] = JArray.FromObject(array);
-											}
+											if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
+											else arrayStr += $",\"{arrayValue[k].Trim()}\"";
 										}
+										arrayStr += "]";
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+										else
+										{
+											string[] array = JsonConvert.DeserializeObject<string[]>(arrayStr);
+											jsonObject[fieldName] = JArray.FromObject(array);
+										}
+									}
 										break;
 
 									case "array-bool":
+									{
+										fieldName = fieldName.Replace("[]", "");
+										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+										var arrayStr = "[";
+										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											fieldName = fieldName.Replace("[]", "");
-											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-											var arrayStr = "[";
-											for (int k = 0; k < arrayValue.Length; k++)
-											{
-												if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
-												else arrayStr += "," + arrayValue[k].Trim().ToLower();
-											}
-											arrayStr += "]";
-											if (!nestedFiled)
-												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-											else
-											{
-												bool[] array = JsonConvert.DeserializeObject<bool[]>(arrayStr);
-												jsonObject[fieldName] = JArray.FromObject(array);
-											}
+											if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
+											else arrayStr += "," + arrayValue[k].Trim().ToLower();
 										}
+										arrayStr += "]";
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+										else
+										{
+											bool[] array = JsonConvert.DeserializeObject<bool[]>(arrayStr);
+											jsonObject[fieldName] = JArray.FromObject(array);
+										}
+									}
 										break;
 
 									case "json":
-										{
-											fieldName = fieldName.Replace("{}", "");
+									{
+										fieldName = fieldName.Replace("{}", "");
 
-											//Search Id in field value
-											if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
-											{
-												m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
-											}
-											foreach (var id in m_allIDsSorted)
-											{
-												if (fieldValue.Contains(id.Key))
-													fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
-											}
-											if (!Helper.IsValidJson(fieldValue))
-											{
-												MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
-													@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-												Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
-											}
-											var tempObj = JsonConvert.DeserializeObject(fieldValue);
-											var tempJsonStr = JsonConvert.SerializeObject(tempObj);
-											if (!nestedFiled)
-												fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
-											else
-											{
-												jsonObject[fieldName] = JObject.Parse(tempJsonStr);
-											}
+										//Search Id in field value
+										if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
+										{
+											m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
 										}
+										foreach (var id in m_allIDsSorted)
+										{
+											if (fieldValue.Contains(id.Key))
+												fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
+										}
+										if (!Helper.IsValidJson(fieldValue))
+										{
+											MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
+												@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+											Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
+										}
+										var tempObj = JsonConvert.DeserializeObject(fieldValue);
+										var tempJsonStr = JsonConvert.SerializeObject(tempObj);
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
+										else
+										{
+											jsonObject[fieldName] = JObject.Parse(tempJsonStr);
+										}
+									}
 										break;
 								}
 
@@ -1231,7 +1207,7 @@ namespace ExcelToUnity_DataConverter
 				builder.Append(str);
 				builder.Append(Environment.NewLine);
 			}
-			string csFileTemplate = System.IO.File.ReadAllText(SETTINGS_CS_TEMPLATE);
+			string csFileTemplate = File.ReadAllText(SETTINGS_CS_TEMPLATE);
 			string className = sheetName.Replace(" ", "_");
 			csFileTemplate = csFileTemplate.Replace("_SETTINGS_CLASS_NAME_", className);
 			csFileTemplate = csFileTemplate.Replace("//#REPLACE_FIELDS", "\t\t" + builder);
@@ -1555,7 +1531,7 @@ namespace ExcelToUnity_DataConverter
 			languageFilesBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{pLanguageTextDict.First().Key}\";");
 
 			//Write file
-			string fileTemplateContent = System.IO.File.ReadAllText(LOCALIZATION_TEMPLATE);
+			string fileTemplateContent = File.ReadAllText(LOCALIZATION_TEMPLATE);
 			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
 			fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_ENUM", idBuilder2.ToString());
 			fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
@@ -1665,7 +1641,7 @@ namespace ExcelToUnity_DataConverter
 			languagesDictBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{pLanguageTextDict.First().Key}\";");
 
 			//Write file localization constants
-			string fileContent = System.IO.File.ReadAllText(LOCALIZATION_TEMPLATE_V2);
+			string fileContent = File.ReadAllText(LOCALIZATION_TEMPLATE_V2);
 			fileContent = fileContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
 			fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_ENUM", idBuilder2.ToString());
 			fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
@@ -1676,7 +1652,7 @@ namespace ExcelToUnity_DataConverter
 			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileContent);
 
 			//Write file localized text component
-			fileContent = System.IO.File.ReadAllText(LOCALIZATION_TEXT_TEMPLATE);
+			fileContent = File.ReadAllText(LOCALIZATION_TEXT_TEMPLATE);
 			fileContent = fileContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
 			fileContent = AddNamespace(fileContent);
 			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + "Text.cs", fileContent);
@@ -1689,7 +1665,7 @@ namespace ExcelToUnity_DataConverter
 		/// </summary>
 		private void CreateLocalizationsManagerFile()
 		{
-			//if (m_localizedSheetsExported.Count > 1)
+			if (m_localizedSheetsExported.Count > 0)
 			{
 				//Build language dictionary
 				var languagesDictBuilder = new StringBuilder();
@@ -1758,7 +1734,7 @@ namespace ExcelToUnity_DataConverter
 						useAddressable.Append(Environment.NewLine);
 				}
 
-				string fileContent = System.IO.File.ReadAllText(LOCALIZATION_MANAGER_TEMPLATE);
+				string fileContent = File.ReadAllText(LOCALIZATION_MANAGER_TEMPLATE);
 				fileContent = fileContent.Replace("//LOCALIZATION_INIT_ASYNC", initAsynLines.ToString());
 				fileContent = fileContent.Replace("//LOCALIZATION_INIT", initLines.ToString());
 				fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
@@ -1783,11 +1759,11 @@ namespace ExcelToUnity_DataConverter
 			return fileContent;
 		}
 
-		#endregion
+#endregion
 
 		//====================================================
 
-		#region Events
+#region Events
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
@@ -1849,7 +1825,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void txtInputFilePath_TextChanged(object sender, EventArgs e)
 		{
-			if (System.IO.File.Exists(txtInputXLSXFilePath.Text.Trim()))
+			if (File.Exists(txtInputXLSXFilePath.Text.Trim()))
 			{
 				SetupConfigFolders(txtInputXLSXFilePath, ref Config.Settings.inputDataFilePath);
 				LoadWorkBook();
@@ -1877,16 +1853,16 @@ namespace ExcelToUnity_DataConverter
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
-				if (m_sheets[i].SheetName.Contains(IDS_SHEET))
+				if (m_sheets[i].SheetName.EndsWith(IDS_SHEET))
 				{
 					//Load All IDs
-					LoadIdSheet(m_workBook, m_sheets[i].SheetName);
+					BuildContentOfFileIDs(m_workBook, m_sheets[i].SheetName);
 
 					//Create IDs Files
 					if (m_sheets[i].Check && Config.Settings.seperateConstants)
 					{
 						var builder = m_idsBuilderDict[m_sheets[i].SheetName];
-						CreateIDsFile(m_sheets[i].SheetName, builder.ToString());
+						CreateFileIDs(m_sheets[i].SheetName, builder.ToString());
 					}
 				}
 			}
@@ -1900,7 +1876,7 @@ namespace ExcelToUnity_DataConverter
 					iDsBuilder.Append(b.Value);
 					iDsBuilder.AppendLine();
 				}
-				CreateIDsFile("IDs", iDsBuilder.ToString());
+				CreateFileIDs("IDs", iDsBuilder.ToString());
 				Log(LogType.Message, "Export IDs successfully!");
 			}
 
@@ -1946,8 +1922,8 @@ namespace ExcelToUnity_DataConverter
 
 		private static bool IsJsonSheet(string pName)
 		{
-			return !pName.Contains(IDS_SHEET)
-				&& !pName.Contains(CONSTANTS_SHEET)
+			return !pName.EndsWith(IDS_SHEET)
+				&& !pName.EndsWith(CONSTANTS_SHEET)
 				&& !pName.Contains(SETTINGS_SHEET)
 				&& !pName.Contains(LOCALIZATION_SHEET);
 		}
@@ -1959,21 +1935,22 @@ namespace ExcelToUnity_DataConverter
 		{
 			if (m_workBook == null)
 				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
+			m_allIds = new Dictionary<string, int>();
 
 			ClearCaches();
 
 			foreach (var m in m_sheets)
 			{
-				if (m.SheetName.Contains(IDS_SHEET) && m.Check)
+				if (m.SheetName.EndsWith(IDS_SHEET) && m.Check)
 				{
 					//Load All IDs
-					LoadIdSheet(m_workBook, m.SheetName);
+					BuildContentOfFileIDs(m_workBook, m.SheetName);
 
 					//Create IDs Files
 					if (Config.Settings.seperateConstants)
 					{
 						var content = m_idsBuilderDict[m.SheetName].ToString();
-						CreateIDsFile(m.SheetName, content);
+						CreateFileIDs(m.SheetName, content);
 						Log(LogType.Message, "Export " + m.SheetName + " successfully!");
 					}
 				}
@@ -1988,9 +1965,15 @@ namespace ExcelToUnity_DataConverter
 					iDsBuilder.Append(content);
 					iDsBuilder.AppendLine();
 				}
-				CreateIDsFile("IDs", iDsBuilder.ToString());
+				CreateFileIDs("IDs", iDsBuilder.ToString());
 				Log(LogType.Message, "Export IDs successfully!");
 			}
+
+			DtgIDs.DataSource = null;
+			DtgIDs.Rows.Clear();
+			DtgIDs.Refresh();
+			DtgIDs.DataSource = m_allIds;
+			DtgIDs.AutoResizeColumns();
 		}
 
 		private void BtnExportConstants_Click(object sender, EventArgs e)
@@ -2002,13 +1985,13 @@ namespace ExcelToUnity_DataConverter
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
-				if (m_sheets[i].SheetName.Contains(CONSTANTS_SHEET) && m_sheets[i].Check)
+				if (m_sheets[i].SheetName.EndsWith(CONSTANTS_SHEET) && m_sheets[i].Check)
 				{
-					LoadConstantsSheet(m_workBook, m_sheets[i].SheetName);
+					LoadSheetConstantsData(m_workBook, m_sheets[i].SheetName);
 
 					if (m_constantsBuilderDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateConstants)
 					{
-						CreateConstantsFile(m_constantsBuilderDict[m_sheets[i].SheetName].ToString(), m_sheets[i].SheetName);
+						CreateFileConstants(m_constantsBuilderDict[m_sheets[i].SheetName].ToString(), m_sheets[i].SheetName);
 					}
 				}
 			}
@@ -2021,7 +2004,7 @@ namespace ExcelToUnity_DataConverter
 					builder.Append(b.Value);
 					builder.AppendLine();
 				}
-				CreateConstantsFile(builder.ToString(), "Constants");
+				CreateFileConstants(builder.ToString(), "Constants");
 			}
 		}
 
@@ -2160,7 +2143,7 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		private void BtnAllInOne_Click(object sender, EventArgs e)
+		private void BtnExportMultiExcels_Click(object sender, EventArgs e)
 		{
 			var bindingList = (BindingList<ExcelPath>)DtgFilePaths.DataSource;
 			Config.Settings.allFiles = bindingList.ToList();
@@ -2192,7 +2175,7 @@ namespace ExcelToUnity_DataConverter
 				for (int i = 0; i < sheets.Count; i++)
 				{
 					if (sheets[i].SheetName.EndsWith(IDS_SHEET))
-						LoadSheetIDsValue(workBook, sheets[i].SheetName);
+						LoadSheetIDsData(workBook, sheets[i].SheetName);
 				}
 			}
 
@@ -2215,9 +2198,9 @@ namespace ExcelToUnity_DataConverter
 				//Load and write Ids
 				for (int i = 0; i < sheets.Count; i++)
 				{
-					if (sheets[i].SheetName.Contains(IDS_SHEET))
-						if (LoadIdSheet(workBook, sheets[i].SheetName) && exportIDs && Config.Settings.seperateIDs)
-							CreateIDsFile(sheets[i].SheetName, m_idsBuilderDict[sheets[i].SheetName].ToString());
+					if (sheets[i].SheetName.EndsWith(IDS_SHEET))
+						if (BuildContentOfFileIDs(workBook, sheets[i].SheetName) && exportIDs && Config.Settings.seperateIDs)
+							CreateFileIDs(sheets[i].SheetName, m_idsBuilderDict[sheets[i].SheetName].ToString());
 				}
 
 				//Load and write json file
@@ -2257,12 +2240,12 @@ namespace ExcelToUnity_DataConverter
 				//Load and write constants
 				for (int i = 0; i < sheets.Count; i++)
 				{
-					if (sheets[i].SheetName.Contains(CONSTANTS_SHEET))
+					if (sheets[i].SheetName.EndsWith(CONSTANTS_SHEET))
 					{
-						LoadConstantsSheet(workBook, sheets[i].SheetName);
+						LoadSheetConstantsData(workBook, sheets[i].SheetName);
 
 						if (m_constantsBuilderDict.ContainsKey(sheets[i].SheetName) && Config.Settings.seperateConstants)
-							CreateConstantsFile(m_constantsBuilderDict[sheets[i].SheetName].ToString(), sheets[i].SheetName);
+							CreateFileConstants(m_constantsBuilderDict[sheets[i].SheetName].ToString(), sheets[i].SheetName);
 					}
 				}
 
@@ -2297,7 +2280,7 @@ namespace ExcelToUnity_DataConverter
 						builder.AppendLine();
 					count++;
 				}
-				CreateIDsFile("IDs", builder.ToString());
+				CreateFileIDs("IDs", builder.ToString());
 				Log(LogType.Message, "Export IDs successfully!");
 			}
 
@@ -2314,7 +2297,7 @@ namespace ExcelToUnity_DataConverter
 						builder.AppendLine();
 					count++;
 				}
-				CreateConstantsFile(builder.ToString(), "Constants");
+				CreateFileConstants(builder.ToString(), "Constants");
 			}
 
 			if (!Config.Settings.seperateLocalizations)
@@ -2399,10 +2382,10 @@ namespace ExcelToUnity_DataConverter
 			var path1 = value.ToString();
 
 			// Check if the file exists
-			bool fileExists = System.IO.File.Exists(path1);
+			bool fileExists = File.Exists(path1);
 
 			// Get the status cell
-			DataGridViewCell statusCell = row.Cells[statusColumnIndex];
+			var statusCell = row.Cells[statusColumnIndex];
 
 			// Update the status cell image based on whether the file exists
 			if (fileExists)
@@ -2531,11 +2514,11 @@ namespace ExcelToUnity_DataConverter
 			txtLog2.Text = txtLog.Text;
 		}
 
-		#endregion
+#endregion
 
 		//====================================================
 
-		#region Internal Class
+#region Internal Class
 
 		public enum LogType
 		{
@@ -2554,7 +2537,7 @@ namespace ExcelToUnity_DataConverter
 			public List<ICell> fieldCells = new List<ICell>();
 		}
 
-		#endregion
+#endregion
 
 		private void BtnDecrypt_Click(object sender, EventArgs e)
 		{
@@ -2715,15 +2698,14 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		private void DtgFilePaths_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-
-		}
+		private void DtgFilePaths_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
 
 		private void linkGit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Process.Start("https://github.com/hnb-rabear/excel-to-unity/");
 		}
+
+#region Google Sheets
 
 		private void BtnAddGoogleSheet_Click(object sender, EventArgs e)
 		{
@@ -2793,7 +2775,7 @@ namespace ExcelToUnity_DataConverter
 			var list = DtgGoogleSheets.Rows;
 			for (int i = 0; i < list.Count; i++)
 			{
-				DataGridViewRow row = list[i];
+				var row = list[i];
 				// Only process rows that are not new rows (the empty row at the end of DataGridView)
 				if (!row.IsNewRow)
 				{
@@ -2820,62 +2802,80 @@ namespace ExcelToUnity_DataConverter
 			});
 
 			ClearCaches();
+			m_allIDsSorted = null;
+			m_allIds = new Dictionary<string, int>();
+
+			m_localizedSheetsExported = new List<string>();
+			m_localizedLanguages = new List<string>();
+			m_characterMaps = new Dictionary<string, string>();
 
 			var settings = Config.Settings;
 			var googleSheetsPaths = Config.Settings.googleSheetsPaths;
-			for (int i = 0; i < googleSheetsPaths.Count; i++)
+
+			// 1. Build Ids list
+			foreach (var googleSheets in googleSheetsPaths)
 			{
-				var sheets = new List<Sheet>();
-				var name = googleSheetsPaths[i].name;
-
 				// Get the sheet metadata to determine its dimensions
-				var sheetMetadata = service.Spreadsheets.Get(googleSheetsPaths[i].id).Execute();
-				var excludedSheets = settings.GetExcludedSheets();
-				foreach (GoogleSheetsPath.Sheet item in googleSheetsPaths[i].sheets)
+				var sheetMetadata = service.Spreadsheets.Get(googleSheets.id).Execute();
+				foreach (var sheet in googleSheets.sheets)
 				{
-					if (item.selected && excludedSheets == null || !excludedSheets.Contains(item.name))
-						sheets.Add(new Sheet(item.name));
-				}
+					if (!sheet.selected || !sheet.name.EndsWith(IDS_SHEET))
+						continue;
 
-				// 1. Build Ids list
-				foreach (var sheet in sheets)
-				{
-					var sheetInfo = sheetMetadata.Sheets.FirstOrDefault(s => s.Properties.Title == sheet.SheetName);
+					var sheetInfo = sheetMetadata.Sheets.FirstOrDefault(s => s.Properties.Title == sheet.name);
 					if (sheetInfo == null)
 						continue;
 
-					var rowCount = sheetInfo.Properties.GridProperties.RowCount;
 					var columnCount = sheetInfo.Properties.GridProperties.ColumnCount;
 
 					// Construct the range dynamically based on row and column counts
-					var range = $"{sheet.SheetName}!A1:{Helper.GetColumnLetter(columnCount.Value)}";
+					var range = $"{sheet.name}!A1:{Helper.GetColumnLetter(columnCount.Value)}";
 
 					// Create a request to get the sheet data
-					var request = service.Spreadsheets.Values.Get(googleSheetsPaths[i].id, range);
+					var request = service.Spreadsheets.Values.Get(googleSheets.id, range);
 					var response = request.Execute();
 					var values = response.Values;
 
-					if (sheet.SheetName.EndsWith(IDS_SHEET))
+					var ids = LoadSheetIDsValue(sheet.name, values);
+					foreach (var id in ids)
 					{
-						LoadSheetIDsValue(sheet.SheetName, values);
+						if (m_allIds.ContainsKey(id.Key))
+							MessageBox.Show($@"ID {id} is duplicated in sheet {sheet.name}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						m_allIds.AddOrUpdate(id.Key, id.Value);
 					}
 				}
+			}
 
-				// 2. Read and write other data type
+			m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
+
+			// 2. Read and write other data type
+			foreach (var googleSheets in googleSheetsPaths)
+			{
+				var sheets = new List<GoogleSheetsPath.Sheet>();
+
+				// Get the sheet metadata to determine its dimensions
+				var excludedSheets = settings.GetExcludedSheets();
+				foreach (var item in googleSheets.sheets)
+				{
+					if (item.selected && excludedSheets == null || !excludedSheets.Contains(item.name))
+						sheets.Add(item);
+				}
+
 				foreach (var sheet in sheets)
 				{
-					if (sheet.SheetName.EndsWith(CONSTANTS_SHEET))
+					if (sheet.name.EndsWith(CONSTANTS_SHEET))
 					{
-						var range = $"{sheet.SheetName}!A1:D";
-						var request = service.Spreadsheets.Values.Get(googleSheetsPaths[i].id, range);
+						var range = $"{sheet.name}!A1:D";
+						var request = service.Spreadsheets.Values.Get(googleSheets.id, range);
 						var response = request.Execute();
 						var values = response.Values;
-						LoadSheetConstantsValue(sheet.SheetName, values);
+						var constants = LoadSheetConstantsValue(sheet.name, values);
+						BuildContentOfFileConstants(constants, sheet.name);
 					}
-					if (sheet.SheetName.StartsWith(LOCALIZATION_SHEET))
+					else if (sheet.name.StartsWith(LOCALIZATION_SHEET))
 					{
-						var range = $"{sheet.SheetName}!A1:Q";
-						var request = service.Spreadsheets.Values.Get(googleSheetsPaths[i].id, range);
+						var range = $"{sheet.name}!A1:Q";
+						var request = service.Spreadsheets.Values.Get(googleSheets.id, range);
 						var response = request.Execute();
 						var values = response.Values;
 					}
@@ -2883,41 +2883,76 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		private void LoadSheetIDsValue(string sheetName, IList<IList<object>> values)
+		private Dictionary<string, int> LoadSheetIDsValue(string sheetName, IList<IList<object>> values)
 		{
-			if (values != null && values.Count > 0)
-			{
-				Console.WriteLine($"Data from sheet {sheetName}:");
-
-				foreach (var row in values)
-				{
-					// Print each row
-					Console.WriteLine(string.Join(", ", row));
-				}
-			}
-			else
+			if (values == null || values.Count <= 0)
 			{
 				Console.WriteLine($"No data found in sheet {sheetName}.");
+				return null;
 			}
-		}
 
-		private void LoadSheetConstantsValue(string sheetName, IList<IList<object>> values)
-		{
-
-			if (values != null && values.Count > 0)
+			var result = new Dictionary<string, int>();
+			for (int row = 0; row < values.Count; row++)
 			{
-				Console.WriteLine($"Data from sheet {sheetName}:");
-
-				foreach (var row in values)
+				var rowValues = values[row];
+				for (int col = 0; col < rowValues.Count; col += 3)
 				{
-					// Print each row
-					Console.WriteLine(string.Join(", ", row));
+					var cellIdName = rowValues[col].ToString();
+					if (string.IsNullOrEmpty(cellIdName))
+						continue;
+					if (row <= 0)
+						continue;
+
+					var cellIdValue = rowValues[col + 1].ToString();
+					if (string.IsNullOrEmpty(cellIdValue))
+						continue;
+					string key = cellIdName;
+					int value = int.Parse(cellIdValue.Trim());
+
+					result[key] = value;
 				}
 			}
-			else
+
+			return result;
+		}
+
+		private List<ConstantBuilder> LoadSheetConstantsValue(string sheetName, IList<IList<object>> values)
+		{
+			if (values == null || values.Count <= 0)
 			{
 				Console.WriteLine($"No data found in sheet {sheetName}.");
+				return null;
 			}
+
+			var constants = new List<ConstantBuilder>();
+			for (int row = 0; row < values.Count; row++)
+			{
+				var newConst = new ConstantBuilder();
+				var rowValues = values[row];
+
+				if (rowValues.Count < 1)
+					continue;
+				newConst.name = rowValues[0].ToString().Trim();
+				if (rowValues.Count < 2)
+					continue;
+				newConst.valueType = rowValues[1].ToString().Trim();
+				if (rowValues.Count < 3)
+					continue;
+				newConst.value = rowValues[2].ToString().Trim();
+				if (rowValues.Count >= 4)
+					newConst.comment = rowValues[3].ToString().Trim();
+
+				if (string.IsNullOrEmpty(newConst.name)
+				    || string.IsNullOrEmpty(newConst.valueType)
+				    || string.IsNullOrEmpty(newConst.value))
+					continue;
+
+				constants.Add(newConst);
+			}
+			constants.Sort();
+			return constants;
 		}
+
+#endregion
 	}
 }
