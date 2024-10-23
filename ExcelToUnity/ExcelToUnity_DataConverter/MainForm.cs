@@ -2833,11 +2833,11 @@ namespace ExcelToUnity_DataConverter
 				var excludedSheets = settings.GetExcludedSheets();
 				foreach (GoogleSheetsPath.Sheet item in googleSheetsPaths[i].sheets)
 				{
-					if (excludedSheets == null || !excludedSheets.Contains(item.name))
+					if (item.selected && excludedSheets == null || !excludedSheets.Contains(item.name))
 						sheets.Add(new Sheet(item.name));
 				}
 
-				// 1. Read and write ids
+				// 1. Build Ids list
 				foreach (var sheet in sheets)
 				{
 					var sheetInfo = sheetMetadata.Sheets.FirstOrDefault(s => s.Properties.Title == sheet.SheetName);
@@ -2848,11 +2848,7 @@ namespace ExcelToUnity_DataConverter
 					var columnCount = sheetInfo.Properties.GridProperties.ColumnCount;
 
 					// Construct the range dynamically based on row and column counts
-					var range = $"{sheet.SheetName}!A1:Z";
-					if (sheet.SheetName.EndsWith(CONSTANTS_SHEET))
-						range = $"{sheet.SheetName}!A1:D";
-					else
-						range = $"{sheet.SheetName}!A1:{Helper.GetColumnLetter(columnCount.Value)}";
+					var range = $"{sheet.SheetName}!A1:{Helper.GetColumnLetter(columnCount.Value)}";
 
 					// Create a request to get the sheet data
 					var request = service.Spreadsheets.Values.Get(googleSheetsPaths[i].id, range);
@@ -2863,17 +2859,21 @@ namespace ExcelToUnity_DataConverter
 					{
 						LoadSheetIDsValue(sheet.SheetName, values);
 					}
-					else if (sheet.SheetName.EndsWith(CONSTANTS_SHEET))
-					{
-						LoadSheetConstantsValue(sheet.SheetName, values);
-					}
 				}
 
+				// 2. Read and write other data type
 				foreach (var sheet in sheets)
 				{
+					if (sheet.SheetName.EndsWith(CONSTANTS_SHEET))
+					{
+						var range = $"{sheet.SheetName}!A1:D";
+						var request = service.Spreadsheets.Values.Get(googleSheetsPaths[i].id, range);
+						var response = request.Execute();
+						var values = response.Values;
+						LoadSheetConstantsValue(sheet.SheetName, values);
+					}
 					if (sheet.SheetName.StartsWith(LOCALIZATION_SHEET))
 					{
-						// Create a request to get the sheet data
 						var range = $"{sheet.SheetName}!A1:Q";
 						var request = service.Spreadsheets.Values.Get(googleSheetsPaths[i].id, range);
 						var response = request.Execute();
@@ -2883,9 +2883,8 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		private void LoadSheetConstantsValue(string sheetName, IList<IList<object>> values)
+		private void LoadSheetIDsValue(string sheetName, IList<IList<object>> values)
 		{
-
 			if (values != null && values.Count > 0)
 			{
 				Console.WriteLine($"Data from sheet {sheetName}:");
@@ -2902,8 +2901,9 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		private void LoadSheetIDsValue(string sheetName, IList<IList<object>> values)
+		private void LoadSheetConstantsValue(string sheetName, IList<IList<object>> values)
 		{
+
 			if (values != null && values.Count > 0)
 			{
 				Console.WriteLine($"Data from sheet {sheetName}:");
