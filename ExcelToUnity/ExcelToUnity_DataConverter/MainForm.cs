@@ -139,13 +139,6 @@ namespace ExcelToUnity_DataConverter
 
 #region Private
 
-		private void ClearCaches()
-		{
-			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
-			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
-			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
-		}
-
 		private string ConvertSheetToJson(IWorkbook pWorkBook, string pSheetName, string pFileName, bool pEncrypt, bool pWriteFile)
 		{
 			var fieldValueTypes = Helper.GetFieldValueTypes(pWorkBook, pSheetName);
@@ -1762,7 +1755,7 @@ namespace ExcelToUnity_DataConverter
 		/// </summary>
 		private void BtnExportJson_Click(object sender, EventArgs e)
 		{
-			ClearLog();
+			txtLog.Text = "";
 			
 			var allSheets = new List<string>();
 			if (m_workBook == null)
@@ -1852,10 +1845,10 @@ namespace ExcelToUnity_DataConverter
 		{
 			if (m_workBook == null)
 				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
+			
+			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
 			m_allIds = new Dictionary<string, int>();
-
-			ClearCaches();
-			ClearLog();
+			txtLog.Text = "";
 
 			foreach (var m in m_sheets)
 			{
@@ -1900,11 +1893,10 @@ namespace ExcelToUnity_DataConverter
 
 		private void BtnExportConstants_Click(object sender, EventArgs e)
 		{
+			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
 			if (m_workBook == null)
 				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
-
-			ClearCaches();
-			ClearLog();
+			txtLog.Text = "";
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
@@ -1962,12 +1954,11 @@ namespace ExcelToUnity_DataConverter
 			if (m_workBook == null)
 				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
 
+			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
 			m_localizedSheetsExported = new List<string>();
 			m_localizedLanguages = new List<string>();
 			m_characterMaps = new Dictionary<string, string>();
-
-			ClearCaches();
-			ClearLog();
+			txtLog.Text = "";
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
@@ -2030,7 +2021,6 @@ namespace ExcelToUnity_DataConverter
 				var tab = tabControl.SelectedTab;
 				if (tab.Name == "tpExportMultiExcels")
 				{
-					ClearCaches();
 					RefreshDtgExcelFiles();
 					ValidateAllPaths();
 				}
@@ -2072,9 +2062,11 @@ namespace ExcelToUnity_DataConverter
 			var bindingList = (BindingList<ExcelPath>)DtgFilePaths.DataSource;
 			Config.Settings.allFiles = bindingList.ToList();
 			Config.Save();
-			ClearCaches();
-			ClearLog();
-
+			
+			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
+			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
+			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
+			txtLog2.Text = "";
 			m_allIDsSorted = null;
 			m_allIds = new Dictionary<string, int>();
 			m_localizedSheetsExported = new List<string>();
@@ -2416,13 +2408,6 @@ namespace ExcelToUnity_DataConverter
 			Config.Save();
 		}
 
-		private void ClearLog()
-		{
-			txtLog.Text = "";
-			txtLog2.Text = "";
-			TxtLogExportingGoogleSheets.Text = "";
-		}
-
 		private void Log(LogType pLogType, string pLog)
 		{
 			var sb = new StringBuilder();
@@ -2436,9 +2421,13 @@ namespace ExcelToUnity_DataConverter
 			}
 			else
 				sb.Append("[+] ").Append(pLog);
-			txtLog.Text += sb.AppendLine();
-			txtLog2.Text = txtLog.Text;
-			TxtLogExportingGoogleSheets.Text = txtLog.Text;
+
+			if (tabMenu.SelectedTab.Name == "")
+				txtLog.Text += sb.AppendLine();
+			else if (tabMenu.SelectedTab.Name == "")
+				txtLog2.Text += sb.AppendLine();
+			else if (tabMenu.SelectedTab.Name == "")
+				TxtLogExportingGoogleSheets.Text += sb.AppendLine();
 		}
 
 #endregion
@@ -2607,7 +2596,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://github.com/nbhung100914/excel-to-unity/blob/main/Example.xlsx");
+			Process.Start("https://github.com/hnb-rabear/excel-to-unity-document/blob/main/Example.xlsx");
 		}
 
 		private void BtnSaveSettings_Click(object sender, EventArgs e)
@@ -2625,11 +2614,6 @@ namespace ExcelToUnity_DataConverter
 		}
 
 		private void DtgFilePaths_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
-
-		private void linkGit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			Process.Start("https://github.com/hnb-rabear/excel-to-unity/");
-		}
 
 #region Google Sheets
 
@@ -2727,8 +2711,11 @@ namespace ExcelToUnity_DataConverter
 				ApplicationName = APPLICATION_NAME,
 			});
 
-			ClearCaches();
-			ClearLog();
+			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
+			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
+			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
+			
+			TxtLogExportingGoogleSheets.Text = "";
 			m_allIDsSorted = null;
 			m_allIds = new Dictionary<string, int>();
 
@@ -3659,6 +3646,11 @@ namespace ExcelToUnity_DataConverter
 					languageTextDict = textDict,
 				});
 		}
-#endregion
+		#endregion
+
+		private void toolStripStatusLabel3_Click(object sender, EventArgs e)
+		{
+			Process.Start("https://github.com/hnb-rabear/excel-to-unity-document");
+		}
 	}
 }

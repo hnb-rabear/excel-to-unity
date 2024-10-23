@@ -77,3 +77,6 @@
 ## Version 1.4.9
 - Implemented localization loading via Addressable Asset system, improving flexibility and resource management
 - Refactored and cleaned up the codebase
+
+## Version 1.5.0
+- Supported Google Sheets
