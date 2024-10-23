@@ -1,9 +1,9 @@
 RULE AND RECOMMENDATION
 -----------------------
 ## 1. Sheet name
-- `%Constants%` exports to a [.cs] file containing Constants
-- `%IDs%` exports to a [.cs] file containing Constants
-- `%Localization%` exports to a json Localization file
+- `%Constants` (end with "Constants") exports to a [.cs] file containing Constants
+- `%IDs` (end with "IDs") exports to a [.cs] file containing Constants
+- `Localization%` (start with "Localization") exports to a json Localization file
 - In other cases, data in Json format will be exported to a [.txt] file.
 
 ## 2. Naming rules for constants in the IDs sheet

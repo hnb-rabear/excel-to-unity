@@ -1,5 +1,8 @@
 using ChoETL;
 using CsvHelper;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Sheets.v4;
+using Google.Apis.Util.Store;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPOI.SS.UserModel;
@@ -10,39 +13,11 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ExcelToUnity_DataConverter
 {
-    public class ID
-    {
-        public string Key { get; set; }
-        public int Value { get; set; }
-
-        public ID(string key, int value)
-        {
-            Key = key;
-            Value = value;
-        }
-    }
-
-    public class FieldValueType
-    {
-        public string name;
-        public string type;
-
-        public FieldValueType(string name)
-        {
-            this.name = name;
-        }
-
-        public FieldValueType(string name, string type)
-        {
-            this.name = name;
-            this.type = type;
-        }
-    }
-
     public static class HelperExtension
     {
         public static string ToCellString(this ICell cell, string pDefault = "")
@@ -114,21 +89,6 @@ namespace ExcelToUnity_DataConverter
             return false;
         }
 
-        //public static int GetLastCellNum(ISheet sheet)
-        //{
-        //    int lastCellNum = 0;
-        //    int totalRows = sheet.LastRowNum; 
-        //    if (totalRows > 4)
-        //        totalRows = 4;
-        //    for (int row = 0; row <= totalRows; row++)
-        //    {
-        //        IRow rowData = sheet.GetRow(row);
-        //        if (lastCellNum < rowData.LastCellNum)
-        //            lastCellNum = rowData.LastCellNum;
-        //    }
-        //    return lastCellNum;
-        //}
-
         /// <summary>
         /// Return the the name and type of Field of a column
         /// </summary>
@@ -178,23 +138,6 @@ namespace ExcelToUnity_DataConverter
                 string filedValue = fieldsValue[i].Trim();
                 bool isArray = fieldName.Contains("[]");
                 var fieldValueType = new FieldValueType(fieldName);
-
-                //bool linked = fieldName.Contains("&"); // if this field value is linked to another sheet
-                //if (linked)
-                //{
-                //    int ref1stIndex = fieldName.IndexOf("&");
-                //    string linkedSheet = fieldName.Substring(fieldName.IndexOf("&") + 1);
-                //    string linkedSheet_RefId = linkedSheet.Substring(linkedSheet.IndexOf("&") + 1);
-                //    linkedSheet = linkedSheet.Replace("&" + linkedSheet_RefId, "");
-                //    fieldName = fieldName.Substring(0, ref1stIndex);
-
-                //    if (!string.IsNullOrEmpty(linkedSheet) && !string.IsNullOrEmpty(linkedSheet_RefId))
-                //    {
-                //        fieldValueType.linkedSheet = linkedSheet;
-                //        fieldValueType.linkedSheet_RefId = linkedSheet_RefId;
-                //    }
-                //}
-
                 if (!isArray)
                 {
                     if (string.IsNullOrEmpty(filedValue))
@@ -269,14 +212,115 @@ namespace ExcelToUnity_DataConverter
             return fieldValueTypes;
         }
 
+        public static List<FieldValueType> GetFieldValueTypes(IList<IList<object>> pValues)
+        {
+            if (pValues == null || pValues.Count == 0)
+                return null;
+            var rowValues = pValues[0];
+            var fieldsName = new string[rowValues.Count];
+            var fieldsValue = new string[rowValues.Count];
+            for (int col = 0; col < rowValues.Count; col++)
+            {
+                var cell = rowValues[col].ToString().Trim();
+                if (!string.IsNullOrEmpty(cell))
+                    fieldsName[col] = cell.Replace(" ", "_");
+                else
+                    fieldsName[col] = "";
+                fieldsValue[col] = "";
+            }
+
+            for (int row = 1; row < pValues.Count; row++)
+            {
+                rowValues = pValues[row];
+                if (rowValues != null)
+                {
+                    //Find longest value, and use it to check value type
+                    for (int col = 0; col < fieldsName.Length; col++)
+                    {
+                        var cellStr = "";
+                        if (col < rowValues.Count)
+                            cellStr = rowValues[col].ToString();
+                        if (!string.IsNullOrEmpty(cellStr))
+                        {
+                            cellStr = cellStr.Trim();
+                            if (cellStr.Length > fieldsValue[col].Length)
+                                fieldsValue[col] = cellStr;
+                        }
+                    }
+                }
+            }
+
+            var fieldValueTypes = new List<FieldValueType>();
+            for (int i = 0; i < fieldsName.Length; i++)
+            {
+                string fieldName = fieldsName[i];
+                string filedValue = fieldsValue[i].Trim();
+                bool isArray = fieldName.Contains("[]");
+                var fieldValueType = new FieldValueType(fieldName);
+                if (!isArray)
+                {
+                    if (string.IsNullOrEmpty(filedValue))
+                        fieldValueType.type = "string";
+                    else
+                    {
+                        if (!filedValue.Contains(',') && decimal.TryParse(filedValue, out decimal _))
+                            fieldValueType.type = "number";
+                        else if (bool.TryParse(filedValue.ToLower(), out bool _))
+                            fieldValueType.type = "bool";
+                        else if (fieldName.Contains("{}"))
+                            fieldValueType.type = "json";
+                        else
+                            fieldValueType.type = "string";
+                    }
+                    fieldValueTypes.Add(fieldValueType);
+                }
+                else
+                {
+                    string[] values = SplitValueToArray(filedValue, false);
+                    int lenVal = 0;
+                    string longestValue = "";
+                    foreach (string val in values)
+                    {
+                        if (lenVal < val.Length)
+                        {
+                            lenVal = val.Length;
+                            longestValue = val;
+                        }
+                    }
+                    if (values.Length > 0)
+                    {
+                        if (string.IsNullOrEmpty(longestValue))
+                            fieldValueType.type = "array-string";
+                        else
+                        {
+                            if (!longestValue.Contains(',') && decimal.TryParse(longestValue, out decimal _))
+                                fieldValueType.type = "array-number";
+                            else if (bool.TryParse(longestValue.ToLower(), out bool _))
+                                fieldValueType.type = "array-bool";
+                            else
+                                fieldValueType.type = "array-string";
+                        }
+                        fieldValueTypes.Add(fieldValueType);
+                    }
+                    else
+                    {
+                        fieldValueType.type = "array-string";
+                        fieldValueTypes.Add(fieldValueType);
+                    }
+                }
+            }
+
+            return fieldValueTypes;
+        }
+        
         public static void WriteFile(string pFolderPath, string pFileName, string pContent)
         {
             if (!Directory.Exists(pFolderPath))
                 Directory.CreateDirectory(pFolderPath);
 
             string filePath = $"{pFolderPath}\\{pFileName}";
-            if (!File.Exists(filePath))
-                using (File.Create(filePath)) { }
+            if (!System.IO.File.Exists(filePath))
+                using (System.IO.File.Create(filePath)) { }
 
             using (var sw = new StreamWriter(filePath))
             {
@@ -287,7 +331,7 @@ namespace ExcelToUnity_DataConverter
 
         public static void WriteFile(string pFilePath, string pContent)
         {
-            if (!File.Exists(pFilePath))
+			if (!File.Exists(pFilePath))
                 using (File.Create(pFilePath)) { }
 
             using (var sw = new StreamWriter(pFilePath))
@@ -299,7 +343,7 @@ namespace ExcelToUnity_DataConverter
 
         public static string ConvertCSVToJson<T>(string pFilePath)
         {
-            using (TextReader fileReader = File.OpenText(pFilePath))
+            using (TextReader fileReader = System.IO.File.OpenText(pFilePath))
             {
                 var cultureInfo = new CultureInfo("es-ES", false);
                 var csvReader = new CsvReader(fileReader, cultureInfo);
@@ -456,7 +500,7 @@ namespace ExcelToUnity_DataConverter
             languageFilesBuilder.Append($"\tpublic static readonly string DefaultLanguage = \"{textDict.First().Key}\";");
 
             //Write file
-            string fileTemplateContent = File.ReadAllText(LOCALIZED_TEXT_TEMPLATE);
+            string fileTemplateContent = System.IO.File.ReadAllText(LOCALIZED_TEXT_TEMPLATE);
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_ENUM", idBuilder2.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
             fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
@@ -666,5 +710,47 @@ namespace ExcelToUnity_DataConverter
             }
             return null;
         }
+
+		private static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+		private static string CLIENT_ID = "871414866606-7b9687cp1ibjokihbbfl6nrjr94j14o8.apps.googleusercontent.com";
+		private static string CLIENT_SECRET = "zF_J3qHpzX5e8i2V-ZEvOdGV";
+		public static UserCredential AuthenticateGoogleStore()
+        {
+			UserCredential credential;
+
+			var clientSecrets = new ClientSecrets();
+			clientSecrets.ClientId = CLIENT_ID;
+			clientSecrets.ClientSecret = CLIENT_SECRET;
+
+			// The file token.json stores the user's access and refresh tokens, and is created
+			// automatically when the authorization flow completes for the first time.
+			credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+				clientSecrets,
+				Scopes,
+				"user",
+				CancellationToken.None,
+				new FileDataStore(Config.GetSaveDirectory(), true)).Result;
+
+			Console.WriteLine("Credential file saved to: " + Config.GetSaveDirectory());
+            return credential;
+		}
+
+		/// <summary>
+		/// Helper method to convert column number to letter (e.g., 1 -> A, 2 -> B, ..., 26 -> Z, 27 -> AA)
+		/// </summary>
+		public static string GetColumnLetter(int columnNumber)
+		{
+			int dividend = columnNumber;
+			string columnLetter = string.Empty;
+
+			while (dividend > 0)
+			{
+				int modulo = (dividend - 1) % 26;
+				columnLetter = (char)(65 + modulo) + columnLetter; // 65 is the ASCII value for 'A'
+				dividend = (dividend - modulo) / 26;
+			}
+
+			return columnLetter;
+		}
 	}
 }
