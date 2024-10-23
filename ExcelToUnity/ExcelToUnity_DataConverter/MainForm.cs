@@ -57,7 +57,7 @@ namespace ExcelToUnity_DataConverter
 			public string GetJsonString()
 			{
 				var list = new List<string>();
-				list.Add(($"\"id\":{id}"));
+				list.Add($"\"id\":{id}");
 				if (value != 0) list.Add($"\"value\":{value}");
 				if (increase != 0) list.Add($"\"increase\":{increase}");
 				if (unlock != 0) list.Add($"\"unlock\":{unlock}");
@@ -144,7 +144,6 @@ namespace ExcelToUnity_DataConverter
 			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
 			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
 			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
-			ClearLog();
 		}
 
 		private string ConvertSheetToJson(IWorkbook pWorkBook, string pSheetName, string pFileName, bool pEncrypt, bool pWriteFile)
@@ -218,7 +217,7 @@ namespace ExcelToUnity_DataConverter
 						if (cellKey != null)
 						{
 							int index = col / 3;
-							var sb = (index < idsBuilders.Count) ? idsBuilders[index] : new StringBuilder();
+							var sb = index < idsBuilders.Count ? idsBuilders[index] : new StringBuilder();
 							if (!idsBuilders.Contains(sb))
 							{
 								idsBuilders.Add(sb);
@@ -257,9 +256,13 @@ namespace ExcelToUnity_DataConverter
 										sb.Append(" /*").Append(cellComment).Append("*/");
 								}
 
-								if (m_allIds.ContainsKey(key))
-									MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-								m_allIds.AddOrUpdate(key, value);
+								if (m_allIds.TryGetValue(key, out int val))
+								{
+									if (val != value)
+										MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+								}
+								else
+									m_allIds.AddOrUpdate(key, value);
 							}
 							//Header row
 							else
@@ -487,7 +490,6 @@ namespace ExcelToUnity_DataConverter
 				}
 			}
 			constants.Sort();
-
 			BuildContentOfFileConstants(constants, sheetName);
 		}
 
@@ -682,7 +684,6 @@ namespace ExcelToUnity_DataConverter
 							rowContent.fieldNames.Add(fieldName);
 							rowContent.fieldValues.Add(fieldValue);
 						}
-						rowContent.fieldCells.Add(cell);
 					}
 					rowContents.Add(rowContent);
 				}
@@ -705,22 +706,6 @@ namespace ExcelToUnity_DataConverter
 						continue;
 					string fieldName = rowContent.fieldNames[j];
 					string fieldValue = rowContent.fieldValues[j];
-					if (rowContent.fieldCells[j] != null && rowContent.fieldCells[j].CellType == CellType.Formula)
-					{
-						var cell = rowContent.fieldCells[j];
-						switch (cell.CachedFormulaResultType)
-						{
-							case CellType.Numeric:
-								fieldValue = cell.NumericCellValue.ToString(CultureInfo.InvariantCulture);
-								break;
-							case CellType.String:
-								fieldValue = cell.StringCellValue;
-								break;
-							case CellType.Boolean:
-								fieldValue = cell.BooleanCellValue.ToString();
-								break;
-						}
-					}
 					bool isAttribute = fieldName.ToLower().Contains("attribute") && fieldName.Length <= 11;
 
 					//some weird situation, data has attribute field, therefore Converter will confuse it with attrbiute from Attribute System
@@ -849,7 +834,7 @@ namespace ExcelToUnity_DataConverter
 						bool importantField = unminifiedFields.Contains(fieldName.Replace("[]", "").ToLower());
 
 						//Ignore empty field or field have value which equal 0
-						if (string.IsNullOrEmpty(fieldValue) || (fieldValue == "0" && !importantField))
+						if (string.IsNullOrEmpty(fieldValue) || fieldValue == "0" && !importantField)
 							continue;
 
 						bool nestedFiled = fieldName.Contains(".");
@@ -1222,24 +1207,6 @@ namespace ExcelToUnity_DataConverter
 			DtgFilePaths.AutoResizeColumns();
 		}
 
-		//private void RefreshDtgFiles()
-		//{
-		//    DtgFilePaths.DataSource = null;
-		//    DtgFilePaths.Rows.Clear();
-		//    DtgFilePaths.Refresh();
-		//    for (int i = Config.Settings.allFiles.Count - 1; i >= 0; i--)
-		//    {
-		//        //Check if file exist
-		//        if (!File.Exists(Config.Settings.allFiles[i].path))
-		//            Config.Settings.allFiles.RemoveAt(i);
-		//    }
-		//    DtgFilePaths.DataSource = Config.Settings.allFiles;
-		//    DtgFilePaths.AutoResizeColumns();
-		//}
-
-		/// <summary>
-		/// Must be called after init data files list
-		/// </summary>
 		private void InitExcels()
 		{
 			DtgFilePaths.AutoGenerateColumns = false;
@@ -1269,7 +1236,7 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		private void LoadLocalizationSheet(IWorkbook pWorkBook, string pSheetName)
+		private void LoadSheetLocalizationData(IWorkbook pWorkBook, string pSheetName)
 		{
 			var sheet = pWorkBook.GetSheet(pSheetName);
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
@@ -1304,10 +1271,7 @@ namespace ExcelToUnity_DataConverter
 						if (col == 0 && row > 0)
 						{
 							if (string.IsNullOrEmpty(fieldValue))
-							{
-								//MessageBox.Show(string.Format("Sheet {0}: IdString can not be empty!", pSheetName), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								break;
-							}
 							idStrings.Add(fieldValue);
 						}
 						//relativeId
@@ -1798,6 +1762,8 @@ namespace ExcelToUnity_DataConverter
 		/// </summary>
 		private void BtnExportJson_Click(object sender, EventArgs e)
 		{
+			ClearLog();
+			
 			var allSheets = new List<string>();
 			if (m_workBook == null)
 				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
@@ -1889,6 +1855,7 @@ namespace ExcelToUnity_DataConverter
 			m_allIds = new Dictionary<string, int>();
 
 			ClearCaches();
+			ClearLog();
 
 			foreach (var m in m_sheets)
 			{
@@ -1937,6 +1904,7 @@ namespace ExcelToUnity_DataConverter
 				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
 
 			ClearCaches();
+			ClearLog();
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
@@ -1999,12 +1967,13 @@ namespace ExcelToUnity_DataConverter
 			m_characterMaps = new Dictionary<string, string>();
 
 			ClearCaches();
+			ClearLog();
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
 				if (m_sheets[i].Check && m_sheets[i].SheetName.StartsWith(LOCALIZATION_SHEET))
 				{
-					LoadLocalizationSheet(m_workBook, m_sheets[i].SheetName);
+					LoadSheetLocalizationData(m_workBook, m_sheets[i].SheetName);
 
 					if (m_localizationsDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateLocalizations)
 					{
@@ -2104,6 +2073,7 @@ namespace ExcelToUnity_DataConverter
 			Config.Settings.allFiles = bindingList.ToList();
 			Config.Save();
 			ClearCaches();
+			ClearLog();
 
 			m_allIDsSorted = null;
 			m_allIds = new Dictionary<string, int>();
@@ -2111,7 +2081,7 @@ namespace ExcelToUnity_DataConverter
 			m_localizedLanguages = new List<string>();
 			m_characterMaps = new Dictionary<string, string>();
 
-			//Process IDs sheet first
+			//Process IDs sheets first
 			foreach (var file in Config.Settings.allFiles)
 			{
 				var workBook = Helper.LoadWorkBook(file.path);
@@ -2204,17 +2174,16 @@ namespace ExcelToUnity_DataConverter
 					}
 				}
 
-				//Load and write localization
+				//Load and write localizations
 				for (int i = 0; i < sheets.Count; i++)
 				{
 					if (sheets[i].SheetName.StartsWith(LOCALIZATION_SHEET))
 					{
-						LoadLocalizationSheet(workBook, sheets[i].SheetName);
+						LoadSheetLocalizationData(workBook, sheets[i].SheetName);
 
 						if (m_localizationsDict.ContainsKey(sheets[i].SheetName) && Config.Settings.seperateLocalizations)
 						{
 							var builder = m_localizationsDict[sheets[i].SheetName];
-							//CreateLocalizationFile(builder.idsString, builder.languageTextDict, sheets[i].SheetName);
 							CreateLocalizationFileV2(builder.idsString, builder.languageTextDict, sheets[i].SheetName);
 							m_localizedSheetsExported.Add(sheets[i].SheetName);
 						}
@@ -2222,9 +2191,9 @@ namespace ExcelToUnity_DataConverter
 				}
 			}
 
+			//Create file contain all IDs
 			if (!Config.Settings.seperateIDs)
 			{
-				//Create IDs comprehensively
 				var builder = new StringBuilder();
 				int count = 0;
 				int length = m_idsBuilderDict.Count;
@@ -2239,9 +2208,9 @@ namespace ExcelToUnity_DataConverter
 				Log(LogType.Message, "Export IDs successfully!");
 			}
 
+			//Create file contain all Constants
 			if (!Config.Settings.seperateConstants)
 			{
-				//Create Constants comprehensively
 				var builder = new StringBuilder();
 				int count = 0;
 				int length = m_constantsBuilderDict.Count;
@@ -2255,9 +2224,9 @@ namespace ExcelToUnity_DataConverter
 				CreateFileConstants(builder.ToString(), "Constants");
 			}
 
+			//Create file contain all Localizations
 			if (!Config.Settings.seperateLocalizations)
 			{
-				//Create Localization comprehensively
 				var localizationBuilder = new LocalizationBuilder();
 				foreach (var b in m_localizationsDict)
 				{
@@ -2271,7 +2240,6 @@ namespace ExcelToUnity_DataConverter
 						localizationBuilder.languageTextDict[language].AddRange(texts);
 					}
 				}
-				//CreateLocalizationFile(localizationBuilder.idsString, localizationBuilder.languageTextDict, "Localization");
 				CreateLocalizationFileV2(localizationBuilder.idsString, localizationBuilder.languageTextDict, "Localization");
 				m_localizedSheetsExported.Add("Localization");
 			}
@@ -2284,8 +2252,10 @@ namespace ExcelToUnity_DataConverter
 					Helper.WriteFile(Config.Settings.outputDataFilePath, $"characters_map_{map.Key}" + ".txt", map.Value);
 			}
 
-			//Write localization manager file
+			//Create localization manager file
 			CreateLocalizationsManagerFile();
+			
+			Log(LogType.Message, "Done!");
 		}
 
 		private void DtgFilePaths_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -2468,6 +2438,7 @@ namespace ExcelToUnity_DataConverter
 				sb.Append("[+] ").Append(pLog);
 			txtLog.Text += sb.AppendLine();
 			txtLog2.Text = txtLog.Text;
+			TxtLogExportingGoogleSheets.Text = txtLog.Text;
 		}
 
 #endregion
@@ -2490,7 +2461,6 @@ namespace ExcelToUnity_DataConverter
 		{
 			public List<string> fieldNames = new List<string>();
 			public List<string> fieldValues = new List<string>();
-			public List<ICell> fieldCells = new List<ICell>();
 		}
 
 #endregion
@@ -2758,6 +2728,7 @@ namespace ExcelToUnity_DataConverter
 			});
 
 			ClearCaches();
+			ClearLog();
 			m_allIDsSorted = null;
 			m_allIds = new Dictionary<string, int>();
 
@@ -2768,7 +2739,7 @@ namespace ExcelToUnity_DataConverter
 			var settings = Config.Settings;
 			var googleSheetsPaths = Config.Settings.googleSheetsPaths;
 
-			// 1. Build Ids list
+			//Load and write Ids first
 			foreach (var googleSheets in googleSheetsPaths)
 			{
 				// Get the sheet metadata to determine its dimensions
@@ -2792,17 +2763,11 @@ namespace ExcelToUnity_DataConverter
 					var response = request.Execute();
 					var values = response.Values;
 
-					var ids = LoadSheetIDsValue(sheet.name, values);
-					foreach (var id in ids)
-					{
-						if (m_allIds.ContainsKey(id.Key))
-							MessageBox.Show($@"ID {id} is duplicated in sheet {sheet.name}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						m_allIds.AddOrUpdate(id.Key, id.Value);
-					}
+					// Build contents of file IDs and export to file if seperateIDs = true
+					if (BuildContentOfFileIDs(sheet.name, values) && Config.Settings.seperateIDs)
+						CreateFileIDs(sheet.name, m_idsBuilderDict[sheet.name].ToString());
 				}
 			}
-
-			m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
 
 			// 2. Read and write other data type
 			foreach (var googleSheets in googleSheetsPaths)
@@ -2815,31 +2780,145 @@ namespace ExcelToUnity_DataConverter
 						sheets.Add(sheet);
 				}
 
+				// Get the sheet metadata to determine its dimensions
+				var ggSheetsMetadata = service.Spreadsheets.Get(googleSheets.id).Execute();
+				var allJsons = new Dictionary<string, string>();
 				foreach (var sheet in sheets)
 				{
+					var sheetInfo = ggSheetsMetadata.Sheets.FirstOrDefault(s => s.Properties.Title == sheet.name);
+					if (sheetInfo == null)
+						continue;
+
+					var columnCount = sheetInfo.Properties.GridProperties.ColumnCount;
+
+					// Construct the range dynamically based on row and column counts
+					var range = $"{sheet.name}!A1:{Helper.GetColumnLetter(columnCount.Value)}";
+					if (sheet.name.EndsWith(CONSTANTS_SHEET))
+						range = $"{sheet.name}!A1:D";
+
+					// Create a request to get the sheet data
+					var request = service.Spreadsheets.Values.Get(googleSheets.id, range);
+					var response = request.Execute();
+					var values = response.Values;
+					
+					//Load and write json file
+					if (IsJsonSheet(sheet.name))
+					{
+						string fileName = sheet.name.Trim().Replace(" ", "_");
+						string json = ConvertSheetToJson(values, sheet.name, fileName, Config.Settings.encryption, !Config.Settings.mergeJsonsIntoSingleJson);
+						if (Config.Settings.mergeJsonsIntoSingleJson)
+						{
+							if (allJsons.ContainsKey(fileName))
+							{
+								Log(LogType.Error, $"Can not merge sheet {fileName}, because key {fileName} is already exists!");
+								continue;
+							}
+							allJsons.Add(fileName, json);
+						}
+					}
+
+					if (Config.Settings.mergeJsonsIntoSingleJson)
+					{
+						//Build json file for all jsons content
+						string mergedJson = JsonConvert.SerializeObject(allJsons);
+						string mergedFileName = ggSheetsMetadata.Properties.Title;
+						Helper.WriteFile(Config.Settings.outputDataFilePath, mergedFileName + ".txt", mergedJson);
+
+						if (Config.Settings.encryption)
+							Log(LogType.Message, $"Exported all Data Tables {mergedFileName} as encrypted JSON data.");
+						else
+							Log(LogType.Message, $"Exported all Data Tables {mergedFileName} as JSON data.");
+					}
+					
+					//Load and write constants
 					if (sheet.name.EndsWith(CONSTANTS_SHEET))
 					{
-						var range = $"{sheet.name}!A1:D";
-						var request = service.Spreadsheets.Values.Get(googleSheets.id, range);
-						var response = request.Execute();
-						var values = response.Values;
-						var constants = LoadSheetConstantsValue(sheet.name, values);
-						BuildContentOfFileConstants(constants, sheet.name);
+						LoadSheetConstantsData(sheet.name, values);
+						
+						if (m_constantsBuilderDict.ContainsKey(sheet.name) && Config.Settings.seperateConstants)
+							CreateFileConstants(m_constantsBuilderDict[sheet.name].ToString(), sheet.name);
 					}
-					else if (sheet.name.StartsWith(LOCALIZATION_SHEET))
+					
+					//Load and write localizations
+					if (sheet.name.StartsWith(LOCALIZATION_SHEET))
 					{
-						var range = $"{sheet.name}!A1:Q";
-						var request = service.Spreadsheets.Values.Get(googleSheets.id, range);
-						var response = request.Execute();
-						var values = response.Values;
+						LoadSheetLocalizationData(values, sheet.name);
+						
+						if (m_localizationsDict.ContainsKey(sheet.name) && Config.Settings.seperateLocalizations)
+						{
+							var builder = m_localizationsDict[sheet.name];
+							CreateLocalizationFileV2(builder.idsString, builder.languageTextDict, sheet.name);
+							m_localizedSheetsExported.Add(sheet.name);
+						}
 					}
 				}
 			}
+
+			//Create file contain all IDs
+			if (!Config.Settings.seperateIDs)
+			{
+				var builder = new StringBuilder();
+				int count = 0;
+				int length = m_idsBuilderDict.Count;
+				foreach (var b in m_idsBuilderDict)
+				{
+					builder.Append(b.Value);
+					if (count < length - 1)
+						builder.AppendLine();
+					count++;
+				}
+				CreateFileIDs("IDs", builder.ToString());
+				Log(LogType.Message, "Export IDs successfully!");
+			}
 			
-			//Build IDs Files
-			//Build Constants Files
-			//Build Json Files
-			//Build Localization Files
+			//Create file contain all Constants
+			if (!Config.Settings.seperateConstants)
+			{
+				var builder = new StringBuilder();
+				int count = 0;
+				int length = m_constantsBuilderDict.Count;
+				foreach (var b in m_constantsBuilderDict)
+				{
+					builder.Append(b.Value);
+					if (count < length - 1)
+						builder.AppendLine();
+					count++;
+				}
+				CreateFileConstants(builder.ToString(), "Constants");
+			}
+			
+			//Create file contain all Localizations
+			if (!Config.Settings.seperateLocalizations)
+			{
+				var localizationBuilder = new LocalizationBuilder();
+				foreach (var b in m_localizationsDict)
+				{
+					localizationBuilder.idsString.AddRange(b.Value.idsString);
+					foreach (var t in b.Value.languageTextDict)
+					{
+						var language = t.Key;
+						var texts = t.Value;
+						if (!localizationBuilder.languageTextDict.ContainsKey(language))
+							localizationBuilder.languageTextDict.Add(language, new List<string>());
+						localizationBuilder.languageTextDict[language].AddRange(texts);
+					}
+				}
+				CreateLocalizationFileV2(localizationBuilder.idsString, localizationBuilder.languageTextDict, "Localization");
+				m_localizedSheetsExported.Add("Localization");
+			}
+			
+			//Create characters maps
+			if (m_characterMaps != null && m_characterMaps.Count > 0)
+			{
+				var maps = GenereteCharacterMaps(m_characterMaps);
+				foreach (var map in maps)
+					Helper.WriteFile(Config.Settings.outputDataFilePath, $"characters_map_{map.Key}" + ".txt", map.Value);
+			}
+			
+			//Create localization manager file
+			CreateLocalizationsManagerFile();
+			
+			Log(LogType.Message, "Done!");
 		}
 
 		private Dictionary<string, int> LoadSheetIDsValue(string sheetName, IList<IList<object>> values)
@@ -2875,12 +2954,12 @@ namespace ExcelToUnity_DataConverter
 			return result;
 		}
 
-		private List<ConstantBuilder> LoadSheetConstantsValue(string sheetName, IList<IList<object>> values)
+		private void LoadSheetConstantsData(string sheetName, IList<IList<object>> values)
 		{
 			if (values == null || values.Count <= 0)
 			{
 				Console.WriteLine($"No data found in sheet {sheetName}.");
-				return null;
+				return;
 			}
 
 			var constants = new List<ConstantBuilder>();
@@ -2909,9 +2988,677 @@ namespace ExcelToUnity_DataConverter
 				constants.Add(newConst);
 			}
 			constants.Sort();
-			return constants;
+			BuildContentOfFileConstants(constants, sheetName);
 		}
 
+		private bool BuildContentOfFileIDs(string pSheetName, IList<IList<object>> pValues)
+		{
+			if (pValues == null || pValues.Count <= 0)
+			{
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty");
+				return false;
+			}
+
+			var idsBuilders = new List<StringBuilder>();
+			var idsEnumBuilders = new List<StringBuilder>();
+			var idsEnumBuilderNames = new List<string>();
+			var idsEnumBuilderIndexes = new List<int>();
+			for (int row = 0; row < pValues.Count; row++)
+			{
+				var rowValues = pValues[row];
+				for (int col = 0; col <= rowValues.Count; col += 3)
+				{
+					var key = rowValues[col].ToString().Trim();
+					if (string.IsNullOrEmpty(key))
+						continue;
+					int index = col / 3;
+					var sb = index < idsBuilders.Count ? idsBuilders[index] : new StringBuilder();
+					if (!idsBuilders.Contains(sb))
+					{
+						idsBuilders.Add(sb);
+					}
+					//Values row
+					if (row > 0)
+					{
+						if (string.IsNullOrEmpty(key))
+							continue;
+
+						//Value
+						var valueStr = rowValues[col + 1].ToString().Trim();
+						if (string.IsNullOrEmpty(valueStr))
+						{
+							MessageBox.Show($@"Sheet {pSheetName}: Key {key} doesn't have value!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							continue;
+						}
+						
+						int.TryParse(valueStr, out int value);
+						sb.Append("\tpublic const int ");
+						sb.Append(key);
+						sb.Append(" = ");
+						sb.Append(value);
+						sb.Append(";");
+
+						//Comment
+						if (col + 2 < rowValues.Count)
+						{
+							var cellComment = rowValues[col + 2].ToString();
+							if (!string.IsNullOrEmpty(cellComment.Trim()))
+								sb.Append(" /*").Append(cellComment).Append("*/");
+						}
+
+						if (m_allIds.ContainsKey(key))
+							MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						m_allIds.AddOrUpdate(key, value);
+					}
+					//Header row
+					else
+					{
+						if (key.Contains("[enum]"))
+						{
+							idsEnumBuilders.Add(sb);
+							idsEnumBuilderNames.Add(key.Replace("[enum]", ""));
+							idsEnumBuilderIndexes.Add(index);
+						}
+
+						sb.Append("\t#region ")
+							.Append(key);
+					}
+					sb.Append(Environment.NewLine);
+				}
+			}
+
+			m_allIds = m_allIds.OrderBy(m => m.Key).ToDictionary(x => x.Key, x => x.Value);
+
+			//Build Ids Enum
+			if (idsEnumBuilders.Count > 0)
+			{
+				for (int i = 0; i < idsEnumBuilders.Count; i++)
+				{
+					var str = idsEnumBuilders[i].ToString()
+						.Replace("\r\n\tpublic const int ", "")
+						.Replace("\r\n", "")
+						.Replace(";", ",").Trim();
+					str = str.Remove(str.Length - 1);
+					var enumIndex = str.IndexOf("[enum]", StringComparison.Ordinal);
+					str = str.Remove(0, enumIndex + 6).Replace(",", ", ");
+
+					string enumName = idsEnumBuilderNames[i].Replace(" ", "_");
+
+					var enumBuilder = new StringBuilder();
+					enumBuilder.Append("\tpublic enum ")
+						.Append(enumName)
+						.Append(" { ")
+						.Append(str)
+						.Append(" }\n");
+					if (Config.Settings.keepOnlyEnumAsIDs)
+					{
+						var tempSb = new StringBuilder();
+						tempSb.Append("\t#region ")
+							.Append(enumName)
+							.Append(Environment.NewLine)
+							.Append(enumBuilder);
+						idsBuilders[idsEnumBuilderIndexes[i]] = tempSb;
+					}
+					else
+						idsBuilders[idsEnumBuilderIndexes[i]].Append(enumBuilder);
+				}
+			}
+
+			//Add end region and add to final dictionary
+			var builder = new StringBuilder();
+			for (int i = 0; i < idsBuilders.Count; i++)
+			{
+				string str = idsBuilders[i].ToString();
+				if (!string.IsNullOrEmpty(str))
+				{
+					builder.Append(str);
+					builder.Append("\t#endregion");
+					if (i < idsBuilders.Count - 1)
+						builder.Append(Environment.NewLine);
+				}
+			}
+
+			if (m_idsBuilderDict.ContainsKey(pSheetName))
+			{
+				m_idsBuilderDict[pSheetName].AppendLine();
+				m_idsBuilderDict[pSheetName].Append(builder);
+			}
+			else
+				m_idsBuilderDict.Add(pSheetName, builder);
+
+			return true;
+		}
+
+		private string ConvertSheetToJson(IList<IList<object>> pValues, string pSheetName, string pFileName, bool pEncrypt, bool pWriteFile)
+		{
+			var fieldValueTypes = Helper.GetFieldValueTypes(pValues);
+			if (fieldValueTypes == null)
+				return "{}";
+			return ConvertSheetToJson(pValues, pSheetName, pFileName, fieldValueTypes, pEncrypt, pWriteFile);
+		}
+		
+		private string ConvertSheetToJson(IList<IList<object>> pValues, string pSheetName, string pOutputFile, List<FieldValueType> pFieldValueTypes, bool pEncrypt, bool pAutoWriteFile)
+		{
+			var unminifiedFields = Config.Settings.GetUnminizedFields();
+
+			if (pValues == null || pValues.Count == 0)
+			{
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
+				return null;
+			}
+
+			int lastCellNum = 0;
+			string[] fields = null;
+			bool[] validCols = null;
+			var rowContents = new List<RowContent>();
+
+			for (int row = 0; row < pValues.Count; row++)
+			{
+				var rowValues = pValues[row];
+				if (rowValues == null || rowValues.Count == 0)
+					continue;
+
+				if (row == 0)
+				{
+					lastCellNum = rowValues.Count;
+					fields = new string[lastCellNum];
+					validCols = new bool[lastCellNum];
+
+					for (int col = 0; col < lastCellNum; col++)
+					{
+						var cellValue = rowValues[col].ToString().Trim();
+						if (!string.IsNullOrEmpty(cellValue) && !cellValue.Contains("[x]"))
+						{
+							validCols[col] = true;
+							fields[col] = cellValue.Trim();
+						}
+						else
+						{
+							validCols[col] = false;
+							fields[col] = "";
+						}
+					}
+				}
+				else
+				{
+					var rowContent = new RowContent();
+					for (int col = 0; col < lastCellNum; col++)
+					{
+						var cellValue = "";
+						if (col < rowValues.Count)
+							cellValue = rowValues[col].ToString().Trim();
+						if (fields != null)
+						{
+							string fieldName = fields[col];
+							string fieldValue = cellValue;
+							fieldName = fieldName.Replace(" ", "_");
+							rowContent.fieldNames.Add(fieldName);
+							rowContent.fieldValues.Add(fieldValue);
+						}
+					}
+					rowContents.Add(rowContent);
+				}
+			}
+
+			string content = "[";
+			for (int i = 0; i < rowContents.Count; i++)
+			{
+				var rowContent = rowContents[i];
+
+				var attributes = new List<Att>();
+				string fieldContentStr = "";
+				bool rowIsEmpty = true; //Because Loading sheet sometime includes the empty rows, I don't know why it happen
+				var nestedObjects = new List<JObject>();
+
+				for (int j = 0; j < rowContent.fieldNames.Count; j++)
+				{
+					bool valid = validCols[j];
+					if (!valid)
+						continue;
+					string fieldName = rowContent.fieldNames[j];
+					string fieldValue = rowContent.fieldValues[j];
+					bool isAttribute = fieldName.ToLower().Contains("attribute") && fieldName.Length <= 11;
+
+					//some weird situation, data has attribute field, therefore Converter will confuse it with attrbiute from Attribute System
+					//To fix this problem I have to add one more condition, the next field must be value
+					if (isAttribute)
+					{
+						if (j + 1 >= rowContent.fieldNames.Count)
+							isAttribute = false;
+						string nextFieldName = rowContent.fieldNames[j + 1];
+						if (!nextFieldName.ToLower().Contains("value") || nextFieldName.Length > 9)
+							isAttribute = false;
+					}
+
+					if (!string.IsNullOrEmpty(fieldValue))
+						rowIsEmpty = false;
+
+					//Attributes System includes fields: attribute, value/value[], increase/increase[], max/max[], unlock/unlock[]
+					//All these fields must lie on last of data sheet
+					if (isAttribute)
+					{
+						var att = new Att();
+						att.id = GetReferenceId(fieldValue, out bool found);
+						att.idString = fieldValue;
+						while (j < rowContent.fieldNames.Count - 1)
+						{
+							fieldValue = rowContent.fieldValues[j + 1].Trim();
+							fieldName = rowContent.fieldNames[j + 1].Trim();
+							if (fieldName.ToLower().Contains("unlock"))
+							{
+								bool isArray = fieldName.Contains("[]");
+								j++;
+								if (!isArray)
+								{
+									if (!float.TryParse(fieldValue, out att.unlock))
+										att.unlock = GetReferenceId(fieldValue, out found);
+								}
+								else
+								{
+									string[] inValues = Helper.SplitValueToArray(fieldValue, false);
+									float[] outValues = new float[inValues.Length];
+									for (int t = 0; t < inValues.Length; t++)
+									{
+										if (!float.TryParse(inValues[t].Trim(), out outValues[t]))
+											outValues[t] = GetReferenceId(inValues[t].Trim(), out found);
+									}
+									att.unlocks = outValues;
+								}
+							}
+							else if (fieldName.ToLower().Contains("increase"))
+							{
+								bool isArray = fieldName.Contains("[]");
+								j++;
+								if (!isArray)
+								{
+									if (!float.TryParse(fieldValue, out att.increase))
+										att.increase = GetReferenceId(fieldValue, out found);
+								}
+								else
+								{
+									string[] inValues = Helper.SplitValueToArray(fieldValue, false);
+									float[] outValues = new float[inValues.Length];
+									for (int t = 0; t < inValues.Length; t++)
+									{
+										if (!float.TryParse(inValues[t].Trim(), out outValues[t]))
+											outValues[t] = GetReferenceId(inValues[t].Trim(), out found);
+									}
+									att.increases = outValues;
+								}
+							}
+							else if (fieldName.ToLower().Contains("value"))
+							{
+								bool isArray = fieldName.Contains("[]"); //If attribute value is array
+								j++;
+								if (!isArray)
+								{
+									if (!float.TryParse(fieldValue, out att.value))
+										att.value = GetReferenceId(fieldValue, out found);
+									if (!found)
+										att.valueString = fieldValue;
+								}
+								else
+								{
+									string[] inValues = Helper.SplitValueToArray(fieldValue, false);
+									float[] outValues = new float[inValues.Length];
+									for (int t = 0; t < inValues.Length; t++)
+									{
+										if (!float.TryParse(inValues[t].Trim(), out outValues[t]))
+											outValues[t] = GetReferenceId(inValues[t].Trim(), out found);
+									}
+									if (outValues.Length == 1 && outValues[0] == 0)
+										outValues = null;
+									att.values = outValues;
+								}
+							}
+							else if (fieldName.ToLower().Contains("max"))
+							{
+								bool isArray = fieldName.Contains("[]");
+								j++;
+								if (!isArray)
+								{
+									if (!float.TryParse(fieldValue, out att.max))
+										att.max = GetReferenceId(fieldValue, out found);
+								}
+								else
+								{
+									string[] inValues = Helper.SplitValueToArray(fieldValue, false);
+									float[] outValues = new float[inValues.Length];
+									for (int t = 0; t < inValues.Length; t++)
+									{
+										if (!float.TryParse(inValues[t].Trim(), out outValues[t]))
+											outValues[t] = GetReferenceId(inValues[t].Trim(), out found);
+									}
+									att.maxes = outValues;
+								}
+							}
+							else
+								break;
+						}
+						if (att.idString != "ATT_NULL" && !string.IsNullOrEmpty(att.idString))
+						{
+							attributes.Add(att);
+						}
+					}
+					else
+					{
+						bool importantField = unminifiedFields.Contains(fieldName.Replace("[]", "").ToLower());
+
+						//Ignore empty field or field have value which equal 0
+						if (string.IsNullOrEmpty(fieldValue) || fieldValue == "0" && !importantField)
+							continue;
+
+						bool nestedFiled = fieldName.Contains(".");
+						foreach (var field in pFieldValueTypes)
+						{
+							//Find referenced Id in string and convert it to number
+							if (field.name == fieldName)
+							{
+								string fieldType = field.type;
+								bool referencedId = false;
+								if (fieldType == "string") //Find and replace string value with referenced ID
+								{
+									if (CheckExistId(fieldValue))
+									{
+										fieldType = "number";
+										referencedId = true;
+									}
+									else if (int.TryParse(fieldValue, out int _))
+									{
+										fieldType = "number";
+										referencedId = true;
+									}
+								}
+								if (fieldType == "array-string") //Find and replace string value with referenced ID
+								{
+									string[] arrayValue = Helper.SplitValueToArray(fieldValue, false);
+									foreach (string val in arrayValue)
+									{
+										if (CheckExistId(val.Trim()))
+										{
+											fieldType = "array-number";
+											referencedId = true;
+											break;
+										}
+									}
+								}
+
+								var jsonObject = new JObject();
+								switch (fieldType)
+								{
+									case "number":
+										if (referencedId)
+										{
+											int intValue = GetReferenceId(fieldValue, out bool _);
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{intValue},";
+											jsonObject[fieldName] = intValue;
+										}
+										else
+										{
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{fieldValue},";
+											jsonObject[fieldName] = fieldValue;
+										}
+										break;
+
+									case "string":
+										fieldValue = fieldValue.Replace("\n", "\\n");
+										fieldValue = fieldValue.Replace("\"", "\\\"");
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":\"{fieldValue}\",";
+										else
+											jsonObject[fieldName] = fieldValue;
+										break;
+
+									case "bool":
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{fieldValue.ToLower()},";
+										else
+											jsonObject[fieldName] = fieldValue;
+										break;
+
+									case "array-number":
+									{
+										fieldName = fieldName.Replace("[]", "");
+										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+										var arrayStr = "[";
+										for (int k = 0; k < arrayValue.Length; k++)
+										{
+											string val = arrayValue[k].Trim();
+											if (referencedId)
+												val = GetReferenceId(val, out bool _).ToString();
+											if (k == 0) arrayStr += val;
+											else arrayStr += "," + val;
+										}
+										arrayStr += "]";
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+										else
+										{
+											int[] array = JsonConvert.DeserializeObject<int[]>(arrayStr);
+											jsonObject[fieldName] = JArray.FromObject(array);
+										}
+									}
+										break;
+
+									case "array-string":
+									{
+										fieldName = fieldName.Replace("[]", "");
+										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+										var arrayStr = "[";
+										for (int k = 0; k < arrayValue.Length; k++)
+										{
+											if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
+											else arrayStr += $",\"{arrayValue[k].Trim()}\"";
+										}
+										arrayStr += "]";
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+										else
+										{
+											string[] array = JsonConvert.DeserializeObject<string[]>(arrayStr);
+											jsonObject[fieldName] = JArray.FromObject(array);
+										}
+									}
+										break;
+
+									case "array-bool":
+									{
+										fieldName = fieldName.Replace("[]", "");
+										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+										var arrayStr = "[";
+										for (int k = 0; k < arrayValue.Length; k++)
+										{
+											if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
+											else arrayStr += "," + arrayValue[k].Trim().ToLower();
+										}
+										arrayStr += "]";
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+										else
+										{
+											bool[] array = JsonConvert.DeserializeObject<bool[]>(arrayStr);
+											jsonObject[fieldName] = JArray.FromObject(array);
+										}
+									}
+										break;
+
+									case "json":
+									{
+										fieldName = fieldName.Replace("{}", "");
+
+										//Search Id in field value
+										if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
+										{
+											m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
+										}
+										foreach (var id in m_allIDsSorted)
+										{
+											if (fieldValue.Contains(id.Key))
+												fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
+										}
+										if (!Helper.IsValidJson(fieldValue))
+										{
+											MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
+												@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+											Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
+										}
+										var tempObj = JsonConvert.DeserializeObject(fieldValue);
+										var tempJsonStr = JsonConvert.SerializeObject(tempObj);
+										if (!nestedFiled)
+											fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
+										else
+										{
+											jsonObject[fieldName] = JObject.Parse(tempJsonStr);
+										}
+									}
+										break;
+								}
+
+								// Nested Object
+								if (nestedFiled)
+									nestedObjects.Add(jsonObject);
+							}
+						}
+					}
+				}
+				if (nestedObjects.Count > 0)
+				{
+					var nestedObjectsJson = Helper.ConvertToNestedJson(nestedObjects);
+					fieldContentStr += $"{nestedObjectsJson.Substring(1, nestedObjectsJson.Length - 2)}";
+				}
+				if (attributes.Count > 0)
+				{
+					fieldContentStr += "\"Attributes\":[";
+					for (int a = 0; a < attributes.Count; a++)
+					{
+						fieldContentStr += attributes[a].GetJsonString();
+						if (a < attributes.Count - 1)
+							fieldContentStr += ",";
+					}
+					fieldContentStr += "],";
+				}
+				if (nestedObjects.Count == 0)
+					fieldContentStr = Helper.RemoveLast(fieldContentStr, ",");
+
+
+				if (!rowIsEmpty)
+					content += $"{"{"}{fieldContentStr}{"},"}";
+			}
+			content = Helper.RemoveLast(content, ",");
+			content += "]";
+
+			if (content == "[]")
+			{
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
+				return null;
+			}
+			string finalContent = content;
+			if (pEncrypt && m_encryption != null)
+				finalContent = m_encryption.EncryptValue(content);
+
+			if (pAutoWriteFile)
+			{
+				Helper.WriteFile(Config.Settings.outputDataFilePath, pOutputFile + ".txt", finalContent);
+				if (pEncrypt && m_encryption != null)
+					Log(LogType.Message, $"Exported all Data Tables {pSheetName} as encrypted JSON data.");
+				else
+					Log(LogType.Message, $"Exported all Data Tables {pSheetName} as JSON data.");
+			}
+			return finalContent;
+		}
+
+		private void LoadSheetLocalizationData(IList<IList<object>> pValues, string pSheetName)
+		{
+			if (pValues == null || pValues.Count == 0)
+			{
+				Log(LogType.Warning, pSheetName + " is empty!");
+				return;
+			}
+
+			var idStrings = new List<string>();
+			var textDict = new Dictionary<string, List<string>>();
+			var firstRow = pValues[0];
+			int maxCellNum = firstRow.Count;
+
+			for (int row = 0; row < pValues.Count; row++)
+			{
+				var rowValues = pValues[row];
+				if (rowValues == null)
+					continue;
+				for (int col = 0; col < maxCellNum; col++)
+				{
+					var fieldValue = rowValues[col].ToString().Trim();
+					var fieldName = pValues[0][col].ToString();
+					if (!string.IsNullOrEmpty(fieldName))
+					{
+						//idString
+						if (col == 0 && row > 0)
+						{
+							if (string.IsNullOrEmpty(fieldValue))
+								break;
+							idStrings.Add(fieldValue);
+						}
+						//relativeId
+						else if (col == 1 && row > 0)
+						{
+							if (string.IsNullOrEmpty(fieldValue) || m_allIds == null)
+								continue;
+							bool existId = false;
+							foreach (var id in m_allIds)
+								if (id.Key.Trim() == fieldValue.Trim())
+								{
+									fieldValue = id.Value.ToString();
+									idStrings[idStrings.Count - 1] = $"{idStrings[idStrings.Count - 1]}_{id.Value}";
+									existId = true;
+									break;
+								}
+
+							if (!existId)
+								idStrings[idStrings.Count - 1] = $"{idStrings[idStrings.Count - 1]}_{fieldValue}";
+						}
+						//languages
+						else if (col > 1 && row > 0)
+						{
+							if (!textDict.ContainsKey(fieldName))
+								textDict.Add(fieldName, new List<string>());
+							textDict[fieldName].Add(fieldValue);
+						}
+					}
+					else
+					{
+						Console.Write(col);
+					}
+				}
+			}
+
+			if (m_localizationsDict.ContainsKey(pSheetName))
+			{
+				var builder = m_localizationsDict[pSheetName];
+				idStrings.AddRange(builder.idsString);
+				foreach (var b in builder.languageTextDict)
+				{
+					var language = b.Key;
+					var texts = b.Value;
+					if (textDict.ContainsKey(language))
+						textDict[language].AddRange(texts);
+					else
+						textDict.Add(b.Key, b.Value);
+				}
+				m_localizationsDict[pSheetName] = new LocalizationBuilder()
+				{
+					idsString = idStrings,
+					languageTextDict = textDict,
+				};
+			}
+			else
+				m_localizationsDict.Add(pSheetName, new LocalizationBuilder()
+				{
+					idsString = idStrings,
+					languageTextDict = textDict,
+				});
+		}
 #endregion
 	}
 }

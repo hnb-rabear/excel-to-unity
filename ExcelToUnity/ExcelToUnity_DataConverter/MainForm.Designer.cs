@@ -749,7 +749,6 @@ namespace ExcelToUnity_DataConverter
 		    // DtgFilePaths
 		    // 
 		    this.DtgFilePaths.AllowUserToAddRows = false;
-		    this.DtgFilePaths.AllowUserToDeleteRows = false;
 		    this.DtgFilePaths.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 				    | System.Windows.Forms.AnchorStyles.Left)
 			    | System.Windows.Forms.AnchorStyles.Right)));
@@ -773,7 +772,6 @@ namespace ExcelToUnity_DataConverter
 		    this.DtgFilePaths.Margin = new System.Windows.Forms.Padding(0);
 		    this.DtgFilePaths.MultiSelect = false;
 		    this.DtgFilePaths.Name = "DtgFilePaths";
-		    this.DtgFilePaths.ReadOnly = true;
 		    this.DtgFilePaths.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 		    this.DtgFilePaths.Size = new System.Drawing.Size(690, 221);
 		    this.DtgFilePaths.TabIndex = 0;
@@ -794,7 +792,6 @@ namespace ExcelToUnity_DataConverter
 		    this.exportIds.DataPropertyName = "exportIds";
 		    this.exportIds.HeaderText = "Export IDs";
 		    this.exportIds.Name = "exportIds";
-		    this.exportIds.ReadOnly = true;
 		    this.exportIds.Width = 60;
 		    // 
 		    // exportConstants
@@ -802,7 +799,6 @@ namespace ExcelToUnity_DataConverter
 		    this.exportConstants.DataPropertyName = "exportConstants";
 		    this.exportConstants.HeaderText = "Export Constants";
 		    this.exportConstants.Name = "exportConstants";
-		    this.exportConstants.ReadOnly = true;
 		    // 
 		    // status
 		    // 
@@ -820,7 +816,6 @@ namespace ExcelToUnity_DataConverter
 		    this.BtnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 		    this.BtnDelete.HeaderText = "Delete";
 		    this.BtnDelete.Name = "BtnDelete";
-		    this.BtnDelete.ReadOnly = true;
 		    this.BtnDelete.Resizable = System.Windows.Forms.DataGridViewTriState.True;
 		    this.BtnDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 		    this.BtnDelete.Text = "Delete";
@@ -1128,6 +1123,7 @@ namespace ExcelToUnity_DataConverter
 		    this.TxtLogExportingGoogleSheets.Location = new System.Drawing.Point(3, 269);
 		    this.TxtLogExportingGoogleSheets.Multiline = true;
 		    this.TxtLogExportingGoogleSheets.Name = "TxtLogExportingGoogleSheets";
+		    this.TxtLogExportingGoogleSheets.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 		    this.TxtLogExportingGoogleSheets.Size = new System.Drawing.Size(690, 120);
 		    this.TxtLogExportingGoogleSheets.TabIndex = 2;
 		    // 

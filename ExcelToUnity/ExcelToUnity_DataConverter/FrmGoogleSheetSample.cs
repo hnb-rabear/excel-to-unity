@@ -69,6 +69,9 @@ namespace ExcelToUnity_DataConverter
 		}
 
 		private void BtnDownload_Click(object sender, EventArgs e)
+		
+		
+		
 		{
 			string key = TxtGoogleSheetId.Text;
 			if (string.IsNullOrEmpty(key))
@@ -92,7 +95,15 @@ namespace ExcelToUnity_DataConverter
 			googleSheetId = TxtGoogleSheetId.Text;
 
 			// Fetch metadata for the entire spreadsheet.
-			var spreadsheet = service.Spreadsheets.Get(googleSheetId).Execute();
+			Spreadsheet spreadsheet;
+			try
+			{
+				spreadsheet = service.Spreadsheets.Get(googleSheetId).Execute();
+			}
+			catch
+			{
+				return;
+			}
 			googleSheetName = spreadsheet.Properties.Title;
 			TxtGoogleSheetName.Text = spreadsheet.Properties.Title;
 			sheets = new List<GoogleSheetsPath.Sheet>();

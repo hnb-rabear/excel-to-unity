@@ -89,21 +89,6 @@ namespace ExcelToUnity_DataConverter
             return false;
         }
 
-        //public static int GetLastCellNum(ISheet sheet)
-        //{
-        //    int lastCellNum = 0;
-        //    int totalRows = sheet.LastRowNum; 
-        //    if (totalRows > 4)
-        //        totalRows = 4;
-        //    for (int row = 0; row <= totalRows; row++)
-        //    {
-        //        IRow rowData = sheet.GetRow(row);
-        //        if (lastCellNum < rowData.LastCellNum)
-        //            lastCellNum = rowData.LastCellNum;
-        //    }
-        //    return lastCellNum;
-        //}
-
         /// <summary>
         /// Return the the name and type of Field of a column
         /// </summary>
@@ -153,23 +138,6 @@ namespace ExcelToUnity_DataConverter
                 string filedValue = fieldsValue[i].Trim();
                 bool isArray = fieldName.Contains("[]");
                 var fieldValueType = new FieldValueType(fieldName);
-
-                //bool linked = fieldName.Contains("&"); // if this field value is linked to another sheet
-                //if (linked)
-                //{
-                //    int ref1stIndex = fieldName.IndexOf("&");
-                //    string linkedSheet = fieldName.Substring(fieldName.IndexOf("&") + 1);
-                //    string linkedSheet_RefId = linkedSheet.Substring(linkedSheet.IndexOf("&") + 1);
-                //    linkedSheet = linkedSheet.Replace("&" + linkedSheet_RefId, "");
-                //    fieldName = fieldName.Substring(0, ref1stIndex);
-
-                //    if (!string.IsNullOrEmpty(linkedSheet) && !string.IsNullOrEmpty(linkedSheet_RefId))
-                //    {
-                //        fieldValueType.linkedSheet = linkedSheet;
-                //        fieldValueType.linkedSheet_RefId = linkedSheet_RefId;
-                //    }
-                //}
-
                 if (!isArray)
                 {
                     if (string.IsNullOrEmpty(filedValue))
@@ -244,6 +212,107 @@ namespace ExcelToUnity_DataConverter
             return fieldValueTypes;
         }
 
+        public static List<FieldValueType> GetFieldValueTypes(IList<IList<object>> pValues)
+        {
+            if (pValues == null || pValues.Count == 0)
+                return null;
+            var rowValues = pValues[0];
+            var fieldsName = new string[rowValues.Count];
+            var fieldsValue = new string[rowValues.Count];
+            for (int col = 0; col < rowValues.Count; col++)
+            {
+                var cell = rowValues[col].ToString().Trim();
+                if (!string.IsNullOrEmpty(cell))
+                    fieldsName[col] = cell.Replace(" ", "_");
+                else
+                    fieldsName[col] = "";
+                fieldsValue[col] = "";
+            }
+
+            for (int row = 1; row < pValues.Count; row++)
+            {
+                rowValues = pValues[row];
+                if (rowValues != null)
+                {
+                    //Find longest value, and use it to check value type
+                    for (int col = 0; col < fieldsName.Length; col++)
+                    {
+                        var cellStr = "";
+                        if (col < rowValues.Count)
+                            cellStr = rowValues[col].ToString();
+                        if (!string.IsNullOrEmpty(cellStr))
+                        {
+                            cellStr = cellStr.Trim();
+                            if (cellStr.Length > fieldsValue[col].Length)
+                                fieldsValue[col] = cellStr;
+                        }
+                    }
+                }
+            }
+
+            var fieldValueTypes = new List<FieldValueType>();
+            for (int i = 0; i < fieldsName.Length; i++)
+            {
+                string fieldName = fieldsName[i];
+                string filedValue = fieldsValue[i].Trim();
+                bool isArray = fieldName.Contains("[]");
+                var fieldValueType = new FieldValueType(fieldName);
+                if (!isArray)
+                {
+                    if (string.IsNullOrEmpty(filedValue))
+                        fieldValueType.type = "string";
+                    else
+                    {
+                        if (!filedValue.Contains(',') && decimal.TryParse(filedValue, out decimal _))
+                            fieldValueType.type = "number";
+                        else if (bool.TryParse(filedValue.ToLower(), out bool _))
+                            fieldValueType.type = "bool";
+                        else if (fieldName.Contains("{}"))
+                            fieldValueType.type = "json";
+                        else
+                            fieldValueType.type = "string";
+                    }
+                    fieldValueTypes.Add(fieldValueType);
+                }
+                else
+                {
+                    string[] values = SplitValueToArray(filedValue, false);
+                    int lenVal = 0;
+                    string longestValue = "";
+                    foreach (string val in values)
+                    {
+                        if (lenVal < val.Length)
+                        {
+                            lenVal = val.Length;
+                            longestValue = val;
+                        }
+                    }
+                    if (values.Length > 0)
+                    {
+                        if (string.IsNullOrEmpty(longestValue))
+                            fieldValueType.type = "array-string";
+                        else
+                        {
+                            if (!longestValue.Contains(',') && decimal.TryParse(longestValue, out decimal _))
+                                fieldValueType.type = "array-number";
+                            else if (bool.TryParse(longestValue.ToLower(), out bool _))
+                                fieldValueType.type = "array-bool";
+                            else
+                                fieldValueType.type = "array-string";
+                        }
+                        fieldValueTypes.Add(fieldValueType);
+                    }
+                    else
+                    {
+                        fieldValueType.type = "array-string";
+                        fieldValueTypes.Add(fieldValueType);
+                    }
+                }
+            }
+
+            return fieldValueTypes;
+        }
+        
         public static void WriteFile(string pFolderPath, string pFileName, string pContent)
         {
             if (!Directory.Exists(pFolderPath))
