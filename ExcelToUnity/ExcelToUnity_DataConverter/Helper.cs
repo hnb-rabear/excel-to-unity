@@ -18,35 +18,6 @@ using System.Windows.Forms;
 
 namespace ExcelToUnity_DataConverter
 {
-    public class ID
-    {
-        public string Key { get; set; }
-        public int Value { get; set; }
-
-        public ID(string key, int value)
-        {
-            Key = key;
-            Value = value;
-        }
-    }
-
-    public class FieldValueType
-    {
-        public string name;
-        public string type;
-
-        public FieldValueType(string name)
-        {
-            this.name = name;
-        }
-
-        public FieldValueType(string name, string type)
-        {
-            this.name = name;
-            this.type = type;
-        }
-    }
-
     public static class HelperExtension
     {
         public static string ToCellString(this ICell cell, string pDefault = "")

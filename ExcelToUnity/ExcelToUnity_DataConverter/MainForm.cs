@@ -168,7 +168,7 @@ namespace ExcelToUnity_DataConverter
 			Config.Save();
 		}
 
-		private void LoadWorkBook()
+		private void InitExcel()
 		{
 			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
 			DtgIDs.DataSource = null;
@@ -189,21 +189,6 @@ namespace ExcelToUnity_DataConverter
 				}
 			}
 			DtgSheets.DataSource = new BindingList<Sheet>(m_sheets);
-		}
-
-		private void LoadFileSettings()
-		{
-			Config.Init();
-			LoadSettings();
-			Active(true);
-		}
-
-		private void Active(bool pValue)
-		{
-			BtnAllInOne.Visible = pValue;
-			BtnAddFile.Visible = pValue;
-			if (!pValue)
-				tabMenu.TabPages.RemoveByKey("tabPage4");
 		}
 
 #region Load and create IDs
@@ -1255,43 +1240,8 @@ namespace ExcelToUnity_DataConverter
 		/// <summary>
 		/// Must be called after init data files list
 		/// </summary>
-		private void InitializeDtgFiles()
+		private void InitExcels()
 		{
-			//DtgFilePaths.Columns.Add("path", "Path");
-			//DtgFilePaths.Columns["path"].DataPropertyName = "path";
-
-			//DtgFilePaths.Columns.Add(new DataGridViewCheckBoxColumn()
-			//{
-			//    Name = "exportJsonList",
-			//    HeaderText = "Export Json List",
-			//    ValueType = typeof(bool),
-			//    DataPropertyName = "exportJsonList",
-			//});
-
-			//DtgFilePaths.Columns.Add(new DataGridViewCheckBoxColumn()
-			//{
-			//    Name = "exportIds",
-			//    HeaderText = "Export Ids",
-			//    ValueType = typeof(bool),
-			//    DataPropertyName = "exportIds",
-			//});
-
-			//DtgFilePaths.Columns.Add(new DataGridViewCheckBoxColumn()
-			//{
-			//    Name = "exportConstants",
-			//    HeaderText = "Export Constants",
-			//    ValueType = typeof(bool),
-			//    DataPropertyName = "exportConstants",
-			//});
-
-			//DtgFilePaths.Columns.Add(new DataGridViewButtonColumn()
-			//{
-			//    Name = "BtnDelete",
-			//    HeaderText = "Delete",
-			//    Text = "Delete",
-			//    UseColumnTextForButtonValue = true,
-			//});
-
 			DtgFilePaths.AutoGenerateColumns = false;
 			m_bindingExcelPaths = new BindingList<ExcelPath>(Config.Settings.allFiles);
 			DtgFilePaths.DataSource = m_bindingExcelPaths;
@@ -1767,9 +1717,10 @@ namespace ExcelToUnity_DataConverter
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			LoadFileSettings();
-			LoadWorkBook();
-			InitializeDtgFiles();
+			Config.Init();
+			LoadSettings();
+			InitExcel();
+			InitExcels();
 
 			// btnOpenGoogleSheet.Visible = false;
 			tabMenu.TabPages.RemoveByKey("tabPage2");
@@ -1793,7 +1744,7 @@ namespace ExcelToUnity_DataConverter
 				weboxHelp.DocumentText = htmlContent;
 			}
 
-			txtVersion.Text = @"1.4.9";
+			txtVersion.Text = @"1.5.0";
 		}
 
 		private void btnSelectInputFile_Click(object sender, EventArgs e)
@@ -1813,22 +1764,22 @@ namespace ExcelToUnity_DataConverter
 			Helper.SelectFolder(txtSettingOutputDataFilePath);
 		}
 
-		private void btnSelectOuputConstantsFile_Click(object sender, EventArgs e)
+		private void BtnSelectOutputConstantsFile_Click(object sender, EventArgs e)
 		{
 			Helper.SelectFolder(txtSettingOuputConstantsFilePath);
 		}
 
-		private void txtOuputConstantsFilePath_TextChanged(object sender, EventArgs e)
+		private void TxtOutputConstantsFilePath_TextChanged(object sender, EventArgs e)
 		{
 			SetupConfigFolders(txtSettingOuputConstantsFilePath, ref Config.Settings.outputConstantsFilePath);
 		}
 
-		private void txtInputFilePath_TextChanged(object sender, EventArgs e)
+		private void TxtInputFilePath_TextChanged(object sender, EventArgs e)
 		{
 			if (File.Exists(txtInputXLSXFilePath.Text.Trim()))
 			{
 				SetupConfigFolders(txtInputXLSXFilePath, ref Config.Settings.inputDataFilePath);
-				LoadWorkBook();
+				InitExcel();
 			}
 		}
 
@@ -1925,7 +1876,7 @@ namespace ExcelToUnity_DataConverter
 			return !pName.EndsWith(IDS_SHEET)
 				&& !pName.EndsWith(CONSTANTS_SHEET)
 				&& !pName.Contains(SETTINGS_SHEET)
-				&& !pName.Contains(LOCALIZATION_SHEET);
+				&& !pName.StartsWith(LOCALIZATION_SHEET);
 		}
 
 		/// <summary>
@@ -1969,11 +1920,15 @@ namespace ExcelToUnity_DataConverter
 				Log(LogType.Message, "Export IDs successfully!");
 			}
 
-			DtgIDs.DataSource = null;
-			DtgIDs.Rows.Clear();
-			DtgIDs.Refresh();
-			DtgIDs.DataSource = m_allIds;
-			DtgIDs.AutoResizeColumns();
+			RefreshDtgIDs();
+		}
+
+		private void RefreshDtgIDs()
+		{
+			var ids = new List<ID>();
+			foreach (var pair in m_allIds)
+				ids.Add(new ID(pair.Key, pair.Value));
+			DtgIDs.DataSource = new BindingList<ID>(ids);
 		}
 
 		private void BtnExportConstants_Click(object sender, EventArgs e)
@@ -2010,7 +1965,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void BtnReloadGrid_Click(object sender, EventArgs e)
 		{
-			LoadWorkBook();
+			InitExcel();
 		}
 
 
@@ -2047,7 +2002,7 @@ namespace ExcelToUnity_DataConverter
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
-				if (m_sheets[i].Check && m_sheets[i].SheetName.Contains(LOCALIZATION_SHEET))
+				if (m_sheets[i].Check && m_sheets[i].SheetName.StartsWith(LOCALIZATION_SHEET))
 				{
 					LoadLocalizationSheet(m_workBook, m_sheets[i].SheetName);
 
@@ -2252,7 +2207,7 @@ namespace ExcelToUnity_DataConverter
 				//Load and write localization
 				for (int i = 0; i < sheets.Count; i++)
 				{
-					if (sheets[i].SheetName.Contains(LOCALIZATION_SHEET))
+					if (sheets[i].SheetName.StartsWith(LOCALIZATION_SHEET))
 					{
 						LoadLocalizationSheet(workBook, sheets[i].SheetName);
 
@@ -2473,19 +2428,19 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		private void chkSeperateIDs_CheckedChanged(object sender, EventArgs e)
+		private void ChkSeparateIDs_CheckedChanged(object sender, EventArgs e)
 		{
 			Config.Settings.seperateIDs = chkSeperateIDs.Checked;
 			Config.Save();
 		}
 
-		private void chkSeperateConstants_CheckedChanged(object sender, EventArgs e)
+		private void ChkSeparateConstants_CheckedChanged(object sender, EventArgs e)
 		{
 			Config.Settings.seperateConstants = chkSeperateConstants.Checked;
 			Config.Save();
 		}
 
-		private void chkSeperateLocalization_CheckedChanged(object sender, EventArgs e)
+		private void ChkSeparateLocalization_CheckedChanged(object sender, EventArgs e)
 		{
 			Config.Settings.seperateLocalizations = chkSeperateLocalization.Checked;
 			Config.Save();
@@ -2495,6 +2450,7 @@ namespace ExcelToUnity_DataConverter
 		{
 			txtLog.Text = "";
 			txtLog2.Text = "";
+			TxtLogExportingGoogleSheets.Text = "";
 		}
 
 		private void Log(LogType pLogType, string pLog)
@@ -2694,7 +2650,7 @@ namespace ExcelToUnity_DataConverter
 			if (Config.LoadSettingsFromFile())
 			{
 				LoadSettings();
-				InitializeDtgFiles();
+				InitExcels();
 			}
 		}
 
@@ -2852,13 +2808,11 @@ namespace ExcelToUnity_DataConverter
 			foreach (var googleSheets in googleSheetsPaths)
 			{
 				var sheets = new List<GoogleSheetsPath.Sheet>();
-
-				// Get the sheet metadata to determine its dimensions
 				var excludedSheets = settings.GetExcludedSheets();
-				foreach (var item in googleSheets.sheets)
+				foreach (var sheet in googleSheets.sheets)
 				{
-					if (item.selected && excludedSheets == null || !excludedSheets.Contains(item.name))
-						sheets.Add(item);
+					if (sheet.selected && (excludedSheets == null || !excludedSheets.Contains(sheet.name)))
+						sheets.Add(sheet);
 				}
 
 				foreach (var sheet in sheets)
@@ -2881,6 +2835,11 @@ namespace ExcelToUnity_DataConverter
 					}
 				}
 			}
+			
+			//Build IDs Files
+			//Build Constants Files
+			//Build Json Files
+			//Build Localization Files
 		}
 
 		private Dictionary<string, int> LoadSheetIDsValue(string sheetName, IList<IList<object>> values)

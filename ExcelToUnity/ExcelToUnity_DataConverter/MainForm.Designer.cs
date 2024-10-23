@@ -107,9 +107,13 @@ namespace ExcelToUnity_DataConverter
 		    this.BtnExportIds = new System.Windows.Forms.Button();
 		    this.btnSelectFile = new System.Windows.Forms.Button();
 		    this.DtgIDs = new System.Windows.Forms.DataGridView();
+		    this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+		    this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
 		    this.label1 = new System.Windows.Forms.Label();
 		    this.txtInputXLSXFilePath = new System.Windows.Forms.TextBox();
 		    this.DtgSheets = new System.Windows.Forms.DataGridView();
+		    this.SheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+		    this.Check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 		    this.txtLog = new System.Windows.Forms.TextBox();
 		    this.tabMenu = new System.Windows.Forms.TabControl();
 		    this.tpGoogleSpreadSheets = new System.Windows.Forms.TabPage();
@@ -128,8 +132,6 @@ namespace ExcelToUnity_DataConverter
 		    this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 		    this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
 		    this.linkGit = new System.Windows.Forms.LinkLabel();
-		    this.SheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-		    this.Check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 		    this.statusStrip2.SuspendLayout();
 		    this.tpChangeLog.SuspendLayout();
 		    this.tpHelp.SuspendLayout();
@@ -186,7 +188,7 @@ namespace ExcelToUnity_DataConverter
 		    this.chkSeperateLocalization.Text = "Separate Localizations";
 		    this.toolTip.SetToolTip(this.chkSeperateLocalization, "When this option is selected, the Localizations sheet with different name will be" + " exported individually");
 		    this.chkSeperateLocalization.UseVisualStyleBackColor = true;
-		    this.chkSeperateLocalization.CheckedChanged += new System.EventHandler(this.chkSeperateLocalization_CheckedChanged);
+		    this.chkSeperateLocalization.CheckedChanged += new System.EventHandler(this.ChkSeparateLocalization_CheckedChanged);
 		    // 
 		    // chkSeperateConstants
 		    // 
@@ -199,7 +201,7 @@ namespace ExcelToUnity_DataConverter
 		    this.chkSeperateConstants.Text = "Separate Constants";
 		    this.toolTip.SetToolTip(this.chkSeperateConstants, "When this option is selected, the Constants sheet in each Excel file will be expo" + "rted individually");
 		    this.chkSeperateConstants.UseVisualStyleBackColor = true;
-		    this.chkSeperateConstants.CheckedChanged += new System.EventHandler(this.chkSeperateConstants_CheckedChanged);
+		    this.chkSeperateConstants.CheckedChanged += new System.EventHandler(this.ChkSeparateConstants_CheckedChanged);
 		    // 
 		    // txtUnminimizeFields
 		    // 
@@ -239,7 +241,7 @@ namespace ExcelToUnity_DataConverter
 		    this.chkSeperateIDs.Text = "Separate IDs";
 		    this.toolTip.SetToolTip(this.chkSeperateIDs, "When this option is selected, the IDs sheet in each Excel file will be exported i" + "ndividually");
 		    this.chkSeperateIDs.UseVisualStyleBackColor = true;
-		    this.chkSeperateIDs.CheckedChanged += new System.EventHandler(this.chkSeperateIDs_CheckedChanged);
+		    this.chkSeperateIDs.CheckedChanged += new System.EventHandler(this.ChkSeparateIDs_CheckedChanged);
 		    // 
 		    // txtSettingExcludedSheet
 		    // 
@@ -264,7 +266,7 @@ namespace ExcelToUnity_DataConverter
 		    this.txtSettingOuputConstantsFilePath.Size = new System.Drawing.Size(464, 20);
 		    this.txtSettingOuputConstantsFilePath.TabIndex = 14;
 		    this.toolTip.SetToolTip(this.txtSettingOuputConstantsFilePath, "Folder where the Constants and IDs classes will be exported");
-		    this.txtSettingOuputConstantsFilePath.TextChanged += new System.EventHandler(this.txtOuputConstantsFilePath_TextChanged);
+		    this.txtSettingOuputConstantsFilePath.TextChanged += new System.EventHandler(this.TxtOutputConstantsFilePath_TextChanged);
 		    // 
 		    // txtSettingOutputDataFilePath
 		    // 
@@ -676,7 +678,7 @@ namespace ExcelToUnity_DataConverter
 		    this.btnSelectFolder2.TabIndex = 16;
 		    this.btnSelectFolder2.Text = "Select";
 		    this.btnSelectFolder2.UseVisualStyleBackColor = false;
-		    this.btnSelectFolder2.Click += new System.EventHandler(this.btnSelectOuputConstantsFile_Click);
+		    this.btnSelectFolder2.Click += new System.EventHandler(this.BtnSelectOutputConstantsFile_Click);
 		    // 
 		    // label3
 		    // 
@@ -986,11 +988,29 @@ namespace ExcelToUnity_DataConverter
 		    dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 		    this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
 		    this.DtgIDs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+		    this.DtgIDs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.ID, this.Value });
 		    this.DtgIDs.Location = new System.Drawing.Point(259, 35);
 		    this.DtgIDs.Name = "DtgIDs";
 		    this.DtgIDs.ReadOnly = true;
 		    this.DtgIDs.Size = new System.Drawing.Size(332, 231);
 		    this.DtgIDs.TabIndex = 17;
+		    // 
+		    // ID
+		    // 
+		    this.ID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+		    this.ID.DataPropertyName = "Key";
+		    this.ID.HeaderText = "Key";
+		    this.ID.Name = "ID";
+		    this.ID.ReadOnly = true;
+		    this.ID.ToolTipText = "Key";
+		    // 
+		    // Value
+		    // 
+		    this.Value.DataPropertyName = "value";
+		    this.Value.HeaderText = "Value";
+		    this.Value.Name = "Value";
+		    this.Value.ReadOnly = true;
+		    this.Value.ToolTipText = "Value";
 		    // 
 		    // label1
 		    // 
@@ -1010,7 +1030,7 @@ namespace ExcelToUnity_DataConverter
 		    this.txtInputXLSXFilePath.Name = "txtInputXLSXFilePath";
 		    this.txtInputXLSXFilePath.Size = new System.Drawing.Size(530, 20);
 		    this.txtInputXLSXFilePath.TabIndex = 1;
-		    this.txtInputXLSXFilePath.TextChanged += new System.EventHandler(this.txtInputFilePath_TextChanged);
+		    this.txtInputXLSXFilePath.TextChanged += new System.EventHandler(this.TxtInputFilePath_TextChanged);
 		    // 
 		    // DtgSheets
 		    // 
@@ -1041,6 +1061,22 @@ namespace ExcelToUnity_DataConverter
 		    this.DtgSheets.Name = "DtgSheets";
 		    this.DtgSheets.Size = new System.Drawing.Size(253, 231);
 		    this.DtgSheets.TabIndex = 11;
+		    // 
+		    // SheetName
+		    // 
+		    this.SheetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+		    this.SheetName.DataPropertyName = "SheetName";
+		    this.SheetName.HeaderText = "Sheet Name";
+		    this.SheetName.Name = "SheetName";
+		    this.SheetName.ReadOnly = true;
+		    // 
+		    // Check
+		    // 
+		    this.Check.DataPropertyName = "Check";
+		    this.Check.HeaderText = "Check";
+		    this.Check.Name = "Check";
+		    this.Check.ReadOnly = true;
+		    this.Check.Width = 50;
 		    // 
 		    // txtLog
 		    // 
@@ -1232,22 +1268,6 @@ namespace ExcelToUnity_DataConverter
 		    this.linkGit.Text = "Git";
 		    this.linkGit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGit_LinkClicked);
 		    // 
-		    // SheetName
-		    // 
-		    this.SheetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-		    this.SheetName.DataPropertyName = "SheetName";
-		    this.SheetName.HeaderText = "Sheet Name";
-		    this.SheetName.Name = "SheetName";
-		    this.SheetName.ReadOnly = true;
-		    // 
-		    // Check
-		    // 
-		    this.Check.DataPropertyName = "Check";
-		    this.Check.HeaderText = "Check";
-		    this.Check.Name = "Check";
-		    this.Check.ReadOnly = true;
-		    this.Check.Width = 50;
-		    // 
 		    // MainForm
 		    // 
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1297,6 +1317,8 @@ namespace ExcelToUnity_DataConverter
 		    this.ResumeLayout(false);
 		    this.PerformLayout();
 	    }
+	    private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+	    private System.Windows.Forms.DataGridViewTextBoxColumn Value;
 	    private System.Windows.Forms.DataGridViewTextBoxColumn SheetName;
 	    private System.Windows.Forms.DataGridViewCheckBoxColumn Check;
 

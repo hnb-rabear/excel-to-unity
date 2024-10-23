@@ -1,4 +1,3 @@
-using ExcelToUnity_DataConverter.Entities;
 using Newtonsoft.Json;
 using System;
 using System.IO;

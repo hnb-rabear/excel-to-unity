@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExcelToUnity_DataConverter.Entities
+namespace ExcelToUnity_DataConverter
 {
-	[System.Serializable]
+	[Serializable]
 	public class Settings
 	{
 		/// <summary>
@@ -153,6 +153,35 @@ namespace ExcelToUnity_DataConverter.Entities
 				sheets = sheets,
 			});
 			googleSheetsPaths.Sort();
+		}
+	}
+	
+	public class ID
+	{
+		public string Key { get; set; }
+		public int Value { get; set; }
+
+		public ID(string key, int value)
+		{
+			Key = key;
+			Value = value;
+		}
+	}
+	
+	public class FieldValueType
+	{
+		public string name;
+		public string type;
+
+		public FieldValueType(string name)
+		{
+			this.name = name;
+		}
+
+		public FieldValueType(string name, string type)
+		{
+			this.name = name;
+			this.type = type;
 		}
 	}
 }
