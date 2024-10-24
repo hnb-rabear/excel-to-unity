@@ -47,6 +47,8 @@ namespace ExcelToUnity_DataConverter
 		public bool mergeJsonsIntoSingleJson;
 		public bool keepOnlyEnumAsIDs;
 		public string languageCharactersMaps = @"japan; korean; chinese";
+		public string ggClientId;
+		public string ggClientSecret;
 
 		public string[] GetExcludedSheets()
 		{

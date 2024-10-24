@@ -3652,5 +3652,25 @@ namespace ExcelToUnity_DataConverter
 		{
 			Process.Start("https://github.com/hnb-rabear/excel-to-unity-document");
 		}
+
+		private void TxtGoogleClientID_Leave(object sender, EventArgs e)
+		{
+			bool changed = Config.Settings.ggClientId != TxtGoogleClientID.Text;
+			if (changed)
+			{
+				Config.Settings.ggClientId = TxtGoogleClientID.Text;
+				Config.Save();
+			}
+		}
+
+		private void TxtGoogleClientSecret_Leave(object sender, EventArgs e)
+		{
+			bool changed = Config.Settings.ggClientSecret == TxtGoogleClientSecret.Text;
+			if (changed)
+			{
+				Config.Settings.ggClientSecret = TxtGoogleClientSecret.Text;
+				Config.Save();
+			}
+		}
 	}
 }

@@ -30,14 +30,14 @@ namespace ExcelToUnity_DataConverter
 	    {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -131,6 +131,10 @@ namespace ExcelToUnity_DataConverter
 			this.BtnLoadSettings = new System.Windows.Forms.Button();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.TxtGoogleClientID = new System.Windows.Forms.TextBox();
+			this.TxtGoogleClientSecret = new System.Windows.Forms.TextBox();
 			this.statusStrip2.SuspendLayout();
 			this.tpChangeLog.SuspendLayout();
 			this.tpHelp.SuspendLayout();
@@ -208,10 +212,9 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.txtUnminimizeFields.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtUnminimizeFields.Location = new System.Drawing.Point(105, 319);
-			this.txtUnminimizeFields.Multiline = true;
+			this.txtUnminimizeFields.Location = new System.Drawing.Point(116, 184);
 			this.txtUnminimizeFields.Name = "txtUnminimizeFields";
-			this.txtUnminimizeFields.Size = new System.Drawing.Size(588, 36);
+			this.txtUnminimizeFields.Size = new System.Drawing.Size(574, 20);
 			this.txtUnminimizeFields.TabIndex = 34;
 			this.txtUnminimizeFields.Text = "id; mode; type; group; level; rank";
 			this.toolTip.SetToolTip(this.txtUnminimizeFields, "Type the name of the column in the json data sheet that you want to export even i" +
@@ -250,10 +253,9 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.txtSettingExcludedSheet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingExcludedSheet.Location = new System.Drawing.Point(105, 273);
-			this.txtSettingExcludedSheet.Multiline = true;
+			this.txtSettingExcludedSheet.Location = new System.Drawing.Point(116, 158);
 			this.txtSettingExcludedSheet.Name = "txtSettingExcludedSheet";
-			this.txtSettingExcludedSheet.Size = new System.Drawing.Size(588, 40);
+			this.txtSettingExcludedSheet.Size = new System.Drawing.Size(574, 20);
 			this.txtSettingExcludedSheet.TabIndex = 21;
 			this.txtSettingExcludedSheet.Text = "Sheet1; Sheet2; Sheet3;";
 			this.toolTip.SetToolTip(this.txtSettingExcludedSheet, "Type the name of the sheet that you want to skip when exporting. The skipped shee" +
@@ -288,10 +290,9 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.txtSettingEncryptionKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingEncryptionKey.Location = new System.Drawing.Point(105, 132);
-			this.txtSettingEncryptionKey.Multiline = true;
+			this.txtSettingEncryptionKey.Location = new System.Drawing.Point(116, 262);
 			this.txtSettingEncryptionKey.Name = "txtSettingEncryptionKey";
-			this.txtSettingEncryptionKey.Size = new System.Drawing.Size(588, 109);
+			this.txtSettingEncryptionKey.Size = new System.Drawing.Size(574, 20);
 			this.txtSettingEncryptionKey.TabIndex = 17;
 			this.txtSettingEncryptionKey.Text = resources.GetString("txtSettingEncryptionKey.Text");
 			this.toolTip.SetToolTip(this.txtSettingEncryptionKey, "The key that encrypts the json data before exporting it");
@@ -302,9 +303,9 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.txtLanguageMaps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtLanguageMaps.Location = new System.Drawing.Point(105, 247);
+			this.txtLanguageMaps.Location = new System.Drawing.Point(116, 132);
 			this.txtLanguageMaps.Name = "txtLanguageMaps";
-			this.txtLanguageMaps.Size = new System.Drawing.Size(588, 20);
+			this.txtLanguageMaps.Size = new System.Drawing.Size(574, 20);
 			this.txtLanguageMaps.TabIndex = 45;
 			this.txtLanguageMaps.Tag = "";
 			this.txtLanguageMaps.Text = "japan (jp); korea (ko)";
@@ -502,6 +503,10 @@ namespace ExcelToUnity_DataConverter
 			// 
 			// tpSettings
 			// 
+			this.tpSettings.Controls.Add(this.TxtGoogleClientSecret);
+			this.tpSettings.Controls.Add(this.TxtGoogleClientID);
+			this.tpSettings.Controls.Add(this.label5);
+			this.tpSettings.Controls.Add(this.label4);
 			this.tpSettings.Controls.Add(this.label11);
 			this.tpSettings.Controls.Add(this.txtLanguageMaps);
 			this.tpSettings.Controls.Add(this.label10);
@@ -541,7 +546,7 @@ namespace ExcelToUnity_DataConverter
 			// label11
 			// 
 			this.label11.AutoSize = true;
-			this.label11.Location = new System.Drawing.Point(6, 250);
+			this.label11.Location = new System.Drawing.Point(6, 135);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(83, 13);
 			this.label11.TabIndex = 46;
@@ -603,11 +608,11 @@ namespace ExcelToUnity_DataConverter
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(6, 322);
+			this.label9.Location = new System.Drawing.Point(6, 187);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(93, 13);
+			this.label9.Size = new System.Drawing.Size(90, 13);
 			this.label9.TabIndex = 35;
-			this.label9.Text = "Unminimized fields";
+			this.label9.Text = "Persistent column";
 			// 
 			// btnOpenFolder2
 			// 
@@ -662,7 +667,7 @@ namespace ExcelToUnity_DataConverter
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(6, 276);
+			this.label7.Location = new System.Drawing.Point(6, 161);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(87, 13);
 			this.label7.TabIndex = 22;
@@ -671,7 +676,7 @@ namespace ExcelToUnity_DataConverter
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(6, 135);
+			this.label6.Location = new System.Drawing.Point(8, 265);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(78, 13);
 			this.label6.TabIndex = 18;
@@ -764,12 +769,12 @@ namespace ExcelToUnity_DataConverter
 			this.DtgFilePaths.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
 			this.DtgFilePaths.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgFilePaths.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.path,
@@ -777,14 +782,14 @@ namespace ExcelToUnity_DataConverter
             this.exportConstants,
             this.status,
             this.BtnDelete});
-			dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle11;
+			dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle19;
 			this.DtgFilePaths.Location = new System.Drawing.Point(0, 29);
 			this.DtgFilePaths.Margin = new System.Windows.Forms.Padding(0);
 			this.DtgFilePaths.MultiSelect = false;
@@ -826,10 +831,10 @@ namespace ExcelToUnity_DataConverter
 			// 
 			// BtnDelete
 			// 
-			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle10;
+			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle18;
 			this.BtnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BtnDelete.HeaderText = "Delete";
 			this.BtnDelete.Name = "BtnDelete";
@@ -987,18 +992,18 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.DtgIDs.AllowUserToAddRows = false;
 			this.DtgIDs.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
 			this.DtgIDs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+			dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
 			this.DtgIDs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgIDs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ID,
@@ -1050,29 +1055,29 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.DtgSheets.AllowUserToAddRows = false;
 			this.DtgSheets.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle14;
+			dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle22;
 			this.DtgSheets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
+			dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
 			this.DtgSheets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgSheets.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SheetName,
             this.Check});
-			dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle16;
+			dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle24;
 			this.DtgSheets.Location = new System.Drawing.Point(0, 35);
 			this.DtgSheets.Name = "DtgSheets";
 			this.DtgSheets.Size = new System.Drawing.Size(253, 231);
@@ -1277,6 +1282,44 @@ namespace ExcelToUnity_DataConverter
 			this.dataGridViewImageColumn1.ReadOnly = true;
 			this.dataGridViewImageColumn1.Width = 40;
 			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(6, 213);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(84, 13);
+			this.label4.TabIndex = 47;
+			this.label4.Text = "Google Client ID";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(6, 239);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(104, 13);
+			this.label5.TabIndex = 48;
+			this.label5.Text = "Google Client Secret";
+			// 
+			// TxtGoogleClientID
+			// 
+			this.TxtGoogleClientID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.TxtGoogleClientID.Location = new System.Drawing.Point(116, 210);
+			this.TxtGoogleClientID.Name = "TxtGoogleClientID";
+			this.TxtGoogleClientID.Size = new System.Drawing.Size(574, 20);
+			this.TxtGoogleClientID.TabIndex = 49;
+			this.TxtGoogleClientID.Leave += new System.EventHandler(this.TxtGoogleClientID_Leave);
+			// 
+			// TxtGoogleClientSecret
+			// 
+			this.TxtGoogleClientSecret.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.TxtGoogleClientSecret.Location = new System.Drawing.Point(116, 236);
+			this.TxtGoogleClientSecret.Name = "TxtGoogleClientSecret";
+			this.TxtGoogleClientSecret.Size = new System.Drawing.Size(574, 20);
+			this.TxtGoogleClientSecret.TabIndex = 50;
+			this.TxtGoogleClientSecret.Leave += new System.EventHandler(this.TxtGoogleClientSecret_Leave);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1421,6 +1464,10 @@ namespace ExcelToUnity_DataConverter
 		private System.Windows.Forms.DataGridViewTextBoxColumn GoogleSheetId;
 		private System.Windows.Forms.DataGridViewButtonColumn BtnEditGoogleSheet;
 		private System.Windows.Forms.DataGridViewButtonColumn BtnDeleteGoogleSheet;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.TextBox TxtGoogleClientSecret;
+		private System.Windows.Forms.TextBox TxtGoogleClientID;
+		private System.Windows.Forms.Label label5;
 	}
 }
 
