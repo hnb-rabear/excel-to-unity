@@ -2633,7 +2633,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://github.com/hnb-rabear/excel-to-unity-document/blob/main/Example.xlsx");
+			Process.Start("https://github.com/hnb-rabear/excel-to-unity/blob/main/Example.xlsx");
 		}
 
 		private void BtnSaveSettings_Click(object sender, EventArgs e)
@@ -3710,7 +3710,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void toolStripStatusLabel3_Click(object sender, EventArgs e)
 		{
-			Process.Start("https://github.com/hnb-rabear/excel-to-unity-document");
+			Process.Start("https://github.com/hnb-rabear/excel-to-unity");
 		}
 
 		private void LinkGetProVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
