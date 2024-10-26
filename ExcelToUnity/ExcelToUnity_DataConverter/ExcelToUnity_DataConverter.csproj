@@ -223,6 +223,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\license.e2u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -231,6 +234,9 @@
     <Folder Include="bin\Debug\Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\bWtgYWt1Yg==.e2u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\folder.png" />
   </ItemGroup>
   <ItemGroup>

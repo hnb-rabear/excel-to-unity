@@ -1709,7 +1709,6 @@ namespace ExcelToUnity_DataConverter
 					lblEncryptionKey.Visible = false;
 					chkSettingEnableEncryption.Visible = false;
 					chkSettingEnableEncryption.Checked = false;
-					LinkGetProVersion.Visible = false;
 					TxtGoogleClientID.Visible = false;
 					TxtGoogleClientSecret.Visible = false;
 					lblGoogleClientId.Visible = false;
@@ -1725,8 +1724,6 @@ namespace ExcelToUnity_DataConverter
 					lblEncryptionKey.Visible = false;
 					chkSettingEnableEncryption.Visible = false;
 					chkSettingEnableEncryption.Checked = false;
-					break;
-				case UserType.Admin:
 					break;
 			}
 		}

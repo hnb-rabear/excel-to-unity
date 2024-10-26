@@ -117,6 +117,8 @@ namespace ExcelToUnity_DataConverter
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtInputXLSXFilePath = new System.Windows.Forms.TextBox();
 			this.DtgSheets = new System.Windows.Forms.DataGridView();
+			this.SheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.txtLog = new System.Windows.Forms.TextBox();
 			this.tabMenu = new System.Windows.Forms.TabControl();
 			this.tpGoogleSpreadSheets = new System.Windows.Forms.TabPage();
@@ -134,9 +136,6 @@ namespace ExcelToUnity_DataConverter
 			this.BtnLoadSettings = new System.Windows.Forms.Button();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-			this.LinkGetProVersion = new System.Windows.Forms.LinkLabel();
-			this.SheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.statusStrip2.SuspendLayout();
 			this.tpChangeLog.SuspendLayout();
 			this.tpHelp.SuspendLayout();
@@ -1139,6 +1138,21 @@ namespace ExcelToUnity_DataConverter
 			this.DtgSheets.Size = new System.Drawing.Size(253, 231);
 			this.DtgSheets.TabIndex = 11;
 			// 
+			// SheetName
+			// 
+			this.SheetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.SheetName.DataPropertyName = "SheetName";
+			this.SheetName.HeaderText = "Sheet Name";
+			this.SheetName.Name = "SheetName";
+			this.SheetName.ReadOnly = true;
+			// 
+			// Check
+			// 
+			this.Check.DataPropertyName = "Check";
+			this.Check.HeaderText = "Check";
+			this.Check.Name = "Check";
+			this.Check.Width = 50;
+			// 
 			// txtLog
 			// 
 			this.txtLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1322,38 +1336,11 @@ namespace ExcelToUnity_DataConverter
 			this.dataGridViewImageColumn1.ReadOnly = true;
 			this.dataGridViewImageColumn1.Width = 40;
 			// 
-			// LinkGetProVersion
-			// 
-			this.LinkGetProVersion.AutoSize = true;
-			this.LinkGetProVersion.Location = new System.Drawing.Point(352, 9);
-			this.LinkGetProVersion.Name = "LinkGetProVersion";
-			this.LinkGetProVersion.Size = new System.Drawing.Size(236, 13);
-			this.LinkGetProVersion.TabIndex = 4;
-			this.LinkGetProVersion.TabStop = true;
-			this.LinkGetProVersion.Text = "Upgrade to the Pro Version to unlock all features";
-			this.LinkGetProVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkGetProVersion_LinkClicked);
-			// 
-			// SheetName
-			// 
-			this.SheetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.SheetName.DataPropertyName = "SheetName";
-			this.SheetName.HeaderText = "Sheet Name";
-			this.SheetName.Name = "SheetName";
-			this.SheetName.ReadOnly = true;
-			// 
-			// Check
-			// 
-			this.Check.DataPropertyName = "Check";
-			this.Check.HeaderText = "Check";
-			this.Check.Name = "Check";
-			this.Check.Width = 50;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(704, 476);
-			this.Controls.Add(this.LinkGetProVersion);
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.Controls.Add(this.statusStrip2);
 			this.Controls.Add(this.linkDownloadExample);
@@ -1496,7 +1483,6 @@ namespace ExcelToUnity_DataConverter
 		private System.Windows.Forms.TextBox TxtGoogleClientSecret;
 		private System.Windows.Forms.TextBox TxtGoogleClientID;
 		private System.Windows.Forms.Label lblGoogleClientSecret;
-		private System.Windows.Forms.LinkLabel LinkGetProVersion;
 		private System.Windows.Forms.DataGridViewTextBoxColumn SheetName;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn Check;
 	}
