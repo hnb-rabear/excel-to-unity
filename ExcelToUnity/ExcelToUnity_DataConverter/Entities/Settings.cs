@@ -186,4 +186,20 @@ namespace ExcelToUnity_DataConverter
 			this.type = type;
 		}
 	}
+
+	public enum UserType
+	{
+		None = 0,
+		Admin,
+		Free,
+		Pro
+	}
+
+	public class User
+	{
+		public UserType user;
+		public bool encryption;
+		public int exportMultiExcels;
+		public int exportMultiGoogleSheet;
+	}
 }

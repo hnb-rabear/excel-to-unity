@@ -58,10 +58,16 @@ namespace ExcelToUnity_DataConverter
 
         public static IWorkbook LoadWorkBook(string pFilePath)
         {
-            using (var file = new FileStream(pFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                return new XSSFWorkbook(file);
-            }
+	        if (!File.Exists(pFilePath))
+	        {
+		        MessageBox.Show($"The file at path {pFilePath} does not exist.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		        return null;
+	        }
+
+	        using (var file = new FileStream(pFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+	        {
+		        return new XSSFWorkbook(file);
+	        }
         }
 
         public static bool IsValidJson(string strInput)

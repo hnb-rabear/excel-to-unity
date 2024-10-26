@@ -34,7 +34,6 @@ namespace ExcelToUnity_DataConverter
 			this.TxtGoogleSheetId = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.BtnDownload = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
 			this.TxtGoogleSheetName = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.DtgGoogleSheets)).BeginInit();
@@ -49,9 +48,9 @@ namespace ExcelToUnity_DataConverter
             this.name,
             this.selected});
 			this.DtgGoogleSheets.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.DtgGoogleSheets.Location = new System.Drawing.Point(0, 77);
+			this.DtgGoogleSheets.Location = new System.Drawing.Point(0, 64);
 			this.DtgGoogleSheets.Name = "DtgGoogleSheets";
-			this.DtgGoogleSheets.Size = new System.Drawing.Size(584, 284);
+			this.DtgGoogleSheets.Size = new System.Drawing.Size(584, 297);
 			this.DtgGoogleSheets.TabIndex = 1;
 			this.DtgGoogleSheets.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DtgGoogleSheets_CellEndEdit);
 			// 
@@ -100,16 +99,6 @@ namespace ExcelToUnity_DataConverter
 			this.BtnDownload.UseVisualStyleBackColor = false;
 			this.BtnDownload.Click += new System.EventHandler(this.BtnDownload_Click);
 			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.label2.Location = new System.Drawing.Point(12, 61);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(99, 13);
-			this.label2.TabIndex = 13;
-			this.label2.Text = "List Spread Sheets:";
-			// 
 			// TxtGoogleSheetName
 			// 
 			this.TxtGoogleSheetName.Location = new System.Drawing.Point(105, 38);
@@ -135,7 +124,6 @@ namespace ExcelToUnity_DataConverter
 			this.ClientSize = new System.Drawing.Size(584, 361);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.TxtGoogleSheetName);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.BtnDownload);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.TxtGoogleSheetId);
@@ -156,7 +144,6 @@ namespace ExcelToUnity_DataConverter
 		private System.Windows.Forms.TextBox TxtGoogleSheetId;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button BtnDownload;
-		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox TxtGoogleSheetName;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.DataGridViewTextBoxColumn name;

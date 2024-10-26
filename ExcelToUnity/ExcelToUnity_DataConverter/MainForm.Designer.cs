@@ -30,14 +30,14 @@ namespace ExcelToUnity_DataConverter
 	    {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -64,13 +64,17 @@ namespace ExcelToUnity_DataConverter
 			this.tpHelp = new System.Windows.Forms.TabPage();
 			this.weboxHelp = new System.Windows.Forms.WebBrowser();
 			this.linkDownloadExample = new System.Windows.Forms.LinkLabel();
-			this.tabEncription = new System.Windows.Forms.TabPage();
+			this.tpEncription = new System.Windows.Forms.TabPage();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.txtEncryptionInput = new System.Windows.Forms.TextBox();
 			this.txtEncryptionOutput = new System.Windows.Forms.TextBox();
 			this.BtnDecrypt = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
 			this.tpSettings = new System.Windows.Forms.TabPage();
+			this.TxtGoogleClientSecret = new System.Windows.Forms.TextBox();
+			this.TxtGoogleClientID = new System.Windows.Forms.TextBox();
+			this.lblGoogleClientSecret = new System.Windows.Forms.Label();
+			this.lblGoogleClientId = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.btnOpenFolderLocalization = new System.Windows.Forms.Button();
@@ -81,8 +85,8 @@ namespace ExcelToUnity_DataConverter
 			this.btnOpenFolder1 = new System.Windows.Forms.Button();
 			this.label8 = new System.Windows.Forms.Label();
 			this.txtSettingNamespace = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
+			this.lblbExcluedSheets = new System.Windows.Forms.Label();
+			this.lblEncryptionKey = new System.Windows.Forms.Label();
 			this.btnSelectFolder2 = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.btnSelectFolder = new System.Windows.Forms.Button();
@@ -100,6 +104,7 @@ namespace ExcelToUnity_DataConverter
 			this.txtLog2 = new System.Windows.Forms.TextBox();
 			this.tpExportExcel = new System.Windows.Forms.TabPage();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.BtnExportAll = new System.Windows.Forms.Button();
 			this.BtnExportJson = new System.Windows.Forms.Button();
 			this.BtnReloadGrid = new System.Windows.Forms.Button();
 			this.btnExportLocalization = new System.Windows.Forms.Button();
@@ -112,8 +117,6 @@ namespace ExcelToUnity_DataConverter
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtInputXLSXFilePath = new System.Windows.Forms.TextBox();
 			this.DtgSheets = new System.Windows.Forms.DataGridView();
-			this.SheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.txtLog = new System.Windows.Forms.TextBox();
 			this.tabMenu = new System.Windows.Forms.TabControl();
 			this.tpGoogleSpreadSheets = new System.Windows.Forms.TabPage();
@@ -131,14 +134,13 @@ namespace ExcelToUnity_DataConverter
 			this.BtnLoadSettings = new System.Windows.Forms.Button();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.TxtGoogleClientID = new System.Windows.Forms.TextBox();
-			this.TxtGoogleClientSecret = new System.Windows.Forms.TextBox();
+			this.LinkGetProVersion = new System.Windows.Forms.LinkLabel();
+			this.SheetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.statusStrip2.SuspendLayout();
 			this.tpChangeLog.SuspendLayout();
 			this.tpHelp.SuspendLayout();
-			this.tabEncription.SuspendLayout();
+			this.tpEncription.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -184,11 +186,11 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.chkSeperateLocalization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkSeperateLocalization.AutoSize = true;
-			this.chkSeperateLocalization.Location = new System.Drawing.Point(531, 85);
+			this.chkSeperateLocalization.Location = new System.Drawing.Point(105, 155);
 			this.chkSeperateLocalization.Name = "chkSeperateLocalization";
-			this.chkSeperateLocalization.Size = new System.Drawing.Size(133, 17);
+			this.chkSeperateLocalization.Size = new System.Drawing.Size(161, 17);
 			this.chkSeperateLocalization.TabIndex = 40;
-			this.chkSeperateLocalization.Text = "Separate Localizations";
+			this.chkSeperateLocalization.Text = "Keep Localizations Separate";
 			this.toolTip.SetToolTip(this.chkSeperateLocalization, "When this option is selected, the Localizations sheet with different name will be" +
         " exported individually");
 			this.chkSeperateLocalization.UseVisualStyleBackColor = true;
@@ -198,11 +200,11 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.chkSeperateConstants.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkSeperateConstants.AutoSize = true;
-			this.chkSeperateConstants.Location = new System.Drawing.Point(406, 85);
+			this.chkSeperateConstants.Location = new System.Drawing.Point(105, 109);
 			this.chkSeperateConstants.Name = "chkSeperateConstants";
-			this.chkSeperateConstants.Size = new System.Drawing.Size(119, 17);
+			this.chkSeperateConstants.Size = new System.Drawing.Size(147, 17);
 			this.chkSeperateConstants.TabIndex = 39;
-			this.chkSeperateConstants.Text = "Separate Constants";
+			this.chkSeperateConstants.Text = "Keep Constants Separate";
 			this.toolTip.SetToolTip(this.chkSeperateConstants, "When this option is selected, the Constants sheet in each Excel file will be expo" +
         "rted individually");
 			this.chkSeperateConstants.UseVisualStyleBackColor = true;
@@ -212,9 +214,9 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.txtUnminimizeFields.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtUnminimizeFields.Location = new System.Drawing.Point(116, 184);
+			this.txtUnminimizeFields.Location = new System.Drawing.Point(105, 204);
 			this.txtUnminimizeFields.Name = "txtUnminimizeFields";
-			this.txtUnminimizeFields.Size = new System.Drawing.Size(574, 20);
+			this.txtUnminimizeFields.Size = new System.Drawing.Size(583, 20);
 			this.txtUnminimizeFields.TabIndex = 34;
 			this.txtUnminimizeFields.Text = "id; mode; type; group; level; rank";
 			this.toolTip.SetToolTip(this.txtUnminimizeFields, "Type the name of the column in the json data sheet that you want to export even i" +
@@ -226,7 +228,7 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.chkMergeJsonIntoSingleOne2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkMergeJsonIntoSingleOne2.AutoSize = true;
-			this.chkMergeJsonIntoSingleOne2.Location = new System.Drawing.Point(531, 109);
+			this.chkMergeJsonIntoSingleOne2.Location = new System.Drawing.Point(312, 109);
 			this.chkMergeJsonIntoSingleOne2.Name = "chkMergeJsonIntoSingleOne2";
 			this.chkMergeJsonIntoSingleOne2.Size = new System.Drawing.Size(129, 17);
 			this.chkMergeJsonIntoSingleOne2.TabIndex = 32;
@@ -239,11 +241,11 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.chkSeperateIDs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkSeperateIDs.AutoSize = true;
-			this.chkSeperateIDs.Location = new System.Drawing.Point(312, 85);
+			this.chkSeperateIDs.Location = new System.Drawing.Point(105, 132);
 			this.chkSeperateIDs.Name = "chkSeperateIDs";
-			this.chkSeperateIDs.Size = new System.Drawing.Size(88, 17);
+			this.chkSeperateIDs.Size = new System.Drawing.Size(111, 17);
 			this.chkSeperateIDs.TabIndex = 25;
-			this.chkSeperateIDs.Text = "Separate IDs";
+			this.chkSeperateIDs.Text = "Keep ID Separate";
 			this.toolTip.SetToolTip(this.chkSeperateIDs, "When this option is selected, the IDs sheet in each Excel file will be exported i" +
         "ndividually");
 			this.chkSeperateIDs.UseVisualStyleBackColor = true;
@@ -253,9 +255,9 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.txtSettingExcludedSheet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingExcludedSheet.Location = new System.Drawing.Point(116, 158);
+			this.txtSettingExcludedSheet.Location = new System.Drawing.Point(105, 230);
 			this.txtSettingExcludedSheet.Name = "txtSettingExcludedSheet";
-			this.txtSettingExcludedSheet.Size = new System.Drawing.Size(574, 20);
+			this.txtSettingExcludedSheet.Size = new System.Drawing.Size(583, 20);
 			this.txtSettingExcludedSheet.TabIndex = 21;
 			this.txtSettingExcludedSheet.Text = "Sheet1; Sheet2; Sheet3;";
 			this.toolTip.SetToolTip(this.txtSettingExcludedSheet, "Type the name of the sheet that you want to skip when exporting. The skipped shee" +
@@ -290,9 +292,9 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.txtSettingEncryptionKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSettingEncryptionKey.Location = new System.Drawing.Point(116, 262);
+			this.txtSettingEncryptionKey.Location = new System.Drawing.Point(105, 308);
 			this.txtSettingEncryptionKey.Name = "txtSettingEncryptionKey";
-			this.txtSettingEncryptionKey.Size = new System.Drawing.Size(574, 20);
+			this.txtSettingEncryptionKey.Size = new System.Drawing.Size(583, 20);
 			this.txtSettingEncryptionKey.TabIndex = 17;
 			this.txtSettingEncryptionKey.Text = resources.GetString("txtSettingEncryptionKey.Text");
 			this.toolTip.SetToolTip(this.txtSettingEncryptionKey, "The key that encrypts the json data before exporting it");
@@ -303,9 +305,9 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.txtLanguageMaps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtLanguageMaps.Location = new System.Drawing.Point(116, 132);
+			this.txtLanguageMaps.Location = new System.Drawing.Point(105, 178);
 			this.txtLanguageMaps.Name = "txtLanguageMaps";
-			this.txtLanguageMaps.Size = new System.Drawing.Size(574, 20);
+			this.txtLanguageMaps.Size = new System.Drawing.Size(583, 20);
 			this.txtLanguageMaps.TabIndex = 45;
 			this.txtLanguageMaps.Tag = "";
 			this.txtLanguageMaps.Text = "japan (jp); korea (ko)";
@@ -319,7 +321,7 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.chkKeepOnlyEnumAsIds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkKeepOnlyEnumAsIds.AutoSize = true;
-			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(405, 109);
+			this.chkKeepOnlyEnumAsIds.Location = new System.Drawing.Point(312, 132);
 			this.chkKeepOnlyEnumAsIds.Name = "chkKeepOnlyEnumAsIds";
 			this.chkKeepOnlyEnumAsIds.Size = new System.Drawing.Size(110, 17);
 			this.chkKeepOnlyEnumAsIds.TabIndex = 38;
@@ -333,7 +335,7 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.chkSettingEnableEncryption.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkSettingEnableEncryption.AutoSize = true;
-			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(312, 109);
+			this.chkSettingEnableEncryption.Location = new System.Drawing.Point(312, 155);
 			this.chkSettingEnableEncryption.Name = "chkSettingEnableEncryption";
 			this.chkSettingEnableEncryption.Size = new System.Drawing.Size(87, 17);
 			this.chkSettingEnableEncryption.TabIndex = 19;
@@ -419,15 +421,15 @@ namespace ExcelToUnity_DataConverter
 			this.linkDownloadExample.Text = "Download Example";
 			this.linkDownloadExample.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
 			// 
-			// tabEncription
+			// tpEncription
 			// 
-			this.tabEncription.Controls.Add(this.splitContainer1);
-			this.tabEncription.Location = new System.Drawing.Point(4, 22);
-			this.tabEncription.Name = "tabEncription";
-			this.tabEncription.Padding = new System.Windows.Forms.Padding(3);
-			this.tabEncription.Size = new System.Drawing.Size(696, 392);
-			this.tabEncription.TabIndex = 4;
-			this.tabEncription.Text = "Encryption Tool";
+			this.tpEncription.Controls.Add(this.splitContainer1);
+			this.tpEncription.Location = new System.Drawing.Point(4, 22);
+			this.tpEncription.Name = "tpEncription";
+			this.tpEncription.Padding = new System.Windows.Forms.Padding(3);
+			this.tpEncription.Size = new System.Drawing.Size(696, 392);
+			this.tpEncription.TabIndex = 4;
+			this.tpEncription.Text = "Encryption Tool";
 			// 
 			// splitContainer1
 			// 
@@ -505,8 +507,8 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.tpSettings.Controls.Add(this.TxtGoogleClientSecret);
 			this.tpSettings.Controls.Add(this.TxtGoogleClientID);
-			this.tpSettings.Controls.Add(this.label5);
-			this.tpSettings.Controls.Add(this.label4);
+			this.tpSettings.Controls.Add(this.lblGoogleClientSecret);
+			this.tpSettings.Controls.Add(this.lblGoogleClientId);
 			this.tpSettings.Controls.Add(this.label11);
 			this.tpSettings.Controls.Add(this.txtLanguageMaps);
 			this.tpSettings.Controls.Add(this.label10);
@@ -529,9 +531,9 @@ namespace ExcelToUnity_DataConverter
 			this.tpSettings.Controls.Add(this.txtSettingEncryptionKey);
 			this.tpSettings.Controls.Add(this.txtSettingOuputConstantsFilePath);
 			this.tpSettings.Controls.Add(this.txtSettingOutputDataFilePath);
-			this.tpSettings.Controls.Add(this.label7);
+			this.tpSettings.Controls.Add(this.lblbExcluedSheets);
 			this.tpSettings.Controls.Add(this.chkSettingEnableEncryption);
-			this.tpSettings.Controls.Add(this.label6);
+			this.tpSettings.Controls.Add(this.lblEncryptionKey);
 			this.tpSettings.Controls.Add(this.btnSelectFolder2);
 			this.tpSettings.Controls.Add(this.label3);
 			this.tpSettings.Controls.Add(this.btnSelectFolder);
@@ -543,10 +545,48 @@ namespace ExcelToUnity_DataConverter
 			this.tpSettings.TabIndex = 3;
 			this.tpSettings.Text = "Settings";
 			// 
+			// TxtGoogleClientSecret
+			// 
+			this.TxtGoogleClientSecret.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.TxtGoogleClientSecret.Location = new System.Drawing.Point(105, 282);
+			this.TxtGoogleClientSecret.Name = "TxtGoogleClientSecret";
+			this.TxtGoogleClientSecret.Size = new System.Drawing.Size(583, 20);
+			this.TxtGoogleClientSecret.TabIndex = 50;
+			this.TxtGoogleClientSecret.Leave += new System.EventHandler(this.TxtGoogleClientSecret_Leave);
+			// 
+			// TxtGoogleClientID
+			// 
+			this.TxtGoogleClientID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.TxtGoogleClientID.Location = new System.Drawing.Point(105, 256);
+			this.TxtGoogleClientID.Name = "TxtGoogleClientID";
+			this.TxtGoogleClientID.Size = new System.Drawing.Size(583, 20);
+			this.TxtGoogleClientID.TabIndex = 49;
+			this.TxtGoogleClientID.Leave += new System.EventHandler(this.TxtGoogleClientID_Leave);
+			// 
+			// lblGoogleClientSecret
+			// 
+			this.lblGoogleClientSecret.AutoSize = true;
+			this.lblGoogleClientSecret.Location = new System.Drawing.Point(6, 285);
+			this.lblGoogleClientSecret.Name = "lblGoogleClientSecret";
+			this.lblGoogleClientSecret.Size = new System.Drawing.Size(86, 13);
+			this.lblGoogleClientSecret.TabIndex = 48;
+			this.lblGoogleClientSecret.Text = "GG Client Secret";
+			// 
+			// lblGoogleClientId
+			// 
+			this.lblGoogleClientId.AutoSize = true;
+			this.lblGoogleClientId.Location = new System.Drawing.Point(6, 259);
+			this.lblGoogleClientId.Name = "lblGoogleClientId";
+			this.lblGoogleClientId.Size = new System.Drawing.Size(66, 13);
+			this.lblGoogleClientId.TabIndex = 47;
+			this.lblGoogleClientId.Text = "GG Client ID";
+			// 
 			// label11
 			// 
 			this.label11.AutoSize = true;
-			this.label11.Location = new System.Drawing.Point(6, 135);
+			this.label11.Location = new System.Drawing.Point(6, 181);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(83, 13);
 			this.label11.TabIndex = 46;
@@ -608,7 +648,7 @@ namespace ExcelToUnity_DataConverter
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(6, 187);
+			this.label9.Location = new System.Drawing.Point(6, 207);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(90, 13);
 			this.label9.TabIndex = 35;
@@ -659,28 +699,28 @@ namespace ExcelToUnity_DataConverter
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSettingNamespace.Location = new System.Drawing.Point(105, 83);
 			this.txtSettingNamespace.Name = "txtSettingNamespace";
-			this.txtSettingNamespace.Size = new System.Drawing.Size(201, 20);
+			this.txtSettingNamespace.Size = new System.Drawing.Size(464, 20);
 			this.txtSettingNamespace.TabIndex = 23;
 			this.txtSettingNamespace.TextChanged += new System.EventHandler(this.txtSettingNamespace_TextChanged);
 			this.txtSettingNamespace.Leave += new System.EventHandler(this.txtSettingNamespace_Leave);
 			// 
-			// label7
+			// lblbExcluedSheets
 			// 
-			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(6, 161);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(87, 13);
-			this.label7.TabIndex = 22;
-			this.label7.Text = "Excluded Sheets";
+			this.lblbExcluedSheets.AutoSize = true;
+			this.lblbExcluedSheets.Location = new System.Drawing.Point(6, 233);
+			this.lblbExcluedSheets.Name = "lblbExcluedSheets";
+			this.lblbExcluedSheets.Size = new System.Drawing.Size(87, 13);
+			this.lblbExcluedSheets.TabIndex = 22;
+			this.lblbExcluedSheets.Text = "Excluded Sheets";
 			// 
-			// label6
+			// lblEncryptionKey
 			// 
-			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(8, 265);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(78, 13);
-			this.label6.TabIndex = 18;
-			this.label6.Text = "Encryption Key\r\n";
+			this.lblEncryptionKey.AutoSize = true;
+			this.lblEncryptionKey.Location = new System.Drawing.Point(6, 311);
+			this.lblEncryptionKey.Name = "lblEncryptionKey";
+			this.lblEncryptionKey.Size = new System.Drawing.Size(78, 13);
+			this.lblEncryptionKey.TabIndex = 18;
+			this.lblEncryptionKey.Text = "Encryption Key\r\n";
 			// 
 			// btnSelectFolder2
 			// 
@@ -769,12 +809,12 @@ namespace ExcelToUnity_DataConverter
 			this.DtgFilePaths.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgFilePaths.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.DtgFilePaths.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgFilePaths.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.path,
@@ -782,14 +822,14 @@ namespace ExcelToUnity_DataConverter
             this.exportConstants,
             this.status,
             this.BtnDelete});
-			dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle19;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgFilePaths.DefaultCellStyle = dataGridViewCellStyle3;
 			this.DtgFilePaths.Location = new System.Drawing.Point(0, 29);
 			this.DtgFilePaths.Margin = new System.Windows.Forms.Padding(0);
 			this.DtgFilePaths.MultiSelect = false;
@@ -831,10 +871,10 @@ namespace ExcelToUnity_DataConverter
 			// 
 			// BtnDelete
 			// 
-			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle18;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.BtnDelete.DefaultCellStyle = dataGridViewCellStyle2;
 			this.BtnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BtnDelete.HeaderText = "Delete";
 			this.BtnDelete.Name = "BtnDelete";
@@ -883,6 +923,7 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.panel2.BackColor = System.Drawing.Color.Transparent;
+			this.panel2.Controls.Add(this.BtnExportAll);
 			this.panel2.Controls.Add(this.BtnExportJson);
 			this.panel2.Controls.Add(this.BtnReloadGrid);
 			this.panel2.Controls.Add(this.btnExportLocalization);
@@ -899,6 +940,21 @@ namespace ExcelToUnity_DataConverter
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(690, 269);
 			this.panel2.TabIndex = 27;
+			// 
+			// BtnExportAll
+			// 
+			this.BtnExportAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.BtnExportAll.BackColor = System.Drawing.SystemColors.Control;
+			this.BtnExportAll.Cursor = System.Windows.Forms.Cursors.Default;
+			this.BtnExportAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.BtnExportAll.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.BtnExportAll.Location = new System.Drawing.Point(597, 37);
+			this.BtnExportAll.Name = "BtnExportAll";
+			this.BtnExportAll.Size = new System.Drawing.Size(90, 23);
+			this.BtnExportAll.TabIndex = 21;
+			this.BtnExportAll.Text = "Export All";
+			this.BtnExportAll.UseVisualStyleBackColor = false;
+			this.BtnExportAll.Click += new System.EventHandler(this.BtnExportAll_Click);
 			// 
 			// BtnExportJson
 			// 
@@ -922,7 +978,7 @@ namespace ExcelToUnity_DataConverter
 			this.BtnReloadGrid.Cursor = System.Windows.Forms.Cursors.Default;
 			this.BtnReloadGrid.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BtnReloadGrid.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.BtnReloadGrid.Location = new System.Drawing.Point(597, 37);
+			this.BtnReloadGrid.Location = new System.Drawing.Point(597, 215);
 			this.BtnReloadGrid.Name = "BtnReloadGrid";
 			this.BtnReloadGrid.Size = new System.Drawing.Size(90, 23);
 			this.BtnReloadGrid.TabIndex = 14;
@@ -992,18 +1048,18 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.DtgIDs.AllowUserToAddRows = false;
 			this.DtgIDs.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
+			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgIDs.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
 			this.DtgIDs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgIDs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
 			this.DtgIDs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgIDs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ID,
@@ -1055,49 +1111,33 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.DtgSheets.AllowUserToAddRows = false;
 			this.DtgSheets.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle22;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.DtgSheets.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
 			this.DtgSheets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
+			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DtgSheets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
 			this.DtgSheets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DtgSheets.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SheetName,
             this.Check});
-			dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-			dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle24;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+			dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DtgSheets.DefaultCellStyle = dataGridViewCellStyle8;
 			this.DtgSheets.Location = new System.Drawing.Point(0, 35);
 			this.DtgSheets.Name = "DtgSheets";
 			this.DtgSheets.Size = new System.Drawing.Size(253, 231);
 			this.DtgSheets.TabIndex = 11;
-			// 
-			// SheetName
-			// 
-			this.SheetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.SheetName.DataPropertyName = "SheetName";
-			this.SheetName.HeaderText = "Sheet Name";
-			this.SheetName.Name = "SheetName";
-			this.SheetName.ReadOnly = true;
-			// 
-			// Check
-			// 
-			this.Check.DataPropertyName = "Check";
-			this.Check.HeaderText = "Check";
-			this.Check.Name = "Check";
-			this.Check.ReadOnly = true;
-			this.Check.Width = 50;
 			// 
 			// txtLog
 			// 
@@ -1119,7 +1159,7 @@ namespace ExcelToUnity_DataConverter
 			this.tabMenu.Controls.Add(this.tpExportExcel);
 			this.tabMenu.Controls.Add(this.tpExportMultiExcels);
 			this.tabMenu.Controls.Add(this.tpSettings);
-			this.tabMenu.Controls.Add(this.tabEncription);
+			this.tabMenu.Controls.Add(this.tpEncription);
 			this.tabMenu.Controls.Add(this.tpHelp);
 			this.tabMenu.Controls.Add(this.tpChangeLog);
 			this.tabMenu.Controls.Add(this.tpGoogleSpreadSheets);
@@ -1282,49 +1322,38 @@ namespace ExcelToUnity_DataConverter
 			this.dataGridViewImageColumn1.ReadOnly = true;
 			this.dataGridViewImageColumn1.Width = 40;
 			// 
-			// label4
+			// LinkGetProVersion
 			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(6, 213);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(84, 13);
-			this.label4.TabIndex = 47;
-			this.label4.Text = "Google Client ID";
+			this.LinkGetProVersion.AutoSize = true;
+			this.LinkGetProVersion.Location = new System.Drawing.Point(352, 9);
+			this.LinkGetProVersion.Name = "LinkGetProVersion";
+			this.LinkGetProVersion.Size = new System.Drawing.Size(236, 13);
+			this.LinkGetProVersion.TabIndex = 4;
+			this.LinkGetProVersion.TabStop = true;
+			this.LinkGetProVersion.Text = "Upgrade to the Pro Version to unlock all features";
+			this.LinkGetProVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkGetProVersion_LinkClicked);
 			// 
-			// label5
+			// SheetName
 			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(6, 239);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(104, 13);
-			this.label5.TabIndex = 48;
-			this.label5.Text = "Google Client Secret";
+			this.SheetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.SheetName.DataPropertyName = "SheetName";
+			this.SheetName.HeaderText = "Sheet Name";
+			this.SheetName.Name = "SheetName";
+			this.SheetName.ReadOnly = true;
 			// 
-			// TxtGoogleClientID
+			// Check
 			// 
-			this.TxtGoogleClientID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.TxtGoogleClientID.Location = new System.Drawing.Point(116, 210);
-			this.TxtGoogleClientID.Name = "TxtGoogleClientID";
-			this.TxtGoogleClientID.Size = new System.Drawing.Size(574, 20);
-			this.TxtGoogleClientID.TabIndex = 49;
-			this.TxtGoogleClientID.Leave += new System.EventHandler(this.TxtGoogleClientID_Leave);
-			// 
-			// TxtGoogleClientSecret
-			// 
-			this.TxtGoogleClientSecret.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.TxtGoogleClientSecret.Location = new System.Drawing.Point(116, 236);
-			this.TxtGoogleClientSecret.Name = "TxtGoogleClientSecret";
-			this.TxtGoogleClientSecret.Size = new System.Drawing.Size(574, 20);
-			this.TxtGoogleClientSecret.TabIndex = 50;
-			this.TxtGoogleClientSecret.Leave += new System.EventHandler(this.TxtGoogleClientSecret_Leave);
+			this.Check.DataPropertyName = "Check";
+			this.Check.HeaderText = "Check";
+			this.Check.Name = "Check";
+			this.Check.Width = 50;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(704, 476);
+			this.Controls.Add(this.LinkGetProVersion);
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.Controls.Add(this.statusStrip2);
 			this.Controls.Add(this.linkDownloadExample);
@@ -1340,7 +1369,7 @@ namespace ExcelToUnity_DataConverter
 			this.statusStrip2.PerformLayout();
 			this.tpChangeLog.ResumeLayout(false);
 			this.tpHelp.ResumeLayout(false);
-			this.tabEncription.ResumeLayout(false);
+			this.tpEncription.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.PerformLayout();
 			this.splitContainer1.Panel2.ResumeLayout(false);
@@ -1369,10 +1398,9 @@ namespace ExcelToUnity_DataConverter
 			this.PerformLayout();
 
 	    }
+	    private System.Windows.Forms.Button BtnExportAll;
 	    private System.Windows.Forms.DataGridViewTextBoxColumn ID;
 	    private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-	    private System.Windows.Forms.DataGridViewTextBoxColumn SheetName;
-	    private System.Windows.Forms.DataGridViewCheckBoxColumn Check;
 
 #endregion
         private System.Windows.Forms.OpenFileDialog openFileDialog;
@@ -1385,7 +1413,7 @@ namespace ExcelToUnity_DataConverter
         private System.Windows.Forms.ToolStripStatusLabel txtVersion;
         private System.Windows.Forms.TabPage tpChangeLog;
         private System.Windows.Forms.TabPage tpHelp;
-        private System.Windows.Forms.TabPage tabEncription;
+        private System.Windows.Forms.TabPage tpEncription;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button BtnDecrypt;
         private System.Windows.Forms.TextBox txtEncryptionOutput;
@@ -1400,9 +1428,9 @@ namespace ExcelToUnity_DataConverter
         private System.Windows.Forms.TextBox txtSettingEncryptionKey;
         private System.Windows.Forms.TextBox txtSettingOuputConstantsFilePath;
         private System.Windows.Forms.TextBox txtSettingOutputDataFilePath;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblbExcluedSheets;
         private System.Windows.Forms.CheckBox chkSettingEnableEncryption;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblEncryptionKey;
         private System.Windows.Forms.Button btnSelectFolder2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSelectFolder;
@@ -1464,10 +1492,13 @@ namespace ExcelToUnity_DataConverter
 		private System.Windows.Forms.DataGridViewTextBoxColumn GoogleSheetId;
 		private System.Windows.Forms.DataGridViewButtonColumn BtnEditGoogleSheet;
 		private System.Windows.Forms.DataGridViewButtonColumn BtnDeleteGoogleSheet;
-		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label lblGoogleClientId;
 		private System.Windows.Forms.TextBox TxtGoogleClientSecret;
 		private System.Windows.Forms.TextBox TxtGoogleClientID;
-		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label lblGoogleClientSecret;
+		private System.Windows.Forms.LinkLabel LinkGetProVersion;
+		private System.Windows.Forms.DataGridViewTextBoxColumn SheetName;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn Check;
 	}
 }
 

@@ -160,29 +160,6 @@ namespace ExcelToUnity_DataConverter
 			Config.Save();
 		}
 
-		private void InitExcel()
-		{
-			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
-			DtgIDs.DataSource = null;
-			DtgIDs.Rows.Clear();
-
-			m_sheets = new List<Sheet>();
-			if (!string.IsNullOrEmpty(txtInputXLSXFilePath.Text.Trim()))
-			{
-				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
-				if (m_workBook != null)
-				{
-					for (int i = 0; i < m_workBook.NumberOfSheets; i++)
-					{
-						string sheetName = m_workBook.GetSheetName(i);
-						m_sheets.Add(new Sheet(sheetName));
-					}
-					ExcludeSheets(ref m_sheets);
-				}
-			}
-			DtgSheets.DataSource = new BindingList<Sheet>(m_sheets);
-		}
-
 #region Load and create IDs
 
 		private bool BuildContentOfFileIDs(IWorkbook pWorkBook, string pSheetName)
@@ -191,7 +168,7 @@ namespace ExcelToUnity_DataConverter
 
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
 			{
-				Log(LogType.Warning, $"Sheet {pSheetName} is empty");
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
 				return false;
 			}
 
@@ -379,10 +356,11 @@ namespace ExcelToUnity_DataConverter
 		{
 			string fileContent = File.ReadAllText(IDS_CS_TEMPLATE);
 			fileContent = fileContent.Replace("_IDS_CLASS_NAME_", exportFileName);
-			fileContent = fileContent.Replace("public const int _FIELDS_ = 0;", content /*mIDsBuilderDict.ToString()*/);
+			fileContent = fileContent.Replace("public const int _FIELDS_ = 0;", content);
 			fileContent = AddNamespace(fileContent);
 
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, exportFileName + ".cs", fileContent);
+			Helper.WriteFile(Config.Settings.outputConstantsFilePath, $"{exportFileName}.cs", fileContent);
+			Log(LogType.Message, $"Exported {exportFileName}.cs!");
 		}
 
 		private bool CheckExistId(string pKey)
@@ -423,12 +401,12 @@ namespace ExcelToUnity_DataConverter
 
 #region Load and create Constants
 
-		private void LoadSheetConstantsData(IWorkbook workbook, string sheetName)
+		private void LoadSheetConstantsData(IWorkbook pWorkbook, string pSheetName)
 		{
-			var sheet = workbook.GetSheet(sheetName);
+			var sheet = pWorkbook.GetSheet(pSheetName);
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
 			{
-				Log(LogType.Warning, $"Sheet {sheetName} is empty!");
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
 				return;
 			}
 
@@ -483,7 +461,7 @@ namespace ExcelToUnity_DataConverter
 				}
 			}
 			constants.Sort();
-			BuildContentOfFileConstants(constants, sheetName);
+			BuildContentOfFileConstants(constants, pSheetName);
 		}
 
 		private void BuildContentOfFileConstants(List<ConstantBuilder> constants, string constantsSheet)
@@ -604,7 +582,7 @@ namespace ExcelToUnity_DataConverter
 			fileContent = AddNamespace(fileContent);
 
 			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pExportFileName + ".cs", fileContent);
-			Log(LogType.Message, "Export " + pExportFileName + ".cs successfully!");
+			Log(LogType.Message, $"Exported {pExportFileName}.cs!");
 		}
 
 #endregion
@@ -984,7 +962,7 @@ namespace ExcelToUnity_DataConverter
 										{
 											MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
 												@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-											Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
+											Log(LogType.Error, $"Invalid data, Sheet: {pSheetName}, Field: {fieldName}, Row: {i + 1}");
 										}
 										var tempObj = JsonConvert.DeserializeObject(fieldValue);
 										var tempJsonStr = JsonConvert.SerializeObject(tempObj);
@@ -1042,11 +1020,11 @@ namespace ExcelToUnity_DataConverter
 
 			if (pAutoWriteFile)
 			{
-				Helper.WriteFile(Config.Settings.outputDataFilePath, pOutputFile + ".txt", finalContent);
+				Helper.WriteFile(Config.Settings.outputDataFilePath, $"{pOutputFile}.txt", finalContent);
 				if (pEncrypt && m_encryption != null)
-					Log(LogType.Message, $"Exported all Data Tables {pSheetName} as encrypted JSON data.");
+					Log(LogType.Message, $"Exported encrypted Json data to {pOutputFile}.txt.");
 				else
-					Log(LogType.Message, $"Exported all Data Tables {pSheetName} as JSON data.");
+					Log(LogType.Message, $"Exported Json data to {pOutputFile}.txt.");
 			}
 			return finalContent;
 		}
@@ -1187,17 +1165,20 @@ namespace ExcelToUnity_DataConverter
 
 		private void RefreshDtgExcelFiles()
 		{
-			for (int i = Config.Settings.allFiles.Count - 1; i >= 0; i--)
-			{
-				//Check if file exist
-				if (!File.Exists(Config.Settings.allFiles[i].path))
-					Config.Settings.allFiles.RemoveAt(i);
-			}
+			//for (int i = Config.Settings.allFiles.Count - 1; i >= 0; i--)
+			//{
+			//	//Check if file exist
+			//	if (!File.Exists(Config.Settings.allFiles[i].path))
+			//		Config.Settings.allFiles.RemoveAt(i);
+			//}
 			if (Config.Settings.allFiles != null)
 				Config.Settings.allFiles.Sort();
+			
 			m_bindingExcelPaths.ResetBindings();
 			DtgFilePaths.Refresh();
 			DtgFilePaths.AutoResizeColumns();
+
+			CheckFilesExist();
 		}
 
 		private void InitExcels()
@@ -1205,6 +1186,14 @@ namespace ExcelToUnity_DataConverter
 			DtgFilePaths.AutoGenerateColumns = false;
 			m_bindingExcelPaths = new BindingList<ExcelPath>(Config.Settings.allFiles);
 			DtgFilePaths.DataSource = m_bindingExcelPaths;
+
+			CheckFilesExist();
+		}
+
+		private void CheckFilesExist()
+		{
+			foreach (DataGridViewRow row in DtgFilePaths.Rows)
+				ValidatePathRow(row);
 		}
 
 		private void CreateEncryption()
@@ -1234,7 +1223,7 @@ namespace ExcelToUnity_DataConverter
 			var sheet = pWorkBook.GetSheet(pSheetName);
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
 			{
-				Log(LogType.Warning, pSheetName + " is empty!");
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
 				return;
 			}
 
@@ -1447,7 +1436,7 @@ namespace ExcelToUnity_DataConverter
 			fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageFilesBuilder.ToString());
 			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileTemplateContent);
-			Log(LogType.Message, "Export " + pFileName + ".cs successfully!");
+			Log(LogType.Message, $"Exported {pFileName}.cs!");
 		}
 
 		private Dictionary<string, string> m_characterMaps;
@@ -1522,9 +1511,9 @@ namespace ExcelToUnity_DataConverter
 			foreach (var listText in pLanguageTextDict)
 			{
 				string json = JsonConvert.SerializeObject(listText.Value);
-				Helper.WriteFile(Config.Settings.outputLocalizationFilePath, pFileName + "_" + listText.Key + ".txt", json);
+				Helper.WriteFile(Config.Settings.outputLocalizationFilePath, $"{pFileName}_{listText.Key}.txt", json);
+				Log(LogType.Message, $"Exported Localization content to {pFileName}_{listText.Key}.txt!");
 
-				//Build characters map
 				if (Config.Settings.languageCharactersMaps != null && Config.Settings.languageCharactersMaps.Contains(listText.Key))
 				{
 					if (m_characterMaps.ContainsKey(listText.Key))
@@ -1556,15 +1545,15 @@ namespace ExcelToUnity_DataConverter
 			fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
 			fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 			fileContent = AddNamespace(fileContent);
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileContent);
-
+			Helper.WriteFile(Config.Settings.outputConstantsFilePath, $"{pFileName}.cs", fileContent);
+			Log(LogType.Message, $"Exported {pFileName}.cs!");
+			
 			//Write file localized text component
 			fileContent = File.ReadAllText(LOCALIZATION_TEXT_TEMPLATE);
 			fileContent = fileContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
 			fileContent = AddNamespace(fileContent);
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + "Text.cs", fileContent);
-
-			Log(LogType.Message, "Export " + pFileName + ".cs successfully!");
+			Helper.WriteFile(Config.Settings.outputConstantsFilePath, $"{pFileName}Text.cs", fileContent);
+			Log(LogType.Message, $"Exported {pFileName}Text.cs!");
 		}
 
 		/// <summary>
@@ -1651,6 +1640,7 @@ namespace ExcelToUnity_DataConverter
 				fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 				fileContent = AddNamespace(fileContent);
 				Helper.WriteFile(Config.Settings.outputConstantsFilePath, "LocalizationsManager.cs", fileContent);
+				Log(LogType.Message, $"Exported LocalizationsManager.cs!");
 			}
 		}
 
@@ -1702,18 +1692,43 @@ namespace ExcelToUnity_DataConverter
 			}
 
 			txtVersion.Text = @"1.5.0";
-		}
 
-		private void btnSelectInputFile_Click(object sender, EventArgs e)
-		{
-			var result = openFileDialog.ShowDialog();
-			if (result == DialogResult.OK)
+			//Validate user
+			TabPage tpEncryption = tabMenu.TabPages[3];
+			TabPage tpChangeLog = tabMenu.TabPages[5];
+			TabPage tpExportMultiExcels = tabMenu.TabPages[1];
+			TabPage tpExportMultiGoogleSheets = tabMenu.TabPages[6];
+			switch (Config.User.user)
 			{
-				string fileName = openFileDialog.FileName;
-				txtInputXLSXFilePath.Text = fileName;
+				case UserType.None:
+					tabMenu.TabPages.Remove(tpExportMultiExcels);
+					tabMenu.TabPages.Remove(tpEncryption);
+					tabMenu.TabPages.Remove(tpChangeLog);
+					tabMenu.TabPages.Remove(tpExportMultiGoogleSheets);
+					txtSettingEncryptionKey.Visible = false;
+					lblEncryptionKey.Visible = false;
+					chkSettingEnableEncryption.Visible = false;
+					chkSettingEnableEncryption.Checked = false;
+					LinkGetProVersion.Visible = false;
+					TxtGoogleClientID.Visible = false;
+					TxtGoogleClientSecret.Visible = false;
+					lblGoogleClientId.Visible = false;
+					lblGoogleClientSecret.Visible = false;
+					txtSettingExcludedSheet.Visible = false;
+					lblbExcluedSheets.Visible = false;
+					break;
+				case UserType.Pro:
+				case UserType.Free:
+					tabMenu.TabPages.Remove(tpEncryption);
+					tabMenu.TabPages.Remove(tpChangeLog);
+					txtSettingEncryptionKey.Visible = false;
+					lblEncryptionKey.Visible = false;
+					chkSettingEnableEncryption.Visible = false;
+					chkSettingEnableEncryption.Checked = false;
+					break;
+				case UserType.Admin:
+					break;
 			}
-
-			//Load and show all sheets
 		}
 
 		private void btnOutputFolder_Click(object sender, EventArgs e)
@@ -1731,15 +1746,6 @@ namespace ExcelToUnity_DataConverter
 			SetupConfigFolders(txtSettingOuputConstantsFilePath, ref Config.Settings.outputConstantsFilePath);
 		}
 
-		private void TxtInputFilePath_TextChanged(object sender, EventArgs e)
-		{
-			if (File.Exists(txtInputXLSXFilePath.Text.Trim()))
-			{
-				SetupConfigFolders(txtInputXLSXFilePath, ref Config.Settings.inputDataFilePath);
-				InitExcel();
-			}
-		}
-
 		private void txtOutputDataFilePath_TextChanged(object sender, EventArgs e)
 		{
 			SetupConfigFolders(txtSettingOutputDataFilePath, ref Config.Settings.outputDataFilePath);
@@ -1750,253 +1756,12 @@ namespace ExcelToUnity_DataConverter
 			SetupConfigFolders(txtSettingOutputLocalizationFilePath, ref Config.Settings.outputLocalizationFilePath);
 		}
 
-		/// <summary>
-		/// Export single excel file
-		/// </summary>
-		private void BtnExportJson_Click(object sender, EventArgs e)
-		{
-			txtLog.Text = "";
-			
-			var allSheets = new List<string>();
-			if (m_workBook == null)
-				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
-
-			for (int i = 0; i < m_sheets.Count; i++)
-			{
-				if (m_sheets[i].SheetName.EndsWith(IDS_SHEET))
-				{
-					//Load All IDs
-					BuildContentOfFileIDs(m_workBook, m_sheets[i].SheetName);
-
-					//Create IDs Files
-					if (m_sheets[i].Check && Config.Settings.seperateConstants)
-					{
-						var builder = m_idsBuilderDict[m_sheets[i].SheetName];
-						CreateFileIDs(m_sheets[i].SheetName, builder.ToString());
-					}
-				}
-			}
-
-			if (!Config.Settings.seperateConstants)
-			{
-				//Export all IDs in one file
-				var iDsBuilder = new StringBuilder();
-				foreach (var b in m_idsBuilderDict)
-				{
-					iDsBuilder.Append(b.Value);
-					iDsBuilder.AppendLine();
-				}
-				CreateFileIDs("IDs", iDsBuilder.ToString());
-				Log(LogType.Message, "Export IDs successfully!");
-			}
-
-			bool writeJsonFileForSingleSheet = !Config.Settings.mergeJsonsIntoSingleJson;
-			var allJsons = new Dictionary<string, string>();
-			for (int i = 0; i < m_sheets.Count; i++)
-			{
-				if (m_sheets[i].Check && IsJsonSheet(m_sheets[i].SheetName))
-				{
-					string fileName = m_sheets[i].SheetName.Trim().Replace(" ", "_");
-					string json = ConvertSheetToJson(m_workBook, m_sheets[i].SheetName, fileName, Config.Settings.encryption, writeJsonFileForSingleSheet);
-
-					//Merge all json into a single file
-					if (Config.Settings.mergeJsonsIntoSingleJson)
-					{
-						if (allJsons.ContainsKey(fileName))
-						{
-							Log(LogType.Error, $"Can not merge sheet {fileName}, because key {fileName} is already exists!");
-							continue;
-						}
-						allJsons.Add(fileName, json);
-					}
-
-					allSheets.Add(m_sheets[i].SheetName);
-				}
-			}
-			if (Config.Settings.mergeJsonsIntoSingleJson)
-			{
-				//Build json file for all jsons content
-				string mergedJson = JsonConvert.SerializeObject(allJsons);
-				string mergedFileName = Path.GetFileNameWithoutExtension(Config.Settings.inputDataFilePath).Trim().Replace(" ", "_");
-				Helper.WriteFile(Config.Settings.outputDataFilePath, mergedFileName + ".txt", mergedJson);
-
-				if (Config.Settings.encryption)
-					Log(LogType.Message, $"Exported all Data Tables in {mergedFileName} as encrypted JSON data.");
-				else
-					Log(LogType.Message, $"Exported all Data Tables in {mergedFileName} as JSON data.");
-			}
-
-			if (m_sheets.Count > 0)
-				Log(LogType.Message, "Export Json Data done!\n" + string.Join(", ", allSheets.ToArray()));
-		}
-
 		private static bool IsJsonSheet(string pName)
 		{
 			return !pName.EndsWith(IDS_SHEET)
 				&& !pName.EndsWith(CONSTANTS_SHEET)
 				&& !pName.Contains(SETTINGS_SHEET)
 				&& !pName.StartsWith(LOCALIZATION_SHEET);
-		}
-
-		/// <summary>
-		/// Export single excel file
-		/// </summary>
-		private void BtnExportIds_Click(object sender, EventArgs e)
-		{
-			if (m_workBook == null)
-				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
-			
-			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
-			m_allIds = new Dictionary<string, int>();
-			txtLog.Text = "";
-
-			foreach (var m in m_sheets)
-			{
-				if (m.SheetName.EndsWith(IDS_SHEET) && m.Check)
-				{
-					//Load All IDs
-					BuildContentOfFileIDs(m_workBook, m.SheetName);
-
-					//Create IDs Files
-					if (Config.Settings.seperateConstants)
-					{
-						var content = m_idsBuilderDict[m.SheetName].ToString();
-						CreateFileIDs(m.SheetName, content);
-						Log(LogType.Message, "Export " + m.SheetName + " successfully!");
-					}
-				}
-			}
-
-			if (!Config.Settings.seperateConstants)
-			{
-				var iDsBuilder = new StringBuilder();
-				foreach (var builder in m_idsBuilderDict)
-				{
-					var content = builder.Value.ToString();
-					iDsBuilder.Append(content);
-					iDsBuilder.AppendLine();
-				}
-				CreateFileIDs("IDs", iDsBuilder.ToString());
-				Log(LogType.Message, "Export IDs successfully!");
-			}
-
-			RefreshDtgIDs();
-		}
-
-		private void RefreshDtgIDs()
-		{
-			var ids = new List<ID>();
-			foreach (var pair in m_allIds)
-				ids.Add(new ID(pair.Key, pair.Value));
-			DtgIDs.DataSource = new BindingList<ID>(ids);
-		}
-
-		private void BtnExportConstants_Click(object sender, EventArgs e)
-		{
-			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
-			if (m_workBook == null)
-				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
-			txtLog.Text = "";
-
-			for (int i = 0; i < m_sheets.Count; i++)
-			{
-				if (m_sheets[i].SheetName.EndsWith(CONSTANTS_SHEET) && m_sheets[i].Check)
-				{
-					LoadSheetConstantsData(m_workBook, m_sheets[i].SheetName);
-
-					if (m_constantsBuilderDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateConstants)
-					{
-						CreateFileConstants(m_constantsBuilderDict[m_sheets[i].SheetName].ToString(), m_sheets[i].SheetName);
-					}
-				}
-			}
-
-			if (!Config.Settings.seperateConstants)
-			{
-				var builder = new StringBuilder();
-				foreach (var b in m_constantsBuilderDict)
-				{
-					builder.Append(b.Value);
-					builder.AppendLine();
-				}
-				CreateFileConstants(builder.ToString(), "Constants");
-			}
-		}
-
-		private void BtnReloadGrid_Click(object sender, EventArgs e)
-		{
-			InitExcel();
-		}
-
-
-		[Obsolete]
-		private void ExportSettings()
-		{
-			if (m_workBook == null)
-				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
-
-			for (int i = 0; i < m_sheets.Count; i++)
-			{
-				if (m_sheets[i].SheetName.Contains(SETTINGS_SHEET) && m_sheets[i].Check)
-				{
-					string content = ExportSettingsSheetToScriptableObject(m_workBook, m_sheets[i].SheetName);
-					if (!string.IsNullOrEmpty(content))
-					{
-						Helper.WriteFile(Config.Settings.outputDataFilePath, m_sheets[i].SheetName + ".txt", content);
-						Log(LogType.Message, "Export " + m_sheets[i].SheetName + " successfully!");
-					}
-				}
-			}
-		}
-
-		private void btnExportLocalization_Click(object sender, EventArgs e)
-		{
-			if (m_workBook == null)
-				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
-
-			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
-			m_localizedSheetsExported = new List<string>();
-			m_localizedLanguages = new List<string>();
-			m_characterMaps = new Dictionary<string, string>();
-			txtLog.Text = "";
-
-			for (int i = 0; i < m_sheets.Count; i++)
-			{
-				if (m_sheets[i].Check && m_sheets[i].SheetName.StartsWith(LOCALIZATION_SHEET))
-				{
-					LoadSheetLocalizationData(m_workBook, m_sheets[i].SheetName);
-
-					if (m_localizationsDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateLocalizations)
-					{
-						var builder = m_localizationsDict[m_sheets[i].SheetName];
-						//CreateLocalizationFile(builder.idsString, builder.languageTextDict, mSheets[i].SheetName);
-						CreateLocalizationFileV2(builder.idsString, builder.languageTextDict, m_sheets[i].SheetName);
-						m_localizedSheetsExported.Add(m_sheets[i].SheetName);
-					}
-				}
-			}
-
-			if (!Config.Settings.seperateLocalizations)
-			{
-				var builder = new LocalizationBuilder();
-				foreach (var b in m_localizationsDict)
-				{
-					builder.idsString.AddRange(b.Value.idsString);
-					foreach (var t in b.Value.languageTextDict)
-					{
-						var language = t.Key;
-						var texts = t.Value;
-						if (!builder.languageTextDict.ContainsKey(language))
-							builder.languageTextDict.Add(language, new List<string>());
-						builder.languageTextDict[language].AddRange(texts);
-					}
-				}
-				//CreateLocalizationFile(builder.idsString, builder.languageTextDict, "Localization");
-				CreateLocalizationFileV2(builder.idsString, builder.languageTextDict, "Localization");
-				m_localizedSheetsExported.Add("Localization");
-			}
-
-			CreateLocalizationsManagerFile();
 		}
 
 		private Dictionary<string, string> GenereteCharacterMaps(Dictionary<string, string> pCharacterMaps)
@@ -2022,7 +1787,6 @@ namespace ExcelToUnity_DataConverter
 				if (tab.Name == "tpExportMultiExcels")
 				{
 					RefreshDtgExcelFiles();
-					ValidateAllPaths();
 				}
 			}
 		}
@@ -2133,7 +1897,7 @@ namespace ExcelToUnity_DataConverter
 						{
 							if (allJsons.ContainsKey(fileName))
 							{
-								Log(LogType.Error, $"Can not merge sheet {fileName}, because key {fileName} is already exists!");
+								Log(LogType.Error, $"Could not create single Json file {fileName}, because key {fileName} is already exists!");
 								continue;
 							}
 							allJsons.Add(fileName, json);
@@ -2146,12 +1910,12 @@ namespace ExcelToUnity_DataConverter
 					//Build json file for all jsons content
 					string mergedJson = JsonConvert.SerializeObject(allJsons);
 					string mergedFileName = Path.GetFileNameWithoutExtension(file.path).Trim().Replace(" ", "_");
-					Helper.WriteFile(Config.Settings.outputDataFilePath, mergedFileName + ".txt", mergedJson);
+					Helper.WriteFile(Config.Settings.outputDataFilePath, $"{mergedFileName}.txt", mergedJson);
 
 					if (Config.Settings.encryption)
-						Log(LogType.Message, $"Exported all Data Tables {mergedFileName} as encrypted JSON data.");
+						Log(LogType.Message, $"Exported encrypted Json data to {mergedFileName}.txt.");
 					else
-						Log(LogType.Message, $"Exported all Data Tables {mergedFileName} as JSON data.");
+						Log(LogType.Message, $"Exported Json data to {mergedFileName}.txt.");
 				}
 
 				//Load and write constants
@@ -2197,7 +1961,6 @@ namespace ExcelToUnity_DataConverter
 					count++;
 				}
 				CreateFileIDs("IDs", builder.ToString());
-				Log(LogType.Message, "Export IDs successfully!");
 			}
 
 			//Create file contain all Constants
@@ -2241,7 +2004,10 @@ namespace ExcelToUnity_DataConverter
 			{
 				var maps = GenereteCharacterMaps(m_characterMaps);
 				foreach (var map in maps)
-					Helper.WriteFile(Config.Settings.outputDataFilePath, $"characters_map_{map.Key}" + ".txt", map.Value);
+				{
+					Helper.WriteFile(Config.Settings.outputDataFilePath, $"characters_map_{map.Key}.txt", map.Value);
+					Log(LogType.Message, $"Exported characters_map_{map.Key}.txt!");
+				}
 			}
 
 			//Create localization manager file
@@ -2259,19 +2025,10 @@ namespace ExcelToUnity_DataConverter
 
 			if (e.ColumnIndex == DtgFilePaths.Columns["BtnDelete"].Index)
 			{
-				//System.Diagnostics.Debug.WriteLine(e.RowIndex);
-				//DtgFilePaths.Rows.RemoveAt(e.RowIndex);
 				Config.Settings.allFiles.RemoveAt(e.RowIndex);
 
 				RefreshDtgExcelFiles();
-				//RefreshDtgFiles();
 			}
-
-			ValidatePathRow(row);
-
-			//Config.Settings.allFiles = (List<FileEntity>)DtgFilePaths.DataSource;
-			//string settingJson = JsonConvert.SerializeObject(mSetting);
-			//WriteFile(TOOL_CONFIG_FILE, settingJson);
 		}
 
 		private void DtgFilePaths_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -2298,13 +2055,8 @@ namespace ExcelToUnity_DataConverter
 				return;
 			var path1 = value.ToString();
 
-			// Check if the file exists
 			bool fileExists = File.Exists(path1);
-
-			// Get the status cell
 			var statusCell = row.Cells[statusColumnIndex];
-
-			// Update the status cell image based on whether the file exists
 			if (fileExists)
 			{
 				var image = Properties.Resources.ResourceManager.GetObject("check") as Image;
@@ -2315,12 +2067,6 @@ namespace ExcelToUnity_DataConverter
 				var image = Properties.Resources.ResourceManager.GetObject("cancel") as Image;
 				statusCell.Value = image;
 			}
-		}
-
-		private void ValidateAllPaths()
-		{
-			foreach (DataGridViewRow row in DtgFilePaths.Rows)
-				ValidatePathRow(row);
 		}
 
 		private void chkSettingEnableEncryption_CheckedChanged(object sender, EventArgs e)
@@ -2412,29 +2158,321 @@ namespace ExcelToUnity_DataConverter
 		{
 			var sb = new StringBuilder();
 			if (pLogType == LogType.Error)
-			{
 				sb.Append("[ERROR] ").Append(pLog);
-			}
 			else if (pLogType == LogType.Warning)
-			{
 				sb.Append("[WARNING] ").Append(pLog);
-			}
 			else
 				sb.Append("[+] ").Append(pLog);
 
-			if (tabMenu.SelectedTab.Name == "")
+			if (tabMenu.SelectedTab.Name == "tpExportExcel")
 				txtLog.Text += sb.AppendLine();
-			else if (tabMenu.SelectedTab.Name == "")
+			else if (tabMenu.SelectedTab.Name == "tpExportMultiExcels")
 				txtLog2.Text += sb.AppendLine();
-			else if (tabMenu.SelectedTab.Name == "")
+			else if (tabMenu.SelectedTab.Name == "tpGoogleSpreadSheets")
 				TxtLogExportingGoogleSheets.Text += sb.AppendLine();
 		}
 
-#endregion
+		#endregion
 
 		//====================================================
 
-#region Internal Class
+		#region Single Excel
+
+		private void InitExcel()
+		{
+			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
+			DtgIDs.DataSource = null;
+			DtgIDs.Rows.Clear();
+
+			m_sheets = new List<Sheet>();
+			if (!string.IsNullOrEmpty(txtInputXLSXFilePath.Text.Trim()))
+			{
+				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
+				if (m_workBook != null)
+				{
+					for (int i = 0; i < m_workBook.NumberOfSheets; i++)
+					{
+						string sheetName = m_workBook.GetSheetName(i);
+						m_sheets.Add(new Sheet(sheetName));
+					}
+					ExcludeSheets(ref m_sheets);
+				}
+			}
+			DtgSheets.DataSource = new BindingList<Sheet>(m_sheets);
+		}
+
+		private void btnSelectInputFile_Click(object sender, EventArgs e)
+		{
+			var result = openFileDialog.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				string fileName = openFileDialog.FileName;
+				txtInputXLSXFilePath.Text = fileName;
+			}
+		}
+
+		private void BtnReloadGrid_Click(object sender, EventArgs e)
+		{
+			InitExcel();
+		}
+
+		[Obsolete]
+		private void ExportSettings()
+		{
+			if (m_workBook == null)
+				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
+
+			for (int i = 0; i < m_sheets.Count; i++)
+			{
+				if (m_sheets[i].SheetName.Contains(SETTINGS_SHEET) && m_sheets[i].Check)
+				{
+					string content = ExportSettingsSheetToScriptableObject(m_workBook, m_sheets[i].SheetName);
+					if (!string.IsNullOrEmpty(content))
+					{
+						Helper.WriteFile(Config.Settings.outputDataFilePath, $"{m_sheets[i].SheetName}.txt", content);
+						Log(LogType.Message, $"Exported {m_sheets[i].SheetName}.txt");
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Export single excel file
+		/// </summary>
+		private void BtnExportIds_Click(object sender, EventArgs e)
+		{
+			if (m_workBook == null)
+				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
+			if (m_workBook == null)
+				return;
+
+			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
+			m_allIds = new Dictionary<string, int>();
+
+			foreach (var m in m_sheets)
+			{
+				if (m.SheetName.EndsWith(IDS_SHEET) && m.Check)
+				{
+					//Load All IDs
+					BuildContentOfFileIDs(m_workBook, m.SheetName);
+
+					//Create IDs Files
+					if (Config.Settings.seperateConstants)
+					{
+						var content = m_idsBuilderDict[m.SheetName].ToString();
+						CreateFileIDs(m.SheetName, content);
+					}
+				}
+			}
+
+			if (!Config.Settings.seperateConstants)
+			{
+				var iDsBuilder = new StringBuilder();
+				foreach (var builder in m_idsBuilderDict)
+				{
+					var content = builder.Value.ToString();
+					iDsBuilder.Append(content);
+					iDsBuilder.AppendLine();
+				}
+				CreateFileIDs("IDs", iDsBuilder.ToString());
+
+			}
+
+			RefreshDtgIDs();
+		}
+
+		private void BtnExportConstants_Click(object sender, EventArgs e)
+		{
+			if (m_workBook == null)
+				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
+			if (m_workBook == null)
+				return;
+
+			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
+
+			for (int i = 0; i < m_sheets.Count; i++)
+			{
+				if (m_sheets[i].SheetName.EndsWith(CONSTANTS_SHEET) && m_sheets[i].Check)
+				{
+					LoadSheetConstantsData(m_workBook, m_sheets[i].SheetName);
+
+					if (m_constantsBuilderDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateConstants)
+					{
+						CreateFileConstants(m_constantsBuilderDict[m_sheets[i].SheetName].ToString(), m_sheets[i].SheetName);
+					}
+				}
+			}
+
+			if (!Config.Settings.seperateConstants)
+			{
+				var builder = new StringBuilder();
+				foreach (var b in m_constantsBuilderDict)
+				{
+					builder.Append(b.Value);
+					builder.AppendLine();
+				}
+				CreateFileConstants(builder.ToString(), "Constants");
+			}
+		}
+
+		private void btnExportLocalization_Click(object sender, EventArgs e)
+		{
+			if (m_workBook == null)
+				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
+			if (m_workBook == null)
+				return;
+
+			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
+			m_localizedSheetsExported = new List<string>();
+			m_localizedLanguages = new List<string>();
+			m_characterMaps = new Dictionary<string, string>();
+
+			for (int i = 0; i < m_sheets.Count; i++)
+			{
+				if (m_sheets[i].Check && m_sheets[i].SheetName.StartsWith(LOCALIZATION_SHEET))
+				{
+					LoadSheetLocalizationData(m_workBook, m_sheets[i].SheetName);
+
+					if (m_localizationsDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateLocalizations)
+					{
+						var builder = m_localizationsDict[m_sheets[i].SheetName];
+						//CreateLocalizationFile(builder.idsString, builder.languageTextDict, mSheets[i].SheetName);
+						CreateLocalizationFileV2(builder.idsString, builder.languageTextDict, m_sheets[i].SheetName);
+						m_localizedSheetsExported.Add(m_sheets[i].SheetName);
+					}
+				}
+			}
+
+			if (!Config.Settings.seperateLocalizations)
+			{
+				var builder = new LocalizationBuilder();
+				foreach (var b in m_localizationsDict)
+				{
+					builder.idsString.AddRange(b.Value.idsString);
+					foreach (var t in b.Value.languageTextDict)
+					{
+						var language = t.Key;
+						var texts = t.Value;
+						if (!builder.languageTextDict.ContainsKey(language))
+							builder.languageTextDict.Add(language, new List<string>());
+						builder.languageTextDict[language].AddRange(texts);
+					}
+				}
+				//CreateLocalizationFile(builder.idsString, builder.languageTextDict, "Localization");
+				CreateLocalizationFileV2(builder.idsString, builder.languageTextDict, "Localization");
+				m_localizedSheetsExported.Add("Localization");
+			}
+
+			CreateLocalizationsManagerFile();
+		}
+
+		/// <summary>
+		/// Export single excel file
+		/// </summary>
+		private void BtnExportJson_Click(object sender, EventArgs e)
+		{
+			if (m_workBook == null)
+				m_workBook = Helper.LoadWorkBook(txtInputXLSXFilePath.Text);
+			if (m_workBook == null)
+				return;
+
+			var allSheets = new List<string>();
+			for (int i = 0; i < m_sheets.Count; i++)
+			{
+				if (m_sheets[i].SheetName.EndsWith(IDS_SHEET))
+				{
+					//Load All IDs
+					BuildContentOfFileIDs(m_workBook, m_sheets[i].SheetName);
+
+					//Create IDs Files
+					if (m_sheets[i].Check && Config.Settings.seperateConstants)
+					{
+						var builder = m_idsBuilderDict[m_sheets[i].SheetName];
+						CreateFileIDs(m_sheets[i].SheetName, builder.ToString());
+					}
+				}
+			}
+
+			if (!Config.Settings.seperateConstants)
+			{
+				//Export all IDs in one file
+				var iDsBuilder = new StringBuilder();
+				foreach (var b in m_idsBuilderDict)
+				{
+					iDsBuilder.Append(b.Value);
+					iDsBuilder.AppendLine();
+				}
+				CreateFileIDs("IDs", iDsBuilder.ToString());
+			}
+
+			bool writeJsonFileForSingleSheet = !Config.Settings.mergeJsonsIntoSingleJson;
+			var allJsons = new Dictionary<string, string>();
+			for (int i = 0; i < m_sheets.Count; i++)
+			{
+				if (m_sheets[i].Check && IsJsonSheet(m_sheets[i].SheetName))
+				{
+					string fileName = m_sheets[i].SheetName.Trim().Replace(" ", "_");
+					string json = ConvertSheetToJson(m_workBook, m_sheets[i].SheetName, fileName, Config.Settings.encryption, writeJsonFileForSingleSheet);
+
+					//Merge all json into a single file
+					if (Config.Settings.mergeJsonsIntoSingleJson)
+					{
+						if (allJsons.ContainsKey(fileName))
+						{
+							Log(LogType.Error, $"Could not create single json file {fileName}, because file {fileName} is already exists!");
+							continue;
+						}
+						allJsons.Add(fileName, json);
+					}
+
+					allSheets.Add(m_sheets[i].SheetName);
+				}
+			}
+			if (Config.Settings.mergeJsonsIntoSingleJson)
+			{
+				//Build json file for all jsons content
+				string mergedJson = JsonConvert.SerializeObject(allJsons);
+				string mergedFileName = Path.GetFileNameWithoutExtension(Config.Settings.inputDataFilePath).Trim().Replace(" ", "_");
+				Helper.WriteFile(Config.Settings.outputDataFilePath, $"{mergedFileName}.txt", mergedJson);
+
+				if (Config.Settings.encryption)
+					Log(LogType.Message, $"Exported encrypted Json data to {mergedFileName}.txt.");
+				else
+					Log(LogType.Message, $"Exported Json data to {mergedFileName}.txt.");
+			}
+		}
+
+		private void BtnExportAll_Click(object sender, EventArgs e)
+		{
+			txtLog.Text = "";
+			BtnExportIds_Click(null, null);
+			BtnExportConstants_Click(null, null);
+			btnExportLocalization_Click(null, null);
+			BtnExportJson_Click(null, null);
+		}
+
+		private void RefreshDtgIDs()
+		{
+			var ids = new List<ID>();
+			foreach (var pair in m_allIds)
+				ids.Add(new ID(pair.Key, pair.Value));
+			DtgIDs.DataSource = new BindingList<ID>(ids);
+		}
+
+		private void TxtInputFilePath_TextChanged(object sender, EventArgs e)
+		{
+			if (File.Exists(txtInputXLSXFilePath.Text.Trim()))
+			{
+				SetupConfigFolders(txtInputXLSXFilePath, ref Config.Settings.inputDataFilePath);
+				InitExcel();
+			}
+		}
+
+		#endregion
+
+		//====================================================
+
+		#region Internal Class
 
 		public enum LogType
 		{
@@ -2458,7 +2496,7 @@ namespace ExcelToUnity_DataConverter
 		{
 			if (string.IsNullOrEmpty(txtEncryptionInput.Text))
 				return;
-
+			CreateEncryption();
 			string text = txtEncryptionInput.Text;
 			try
 			{
@@ -2558,6 +2596,8 @@ namespace ExcelToUnity_DataConverter
 			chkSeperateIDs.Checked = settings.seperateIDs;
 			chkSeperateLocalization.Checked = settings.seperateLocalizations;
 			chkKeepOnlyEnumAsIds.Checked = settings.keepOnlyEnumAsIDs;
+			TxtGoogleClientID.Text = settings.ggClientId;
+			TxtGoogleClientSecret.Text = settings.ggClientSecret;
 
 			if (settings.encryption)
 				CreateEncryption();
@@ -2615,7 +2655,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void DtgFilePaths_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
 
-#region Google Sheets
+		#region Google Sheets
 
 		private void BtnAddGoogleSheet_Click(object sender, EventArgs e)
 		{
@@ -2809,12 +2849,12 @@ namespace ExcelToUnity_DataConverter
 						//Build json file for all jsons content
 						string mergedJson = JsonConvert.SerializeObject(allJsons);
 						string mergedFileName = ggSheetsMetadata.Properties.Title;
-						Helper.WriteFile(Config.Settings.outputDataFilePath, mergedFileName + ".txt", mergedJson);
+						Helper.WriteFile(Config.Settings.outputDataFilePath, $"{mergedFileName}.txt", mergedJson);
 
 						if (Config.Settings.encryption)
-							Log(LogType.Message, $"Exported all Data Tables {mergedFileName} as encrypted JSON data.");
+							Log(LogType.Message, $"Exported encrypted Json data to {mergedFileName}.txt.");
 						else
-							Log(LogType.Message, $"Exported all Data Tables {mergedFileName} as JSON data.");
+							Log(LogType.Message, $"Exported Json data to {mergedFileName}.txt.");
 					}
 					
 					//Load and write constants
@@ -2855,7 +2895,6 @@ namespace ExcelToUnity_DataConverter
 					count++;
 				}
 				CreateFileIDs("IDs", builder.ToString());
-				Log(LogType.Message, "Export IDs successfully!");
 			}
 			
 			//Create file contain all Constants
@@ -2899,7 +2938,10 @@ namespace ExcelToUnity_DataConverter
 			{
 				var maps = GenereteCharacterMaps(m_characterMaps);
 				foreach (var map in maps)
-					Helper.WriteFile(Config.Settings.outputDataFilePath, $"characters_map_{map.Key}" + ".txt", map.Value);
+				{
+					Helper.WriteFile(Config.Settings.outputDataFilePath, $"characters_map_{map.Key}.txt", map.Value);
+					Log(LogType.Message, $"Exported characters_map_{map.Key}.txt");
+				}
 			}
 			
 			//Create localization manager file
@@ -3547,11 +3589,11 @@ namespace ExcelToUnity_DataConverter
 
 			if (pAutoWriteFile)
 			{
-				Helper.WriteFile(Config.Settings.outputDataFilePath, pOutputFile + ".txt", finalContent);
+				Helper.WriteFile(Config.Settings.outputDataFilePath, $"{pOutputFile}.txt", finalContent);
 				if (pEncrypt && m_encryption != null)
-					Log(LogType.Message, $"Exported all Data Tables {pSheetName} as encrypted JSON data.");
+					Log(LogType.Message, $"Exported encrypted Json data to {pOutputFile}.txt.");
 				else
-					Log(LogType.Message, $"Exported all Data Tables {pSheetName} as JSON data.");
+					Log(LogType.Message, $"Exported Json data to {pOutputFile}.txt.");
 			}
 			return finalContent;
 		}
@@ -3560,7 +3602,7 @@ namespace ExcelToUnity_DataConverter
 		{
 			if (pValues == null || pValues.Count == 0)
 			{
-				Log(LogType.Warning, pSheetName + " is empty!");
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
 				return;
 			}
 
@@ -3646,12 +3688,6 @@ namespace ExcelToUnity_DataConverter
 					languageTextDict = textDict,
 				});
 		}
-		#endregion
-
-		private void toolStripStatusLabel3_Click(object sender, EventArgs e)
-		{
-			Process.Start("https://github.com/hnb-rabear/excel-to-unity-document");
-		}
 
 		private void TxtGoogleClientID_Leave(object sender, EventArgs e)
 		{
@@ -3665,12 +3701,24 @@ namespace ExcelToUnity_DataConverter
 
 		private void TxtGoogleClientSecret_Leave(object sender, EventArgs e)
 		{
-			bool changed = Config.Settings.ggClientSecret == TxtGoogleClientSecret.Text;
+			bool changed = Config.Settings.ggClientSecret != TxtGoogleClientSecret.Text;
 			if (changed)
 			{
 				Config.Settings.ggClientSecret = TxtGoogleClientSecret.Text;
 				Config.Save();
 			}
+		}
+
+		#endregion
+
+		private void toolStripStatusLabel3_Click(object sender, EventArgs e)
+		{
+			Process.Start("https://github.com/hnb-rabear/excel-to-unity-document");
+		}
+
+		private void LinkGetProVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+
 		}
 	}
 }

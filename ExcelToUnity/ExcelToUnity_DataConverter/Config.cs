@@ -5,22 +5,33 @@ using System.Windows.Forms;
 
 namespace ExcelToUnity_DataConverter
 {
+	// 1: eiB2d2B0JTI4JilpdX5gYmVfZnh3aUR+ZGFpeSkyOD4jLmhqY39jYk90bHNvQmtkbWVtXGZoaWcwKyEneA==
+	// 2: eiB2d2B0JTI7JilpdX5gYmVfZnh3aUR+ZGFpeSkyOD4jLmhqY39jYk90bHNvQmtkbWVtXGZoaWcwKyEneA==
+	// 3: eiB2d2B0JTI6JilpdX5gYmVfZnh3aUR+ZGFpeSkyOD4jLmhqY39jYk90bHNvQmtkbWVtXGZoaWcwKyEneA==
+
 	public static class Config
     {
-        private static Settings m_Settings;
+		public const bool AAA = true;
 
+        private static Settings m_Settings;
         public static Settings Settings => m_Settings;
 
-        public static void Init()
+		private static User m_User;
+		public static User User => m_User;
+
+		private static Encryption m_Encryption;
+
+		public static void Init()
         {
-            var savedSettingsFile = GetSaveFile();
-			if (!File.Exists(savedSettingsFile))
+			m_Encryption = new Encryption(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
+			var savedSettingsFilePath = GetSaveFile();
+			if (!File.Exists(savedSettingsFilePath))
 			{
 				m_Settings = new Settings();
                 Save();
 				return;
 			}
-			using (var sr = new StreamReader(savedSettingsFile))
+			using (var sr = new StreamReader(savedSettingsFilePath))
 			{
 				string settingJson = sr.ReadToEnd();
 				if (!string.IsNullOrEmpty(settingJson))
@@ -35,7 +46,27 @@ namespace ExcelToUnity_DataConverter
                     m_Settings.googleSheetsPaths.RemoveAt(i);
 
 			}
-        }
+			string userFilePath = GetLicenseFile();
+			using (var sr = new StreamReader(userFilePath))
+			{
+				string json = sr.ReadToEnd();
+				if (AAA)
+					json = m_Encryption.DecryptValue(json);
+				if (!string.IsNullOrEmpty(json))
+				{
+					try
+					{
+						m_User = JsonConvert.DeserializeObject<User>(json);
+					}
+					catch 
+					{
+						m_User = new User();
+					}
+				}
+				else
+					m_User = new User();
+			}
+		}
 
         public static void Save()
         {
@@ -50,8 +81,8 @@ namespace ExcelToUnity_DataConverter
             saveFileDialog1.CheckFileExists = false;
             saveFileDialog1.CheckPathExists = true;
             saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.DefaultExt = "rad";
-            saveFileDialog1.Filter = "Rad files (*.rad)|*.rad";
+            saveFileDialog1.DefaultExt = "e2u";
+            saveFileDialog1.Filter = "e2u files (*.e2u)|*.e2u";
             saveFileDialog1.FilterIndex = 2;
             saveFileDialog1.RestoreDirectory = true;
             saveFileDialog1.InitialDirectory = GetSaveDirectory();
@@ -67,9 +98,9 @@ namespace ExcelToUnity_DataConverter
         {
             bool success = false;
             var openFileDialog = new OpenFileDialog();
-            openFileDialog.FileName = "Select a Rad file";
-            openFileDialog.Filter = "Rad files (*.rad)|*.rad";
-            openFileDialog.Title = "Open rad file";
+            openFileDialog.FileName = "Select a e2u file";
+            openFileDialog.Filter = "e2u files (*.e2u)|*.e2u";
+            openFileDialog.Title = "Open e2u file";
             openFileDialog.RestoreDirectory = true;
             openFileDialog.InitialDirectory = GetSaveDirectory();
             openFileDialog.CheckPathExists = true;
@@ -108,10 +139,27 @@ namespace ExcelToUnity_DataConverter
 
 		public static string GetSaveFile()
 		{
-			var path = Path.Combine(GetSaveDirectory(), "save_temp.rad");
-            if (!File.Exists(path))
-                File.Create(path);
-            return path;
+			var path = Path.Combine(GetSaveDirectory(), "save_temp.e2u");
+			if (!File.Exists(path))
+				using (File.Create(path)) { }
+			return path;
+		}
+
+		public static string GetLicenseFile()
+		{
+			string fileName = AAA ? m_Encryption.EncryptValue("license") : "license";
+			var path = Path.Combine("Resources", $"{fileName}.e2u");
+			if (!File.Exists(path))
+				using (File.Create(path)) { }
+			return path;
+		}
+
+		public static void SaveLicense()
+		{
+			string content = JsonConvert.SerializeObject(m_User);
+			if (AAA)
+				content = m_Encryption.EncryptValue(content);
+			Helper.WriteFile(GetLicenseFile(), content);
 		}
 	}
 }
