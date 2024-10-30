@@ -117,7 +117,7 @@ public static class LOCALIZATION_CLASS_NAME
         if (m_LanguageTemp != lang)
         {
 #if UNITY_EDITOR
-            Debug.Log($"Init {nameof(LocalizationTask)}");
+            Debug.Log($"Init {nameof(LOCALIZATION_CLASS_NAME)}");
 #endif
             string file = LanguageFiles[lang];
             string address = $"{Folder}/{file}";

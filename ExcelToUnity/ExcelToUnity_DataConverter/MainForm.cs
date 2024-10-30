@@ -312,7 +312,7 @@ namespace ExcelToUnity_DataConverter
 			return true;
 		}
 
-		private void LoadSheetIDsData(IWorkbook pWorkBook, string pSheetName)
+		private void LoadSheetIDsValues(IWorkbook pWorkBook, string pSheetName)
 		{
 			var sheet = pWorkBook.GetSheet(pSheetName);
 
@@ -1850,7 +1850,7 @@ namespace ExcelToUnity_DataConverter
 				for (int i = 0; i < sheets.Count; i++)
 				{
 					if (sheets[i].SheetName.EndsWith(IDS_SHEET))
-						LoadSheetIDsData(workBook, sheets[i].SheetName);
+						LoadSheetIDsValues(workBook, sheets[i].SheetName);
 				}
 			}
 
