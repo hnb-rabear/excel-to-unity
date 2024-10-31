@@ -273,7 +273,7 @@ namespace ExcelToUnity_DataConverter
 						.Append(" { ")
 						.Append(str)
 						.Append(" }\n");
-					if (Config.Settings.keepOnlyEnumAsIDs)
+					if (Config.Settings.onlyEnumAsIDs)
 					{
 						var tempSb = new StringBuilder();
 						tempSb.Append("\t#region ")
@@ -356,11 +356,11 @@ namespace ExcelToUnity_DataConverter
 			fileContent = fileContent.Replace("public const int _FIELDS_ = 0;", content);
 			fileContent = AddNamespace(fileContent);
 
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, $"{exportFileName}.cs", fileContent);
+			Helper.WriteFile(Config.Settings.constantsOutputFolder, $"{exportFileName}.cs", fileContent);
 			Log(LogType.Message, $"Exported {exportFileName}.cs!");
 		}
 
-		private bool CheckExistId(string pKey)
+		private bool CheckExistedId(string pKey)
 		{
 			foreach (var id in m_allIds)
 				if (id.Key == pKey.Trim())
@@ -578,7 +578,7 @@ namespace ExcelToUnity_DataConverter
 			fileContent = fileContent.Replace("public const int _FIELDS_ = 0;", pContent);
 			fileContent = AddNamespace(fileContent);
 
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pExportFileName + ".cs", fileContent);
+			Helper.WriteFile(Config.Settings.constantsOutputFolder, pExportFileName + ".cs", fileContent);
 			Log(LogType.Message, $"Exported {pExportFileName}.cs!");
 		}
 
@@ -586,7 +586,7 @@ namespace ExcelToUnity_DataConverter
 
 		private string ConvertSheetToJson(IWorkbook pWorkBook, string pSheetName, string pOutputFile, List<FieldValueType> pFieldValueTypes, bool pEncrypt, bool pAutoWriteFile)
 		{
-			var unminifiedFields = Config.Settings.GetUnminizedFields();
+			var unminifiedFields = Config.Settings.GetPersistentFields();
 
 			var sheet = pWorkBook.GetSheet(pSheetName);
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
@@ -815,7 +815,7 @@ namespace ExcelToUnity_DataConverter
 								bool referencedId = false;
 								if (fieldType == "string") //Find and replace string value with referenced ID
 								{
-									if (CheckExistId(fieldValue))
+									if (CheckExistedId(fieldValue))
 									{
 										fieldType = "number";
 										referencedId = true;
@@ -831,7 +831,7 @@ namespace ExcelToUnity_DataConverter
 									string[] arrayValue = Helper.SplitValueToArray(fieldValue, false);
 									foreach (string val in arrayValue)
 									{
-										if (CheckExistId(val.Trim()))
+										if (CheckExistedId(val.Trim()))
 										{
 											fieldType = "array-number";
 											referencedId = true;
@@ -1017,7 +1017,7 @@ namespace ExcelToUnity_DataConverter
 
 			if (pAutoWriteFile)
 			{
-				Helper.WriteFile(Config.Settings.outputDataFilePath, $"{pOutputFile}.txt", finalContent);
+				Helper.WriteFile(Config.Settings.jsonOutputFolder, $"{pOutputFile}.txt", finalContent);
 				if (pEncrypt && m_encryption != null)
 					Log(LogType.Message, $"Exported encrypted Json data to {pOutputFile}.txt.");
 				else
@@ -1028,7 +1028,7 @@ namespace ExcelToUnity_DataConverter
 
 		private string ExportSettingsSheetToScriptableObject(IWorkbook workbook, string sheetName)
 		{
-			string nameSpace = Config.Settings._namespace;
+			string nameSpace = Config.Settings.@namespace;
 
 			var sheet = workbook.GetSheet(sheetName);
 			var fieldsDict = new Dictionary<string, string>();
@@ -1154,7 +1154,7 @@ namespace ExcelToUnity_DataConverter
 				csFileTemplate = $"namespace {nameSpace}\n{"{"}\n{csFileTemplate}\n{"}"}";
 			}
 
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, className + ".cs", csFileTemplate);
+			Helper.WriteFile(Config.Settings.constantsOutputFolder, className + ".cs", csFileTemplate);
 			Log(LogType.Message, $"Exported {className}.cs");
 
 			return content;
@@ -1432,7 +1432,7 @@ namespace ExcelToUnity_DataConverter
 			fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_LIST", allLanguagePackBuilder.ToString());
 			fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageFilesBuilder.ToString());
 			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, pFileName + ".cs", fileTemplateContent);
+			Helper.WriteFile(Config.Settings.constantsOutputFolder, pFileName + ".cs", fileTemplateContent);
 			Log(LogType.Message, $"Exported {pFileName}.cs!");
 		}
 
@@ -1508,10 +1508,10 @@ namespace ExcelToUnity_DataConverter
 			foreach (var listText in pLanguageTextDict)
 			{
 				string json = JsonConvert.SerializeObject(listText.Value);
-				Helper.WriteFile(Config.Settings.outputLocalizationFilePath, $"{pFileName}_{listText.Key}.txt", json);
+				Helper.WriteFile(Config.Settings.localizationOutputFolder, $"{pFileName}_{listText.Key}.txt", json);
 				Log(LogType.Message, $"Exported Localization content to {pFileName}_{listText.Key}.txt!");
 
-				if (Config.Settings.languageCharactersMaps != null && Config.Settings.languageCharactersMaps.Contains(listText.Key))
+				if (Config.Settings.langCharSets != null && Config.Settings.langCharSets.Contains(listText.Key))
 				{
 					if (m_characterMaps.ContainsKey(listText.Key))
 						m_characterMaps[listText.Key] += json;
@@ -1542,14 +1542,14 @@ namespace ExcelToUnity_DataConverter
 			fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
 			fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 			fileContent = AddNamespace(fileContent);
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, $"{pFileName}.cs", fileContent);
+			Helper.WriteFile(Config.Settings.constantsOutputFolder, $"{pFileName}.cs", fileContent);
 			Log(LogType.Message, $"Exported {pFileName}.cs!");
 			
 			//Write file localized text component
 			fileContent = File.ReadAllText(LOCALIZATION_TEXT_TEMPLATE);
 			fileContent = fileContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
 			fileContent = AddNamespace(fileContent);
-			Helper.WriteFile(Config.Settings.outputConstantsFilePath, $"{pFileName}Text.cs", fileContent);
+			Helper.WriteFile(Config.Settings.constantsOutputFolder, $"{pFileName}Text.cs", fileContent);
 			Log(LogType.Message, $"Exported {pFileName}Text.cs!");
 		}
 
@@ -1636,19 +1636,19 @@ namespace ExcelToUnity_DataConverter
 				fileContent = fileContent.Replace("//LOCALIZATION_SYSTEM_LANGUAGE", systemLanguages.ToString());
 				fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
 				fileContent = AddNamespace(fileContent);
-				Helper.WriteFile(Config.Settings.outputConstantsFilePath, "LocalizationsManager.cs", fileContent);
+				Helper.WriteFile(Config.Settings.constantsOutputFolder, "LocalizationsManager.cs", fileContent);
 				Log(LogType.Message, $"Exported LocalizationsManager.cs!");
 			}
 		}
 
 		private string AddNamespace(string fileContent)
 		{
-			if (!string.IsNullOrEmpty(Config.Settings._namespace))
+			if (!string.IsNullOrEmpty(Config.Settings.@namespace))
 			{
 				fileContent = fileContent.Replace(Environment.NewLine, $"NEW_LINE");
 				fileContent = fileContent.Replace("\n", $"NEW_LINE");
 				fileContent = fileContent.Replace("NEW_LINE", $"{Environment.NewLine}\t");
-				fileContent = $"namespace {Config.Settings._namespace}\n{"{"}\n\t{fileContent}\n{"}"}";
+				fileContent = $"namespace {Config.Settings.@namespace}\n{"{"}\n\t{fileContent}\n{"}"}";
 			}
 			return fileContent;
 		}
@@ -1737,17 +1737,17 @@ namespace ExcelToUnity_DataConverter
 
 		private void TxtOutputConstantsFilePath_TextChanged(object sender, EventArgs e)
 		{
-			SetupConfigFolders(txtSettingOuputConstantsFilePath, ref Config.Settings.outputConstantsFilePath);
+			SetupConfigFolders(txtSettingOuputConstantsFilePath, ref Config.Settings.constantsOutputFolder);
 		}
 
 		private void txtOutputDataFilePath_TextChanged(object sender, EventArgs e)
 		{
-			SetupConfigFolders(txtSettingOutputDataFilePath, ref Config.Settings.outputDataFilePath);
+			SetupConfigFolders(txtSettingOutputDataFilePath, ref Config.Settings.jsonOutputFolder);
 		}
 
 		private void txtSettingOutputLocalizationFilePath_TextChanged(object sender, EventArgs e)
 		{
-			SetupConfigFolders(txtSettingOutputLocalizationFilePath, ref Config.Settings.outputLocalizationFilePath);
+			SetupConfigFolders(txtSettingOutputLocalizationFilePath, ref Config.Settings.localizationOutputFolder);
 		}
 
 		private static bool IsJsonSheet(string pName)
@@ -1874,7 +1874,7 @@ namespace ExcelToUnity_DataConverter
 				for (int i = 0; i < sheets.Count; i++)
 				{
 					if (sheets[i].SheetName.EndsWith(IDS_SHEET))
-						if (BuildContentOfFileIDs(workBook, sheets[i].SheetName) && exportIDs && Config.Settings.seperateIDs)
+						if (BuildContentOfFileIDs(workBook, sheets[i].SheetName) && exportIDs && Config.Settings.separateIDs)
 							CreateFileIDs(sheets[i].SheetName, m_idsBuilderDict[sheets[i].SheetName].ToString());
 				}
 
@@ -1885,9 +1885,9 @@ namespace ExcelToUnity_DataConverter
 					if (IsJsonSheet(sheets[i].SheetName))
 					{
 						string fileName = sheets[i].SheetName.Trim().Replace(" ", "_");
-						string json = ConvertSheetToJson(workBook, sheets[i].SheetName, fileName, Config.Settings.encryption, !Config.Settings.mergeJsonsIntoSingleJson);
+						string json = ConvertSheetToJson(workBook, sheets[i].SheetName, fileName, Config.Settings.encryptJson, !Config.Settings.combineJson);
 
-						if (Config.Settings.mergeJsonsIntoSingleJson)
+						if (Config.Settings.combineJson)
 						{
 							if (allJsons.ContainsKey(fileName))
 							{
@@ -1899,14 +1899,14 @@ namespace ExcelToUnity_DataConverter
 					}
 				}
 
-				if (Config.Settings.mergeJsonsIntoSingleJson)
+				if (Config.Settings.combineJson)
 				{
 					//Build json file for all jsons content
 					string mergedJson = JsonConvert.SerializeObject(allJsons);
 					string mergedFileName = Path.GetFileNameWithoutExtension(file.path).Trim().Replace(" ", "_");
-					Helper.WriteFile(Config.Settings.outputDataFilePath, $"{mergedFileName}.txt", mergedJson);
+					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"{mergedFileName}.txt", mergedJson);
 
-					if (Config.Settings.encryption)
+					if (Config.Settings.encryptJson)
 						Log(LogType.Message, $"Exported encrypted Json data to {mergedFileName}.txt.");
 					else
 						Log(LogType.Message, $"Exported Json data to {mergedFileName}.txt.");
@@ -1919,7 +1919,7 @@ namespace ExcelToUnity_DataConverter
 					{
 						LoadSheetConstantsData(workBook, sheets[i].SheetName);
 
-						if (m_constantsBuilderDict.ContainsKey(sheets[i].SheetName) && Config.Settings.seperateConstants)
+						if (m_constantsBuilderDict.ContainsKey(sheets[i].SheetName) && Config.Settings.separateConstants)
 							CreateFileConstants(m_constantsBuilderDict[sheets[i].SheetName].ToString(), sheets[i].SheetName);
 					}
 				}
@@ -1931,7 +1931,7 @@ namespace ExcelToUnity_DataConverter
 					{
 						LoadSheetLocalizationData(workBook, sheets[i].SheetName);
 
-						if (m_localizationsDict.ContainsKey(sheets[i].SheetName) && Config.Settings.seperateLocalizations)
+						if (m_localizationsDict.ContainsKey(sheets[i].SheetName) && Config.Settings.separateLocalizations)
 						{
 							var builder = m_localizationsDict[sheets[i].SheetName];
 							CreateLocalizationFileV2(builder.idsString, builder.languageTextDict, sheets[i].SheetName);
@@ -1942,7 +1942,7 @@ namespace ExcelToUnity_DataConverter
 			}
 
 			//Create file contain all IDs
-			if (!Config.Settings.seperateIDs)
+			if (!Config.Settings.separateIDs)
 			{
 				var builder = new StringBuilder();
 				int count = 0;
@@ -1958,7 +1958,7 @@ namespace ExcelToUnity_DataConverter
 			}
 
 			//Create file contain all Constants
-			if (!Config.Settings.seperateConstants)
+			if (!Config.Settings.separateConstants)
 			{
 				var builder = new StringBuilder();
 				int count = 0;
@@ -1974,7 +1974,7 @@ namespace ExcelToUnity_DataConverter
 			}
 
 			//Create file contain all Localizations
-			if (!Config.Settings.seperateLocalizations)
+			if (!Config.Settings.separateLocalizations)
 			{
 				var localizationBuilder = new LocalizationBuilder();
 				foreach (var b in m_localizationsDict)
@@ -1999,7 +1999,7 @@ namespace ExcelToUnity_DataConverter
 				var maps = GenereteCharacterMaps(m_characterMaps);
 				foreach (var map in maps)
 				{
-					Helper.WriteFile(Config.Settings.outputDataFilePath, $"characters_map_{map.Key}.txt", map.Value);
+					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"characters_map_{map.Key}.txt", map.Value);
 					Log(LogType.Message, $"Exported characters_map_{map.Key}.txt!");
 				}
 			}
@@ -2065,7 +2065,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void chkSettingEnableEncryption_CheckedChanged(object sender, EventArgs e)
 		{
-			Config.Settings.encryption = chkSettingEnableEncryption.Checked;
+			Config.Settings.encryptJson = chkSettingEnableEncryption.Checked;
 
 			if (chkSettingEnableEncryption.Checked)
 				CreateEncryption();
@@ -2075,7 +2075,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void chkMergeJsonIntoSingleExcel2_CheckedChanged(object sender, EventArgs e)
 		{
-			Config.Settings.mergeJsonsIntoSingleJson = chkMergeJsonIntoSingleOne2.Checked;
+			Config.Settings.combineJson = chkMergeJsonIntoSingleOne2.Checked;
 			Config.Save();
 		}
 
@@ -2101,9 +2101,9 @@ namespace ExcelToUnity_DataConverter
 
 		private void txtUnminimizeFields_Leave(object sender, EventArgs e)
 		{
-			if (Config.Settings.unminizedFields != txtUnminimizeFields.Text)
+			if (Config.Settings.persistentFields != txtUnminimizeFields.Text)
 			{
-				Config.Settings.unminizedFields = txtUnminimizeFields.Text.Trim();
+				Config.Settings.persistentFields = txtUnminimizeFields.Text.Trim();
 				Config.Save();
 			}
 		}
@@ -2112,9 +2112,9 @@ namespace ExcelToUnity_DataConverter
 
 		private void txtSettingNamespace_Leave(object sender, EventArgs e)
 		{
-			if (Config.Settings._namespace != txtSettingNamespace.Text)
+			if (Config.Settings.@namespace != txtSettingNamespace.Text)
 			{
-				Config.Settings._namespace = txtSettingNamespace.Text.Trim();
+				Config.Settings.@namespace = txtSettingNamespace.Text.Trim();
 				Config.Save();
 			}
 		}
@@ -2123,28 +2123,28 @@ namespace ExcelToUnity_DataConverter
 
 		private void txtLanguageMaps_Leave(object sender, EventArgs e)
 		{
-			if (Config.Settings.languageCharactersMaps != txtLanguageMaps.Text)
+			if (Config.Settings.langCharSets != txtLanguageMaps.Text)
 			{
-				Config.Settings.languageCharactersMaps = txtLanguageMaps.Text.Trim();
+				Config.Settings.langCharSets = txtLanguageMaps.Text.Trim();
 				Config.Save();
 			}
 		}
 
 		private void ChkSeparateIDs_CheckedChanged(object sender, EventArgs e)
 		{
-			Config.Settings.seperateIDs = chkSeperateIDs.Checked;
+			Config.Settings.separateIDs = chkSeperateIDs.Checked;
 			Config.Save();
 		}
 
 		private void ChkSeparateConstants_CheckedChanged(object sender, EventArgs e)
 		{
-			Config.Settings.seperateConstants = chkSeperateConstants.Checked;
+			Config.Settings.separateConstants = chkSeperateConstants.Checked;
 			Config.Save();
 		}
 
 		private void ChkSeparateLocalization_CheckedChanged(object sender, EventArgs e)
 		{
-			Config.Settings.seperateLocalizations = chkSeperateLocalization.Checked;
+			Config.Settings.separateLocalizations = chkSeperateLocalization.Checked;
 			Config.Save();
 		}
 
@@ -2223,7 +2223,7 @@ namespace ExcelToUnity_DataConverter
 					string content = ExportSettingsSheetToScriptableObject(m_workBook, m_sheets[i].SheetName);
 					if (!string.IsNullOrEmpty(content))
 					{
-						Helper.WriteFile(Config.Settings.outputDataFilePath, $"{m_sheets[i].SheetName}.txt", content);
+						Helper.WriteFile(Config.Settings.jsonOutputFolder, $"{m_sheets[i].SheetName}.txt", content);
 						Log(LogType.Message, $"Exported {m_sheets[i].SheetName}.txt");
 					}
 				}
@@ -2251,7 +2251,7 @@ namespace ExcelToUnity_DataConverter
 					BuildContentOfFileIDs(m_workBook, m.SheetName);
 
 					//Create IDs Files
-					if (Config.Settings.seperateConstants)
+					if (Config.Settings.separateConstants)
 					{
 						var content = m_idsBuilderDict[m.SheetName].ToString();
 						CreateFileIDs(m.SheetName, content);
@@ -2259,7 +2259,7 @@ namespace ExcelToUnity_DataConverter
 				}
 			}
 
-			if (!Config.Settings.seperateConstants)
+			if (!Config.Settings.separateConstants)
 			{
 				var iDsBuilder = new StringBuilder();
 				foreach (var builder in m_idsBuilderDict)
@@ -2290,14 +2290,14 @@ namespace ExcelToUnity_DataConverter
 				{
 					LoadSheetConstantsData(m_workBook, m_sheets[i].SheetName);
 
-					if (m_constantsBuilderDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateConstants)
+					if (m_constantsBuilderDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.separateConstants)
 					{
 						CreateFileConstants(m_constantsBuilderDict[m_sheets[i].SheetName].ToString(), m_sheets[i].SheetName);
 					}
 				}
 			}
 
-			if (!Config.Settings.seperateConstants)
+			if (!Config.Settings.separateConstants)
 			{
 				var builder = new StringBuilder();
 				foreach (var b in m_constantsBuilderDict)
@@ -2316,6 +2316,14 @@ namespace ExcelToUnity_DataConverter
 			if (m_workBook == null)
 				return;
 
+			if (m_allIds == null || m_allIds.Count == 0)
+			{
+				m_allIds = new Dictionary<string, int>();
+				foreach (var sheet in m_sheets)
+					if (sheet.SheetName.EndsWith(IDS_SHEET))
+						LoadSheetIDsValues(m_workBook, sheet.SheetName);
+			}
+
 			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
 			m_localizedSheetsExported = new List<string>();
 			m_localizedLanguages = new List<string>();
@@ -2327,7 +2335,7 @@ namespace ExcelToUnity_DataConverter
 				{
 					LoadSheetLocalizationData(m_workBook, m_sheets[i].SheetName);
 
-					if (m_localizationsDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.seperateLocalizations)
+					if (m_localizationsDict.ContainsKey(m_sheets[i].SheetName) && Config.Settings.separateLocalizations)
 					{
 						var builder = m_localizationsDict[m_sheets[i].SheetName];
 						//CreateLocalizationFile(builder.idsString, builder.languageTextDict, mSheets[i].SheetName);
@@ -2337,7 +2345,7 @@ namespace ExcelToUnity_DataConverter
 				}
 			}
 
-			if (!Config.Settings.seperateLocalizations)
+			if (!Config.Settings.separateLocalizations)
 			{
 				var builder = new LocalizationBuilder();
 				foreach (var b in m_localizationsDict)
@@ -2370,46 +2378,26 @@ namespace ExcelToUnity_DataConverter
 			if (m_workBook == null)
 				return;
 
+			if (m_allIds == null || m_allIds.Count == 0)
+			{
+				m_allIds = new Dictionary<string, int>();
+				foreach (var sheet in m_sheets)
+					if (sheet.SheetName.EndsWith(IDS_SHEET))
+						LoadSheetIDsValues(m_workBook, sheet.SheetName);
+			}
+			
 			var allSheets = new List<string>();
-			for (int i = 0; i < m_sheets.Count; i++)
-			{
-				if (m_sheets[i].SheetName.EndsWith(IDS_SHEET))
-				{
-					//Load All IDs
-					BuildContentOfFileIDs(m_workBook, m_sheets[i].SheetName);
-
-					//Create IDs Files
-					if (m_sheets[i].Check && Config.Settings.seperateConstants)
-					{
-						var builder = m_idsBuilderDict[m_sheets[i].SheetName];
-						CreateFileIDs(m_sheets[i].SheetName, builder.ToString());
-					}
-				}
-			}
-
-			if (!Config.Settings.seperateConstants)
-			{
-				//Export all IDs in one file
-				var iDsBuilder = new StringBuilder();
-				foreach (var b in m_idsBuilderDict)
-				{
-					iDsBuilder.Append(b.Value);
-					iDsBuilder.AppendLine();
-				}
-				CreateFileIDs("IDs", iDsBuilder.ToString());
-			}
-
-			bool writeJsonFileForSingleSheet = !Config.Settings.mergeJsonsIntoSingleJson;
+			bool writeJsonFileForSingleSheet = !Config.Settings.combineJson;
 			var allJsons = new Dictionary<string, string>();
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
 				if (m_sheets[i].Check && IsJsonSheet(m_sheets[i].SheetName))
 				{
 					string fileName = m_sheets[i].SheetName.Trim().Replace(" ", "_");
-					string json = ConvertSheetToJson(m_workBook, m_sheets[i].SheetName, fileName, Config.Settings.encryption, writeJsonFileForSingleSheet);
+					string json = ConvertSheetToJson(m_workBook, m_sheets[i].SheetName, fileName, Config.Settings.encryptJson, writeJsonFileForSingleSheet);
 
 					//Merge all json into a single file
-					if (Config.Settings.mergeJsonsIntoSingleJson)
+					if (Config.Settings.combineJson)
 					{
 						if (allJsons.ContainsKey(fileName))
 						{
@@ -2422,14 +2410,14 @@ namespace ExcelToUnity_DataConverter
 					allSheets.Add(m_sheets[i].SheetName);
 				}
 			}
-			if (Config.Settings.mergeJsonsIntoSingleJson)
+			if (Config.Settings.combineJson)
 			{
 				//Build json file for all jsons content
 				string mergedJson = JsonConvert.SerializeObject(allJsons);
 				string mergedFileName = Path.GetFileNameWithoutExtension(Config.Settings.inputDataFilePath).Trim().Replace(" ", "_");
-				Helper.WriteFile(Config.Settings.outputDataFilePath, $"{mergedFileName}.txt", mergedJson);
+				Helper.WriteFile(Config.Settings.jsonOutputFolder, $"{mergedFileName}.txt", mergedJson);
 
-				if (Config.Settings.encryption)
+				if (Config.Settings.encryptJson)
 					Log(LogType.Message, $"Exported encrypted Json data to {mergedFileName}.txt.");
 				else
 					Log(LogType.Message, $"Exported Json data to {mergedFileName}.txt.");
@@ -2575,25 +2563,25 @@ namespace ExcelToUnity_DataConverter
 			}
 			else
 				txtInputXLSXFilePath.Text = "";
-			txtSettingOutputDataFilePath.Text = settings.outputDataFilePath;
-			txtSettingOutputLocalizationFilePath.Text = settings.outputLocalizationFilePath;
-			txtSettingOuputConstantsFilePath.Text = settings.outputConstantsFilePath;
-			chkSettingEnableEncryption.Checked = settings.encryption;
+			txtSettingOutputDataFilePath.Text = settings.jsonOutputFolder;
+			txtSettingOutputLocalizationFilePath.Text = settings.localizationOutputFolder;
+			txtSettingOuputConstantsFilePath.Text = settings.constantsOutputFolder;
+			chkSettingEnableEncryption.Checked = settings.encryptJson;
 			if (!string.IsNullOrEmpty(settings.encryptionKey))
 				txtSettingEncryptionKey.Text = settings.encryptionKey;
 			txtSettingExcludedSheet.Text = settings.excludedSheets;
-			txtSettingNamespace.Text = settings._namespace;
-			chkMergeJsonIntoSingleOne2.Checked = settings.mergeJsonsIntoSingleJson;
-			txtUnminimizeFields.Text = settings.unminizedFields;
-			txtLanguageMaps.Text = settings.languageCharactersMaps;
-			chkSeperateConstants.Checked = settings.seperateConstants;
-			chkSeperateIDs.Checked = settings.seperateIDs;
-			chkSeperateLocalization.Checked = settings.seperateLocalizations;
-			chkKeepOnlyEnumAsIds.Checked = settings.keepOnlyEnumAsIDs;
-			TxtGoogleClientID.Text = settings.ggClientId;
-			TxtGoogleClientSecret.Text = settings.ggClientSecret;
+			txtSettingNamespace.Text = settings.@namespace;
+			chkMergeJsonIntoSingleOne2.Checked = settings.combineJson;
+			txtUnminimizeFields.Text = settings.persistentFields;
+			txtLanguageMaps.Text = settings.langCharSets;
+			chkSeperateConstants.Checked = settings.separateConstants;
+			chkSeperateIDs.Checked = settings.separateIDs;
+			chkSeperateLocalization.Checked = settings.separateLocalizations;
+			chkKeepOnlyEnumAsIds.Checked = settings.onlyEnumAsIDs;
+			TxtGoogleClientID.Text = settings.googleClientId;
+			TxtGoogleClientSecret.Text = settings.googleClientSecret;
 
-			if (settings.encryption)
+			if (settings.encryptJson)
 				CreateEncryption();
 
 			RefreshDtgGoogleSheetsPaths();
@@ -2604,27 +2592,27 @@ namespace ExcelToUnity_DataConverter
 			Config.ClearSettings();
 			var settings = Config.Settings;
 
-			txtSettingOutputDataFilePath.Text = settings.outputDataFilePath;
-			txtSettingOuputConstantsFilePath.Text = settings.outputConstantsFilePath;
-			txtSettingNamespace.Text = settings._namespace;
-			chkSeperateIDs.Checked = settings.seperateIDs;
-			chkSeperateConstants.Checked = settings.seperateConstants;
-			chkSeperateLocalization.Checked = settings.seperateLocalizations;
-			chkMergeJsonIntoSingleOne2.Checked = settings.mergeJsonsIntoSingleJson;
-			chkKeepOnlyEnumAsIds.Checked = settings.keepOnlyEnumAsIDs;
+			txtSettingOutputDataFilePath.Text = settings.jsonOutputFolder;
+			txtSettingOuputConstantsFilePath.Text = settings.constantsOutputFolder;
+			txtSettingNamespace.Text = settings.@namespace;
+			chkSeperateIDs.Checked = settings.separateIDs;
+			chkSeperateConstants.Checked = settings.separateConstants;
+			chkSeperateLocalization.Checked = settings.separateLocalizations;
+			chkMergeJsonIntoSingleOne2.Checked = settings.combineJson;
+			chkKeepOnlyEnumAsIds.Checked = settings.onlyEnumAsIDs;
 			txtSettingEncryptionKey.Text = settings.encryptionKey;
 			txtSettingExcludedSheet.Text = settings.excludedSheets;
-			txtUnminimizeFields.Text = settings.unminizedFields;
-			txtLanguageMaps.Text = settings.languageCharactersMaps;
+			txtUnminimizeFields.Text = settings.persistentFields;
+			txtLanguageMaps.Text = settings.langCharSets;
 
 			RefreshDtgGoogleSheetsPaths();
 		}
 
 		private void chkKeepOnlyEnumAsIds_CheckedChanged(object sender, EventArgs e)
 		{
-			if (Config.Settings.keepOnlyEnumAsIDs == chkKeepOnlyEnumAsIds.Checked)
+			if (Config.Settings.onlyEnumAsIDs == chkKeepOnlyEnumAsIds.Checked)
 				return;
-			Config.Settings.keepOnlyEnumAsIDs = chkKeepOnlyEnumAsIds.Checked;
+			Config.Settings.onlyEnumAsIDs = chkKeepOnlyEnumAsIds.Checked;
 			Config.Save();
 		}
 
@@ -2785,7 +2773,7 @@ namespace ExcelToUnity_DataConverter
 					var values = response.Values;
 
 					// Build contents of file IDs and export to file if seperateIDs = true
-					if (BuildContentOfFileIDs(sheet.name, values) && Config.Settings.seperateIDs)
+					if (BuildContentOfFileIDs(sheet.name, values) && Config.Settings.separateIDs)
 						CreateFileIDs(sheet.name, m_idsBuilderDict[sheet.name].ToString());
 				}
 			}
@@ -2826,8 +2814,8 @@ namespace ExcelToUnity_DataConverter
 					if (IsJsonSheet(sheet.name))
 					{
 						string fileName = sheet.name.Trim().Replace(" ", "_");
-						string json = ConvertSheetToJson(values, sheet.name, fileName, Config.Settings.encryption, !Config.Settings.mergeJsonsIntoSingleJson);
-						if (Config.Settings.mergeJsonsIntoSingleJson)
+						string json = ConvertSheetToJson(values, sheet.name, fileName, Config.Settings.encryptJson, !Config.Settings.combineJson);
+						if (Config.Settings.combineJson)
 						{
 							if (allJsons.ContainsKey(fileName))
 							{
@@ -2838,14 +2826,14 @@ namespace ExcelToUnity_DataConverter
 						}
 					}
 
-					if (Config.Settings.mergeJsonsIntoSingleJson)
+					if (Config.Settings.combineJson)
 					{
 						//Build json file for all jsons content
 						string mergedJson = JsonConvert.SerializeObject(allJsons);
 						string mergedFileName = ggSheetsMetadata.Properties.Title;
-						Helper.WriteFile(Config.Settings.outputDataFilePath, $"{mergedFileName}.txt", mergedJson);
+						Helper.WriteFile(Config.Settings.jsonOutputFolder, $"{mergedFileName}.txt", mergedJson);
 
-						if (Config.Settings.encryption)
+						if (Config.Settings.encryptJson)
 							Log(LogType.Message, $"Exported encrypted Json data to {mergedFileName}.txt.");
 						else
 							Log(LogType.Message, $"Exported Json data to {mergedFileName}.txt.");
@@ -2856,7 +2844,7 @@ namespace ExcelToUnity_DataConverter
 					{
 						LoadSheetConstantsData(sheet.name, values);
 						
-						if (m_constantsBuilderDict.ContainsKey(sheet.name) && Config.Settings.seperateConstants)
+						if (m_constantsBuilderDict.ContainsKey(sheet.name) && Config.Settings.separateConstants)
 							CreateFileConstants(m_constantsBuilderDict[sheet.name].ToString(), sheet.name);
 					}
 					
@@ -2865,7 +2853,7 @@ namespace ExcelToUnity_DataConverter
 					{
 						LoadSheetLocalizationData(values, sheet.name);
 						
-						if (m_localizationsDict.ContainsKey(sheet.name) && Config.Settings.seperateLocalizations)
+						if (m_localizationsDict.ContainsKey(sheet.name) && Config.Settings.separateLocalizations)
 						{
 							var builder = m_localizationsDict[sheet.name];
 							CreateLocalizationFileV2(builder.idsString, builder.languageTextDict, sheet.name);
@@ -2876,7 +2864,7 @@ namespace ExcelToUnity_DataConverter
 			}
 
 			//Create file contain all IDs
-			if (!Config.Settings.seperateIDs)
+			if (!Config.Settings.separateIDs)
 			{
 				var builder = new StringBuilder();
 				int count = 0;
@@ -2892,7 +2880,7 @@ namespace ExcelToUnity_DataConverter
 			}
 			
 			//Create file contain all Constants
-			if (!Config.Settings.seperateConstants)
+			if (!Config.Settings.separateConstants)
 			{
 				var builder = new StringBuilder();
 				int count = 0;
@@ -2908,7 +2896,7 @@ namespace ExcelToUnity_DataConverter
 			}
 			
 			//Create file contain all Localizations
-			if (!Config.Settings.seperateLocalizations)
+			if (!Config.Settings.separateLocalizations)
 			{
 				var localizationBuilder = new LocalizationBuilder();
 				foreach (var b in m_localizationsDict)
@@ -2933,7 +2921,7 @@ namespace ExcelToUnity_DataConverter
 				var maps = GenereteCharacterMaps(m_characterMaps);
 				foreach (var map in maps)
 				{
-					Helper.WriteFile(Config.Settings.outputDataFilePath, $"characters_map_{map.Key}.txt", map.Value);
+					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"characters_map_{map.Key}.txt", map.Value);
 					Log(LogType.Message, $"Exported characters_map_{map.Key}.txt");
 				}
 			}
@@ -3113,7 +3101,7 @@ namespace ExcelToUnity_DataConverter
 						.Append(" { ")
 						.Append(str)
 						.Append(" }\n");
-					if (Config.Settings.keepOnlyEnumAsIDs)
+					if (Config.Settings.onlyEnumAsIDs)
 					{
 						var tempSb = new StringBuilder();
 						tempSb.Append("\t#region ")
@@ -3162,7 +3150,7 @@ namespace ExcelToUnity_DataConverter
 		
 		private string ConvertSheetToJson(IList<IList<object>> pValues, string pSheetName, string pOutputFile, List<FieldValueType> pFieldValueTypes, bool pEncrypt, bool pAutoWriteFile)
 		{
-			var unminifiedFields = Config.Settings.GetUnminizedFields();
+			var unminifiedFields = Config.Settings.GetPersistentFields();
 
 			if (pValues == null || pValues.Count == 0)
 			{
@@ -3381,7 +3369,7 @@ namespace ExcelToUnity_DataConverter
 								bool referencedId = false;
 								if (fieldType == "string") //Find and replace string value with referenced ID
 								{
-									if (CheckExistId(fieldValue))
+									if (CheckExistedId(fieldValue))
 									{
 										fieldType = "number";
 										referencedId = true;
@@ -3397,7 +3385,7 @@ namespace ExcelToUnity_DataConverter
 									string[] arrayValue = Helper.SplitValueToArray(fieldValue, false);
 									foreach (string val in arrayValue)
 									{
-										if (CheckExistId(val.Trim()))
+										if (CheckExistedId(val.Trim()))
 										{
 											fieldType = "array-number";
 											referencedId = true;
@@ -3583,7 +3571,7 @@ namespace ExcelToUnity_DataConverter
 
 			if (pAutoWriteFile)
 			{
-				Helper.WriteFile(Config.Settings.outputDataFilePath, $"{pOutputFile}.txt", finalContent);
+				Helper.WriteFile(Config.Settings.jsonOutputFolder, $"{pOutputFile}.txt", finalContent);
 				if (pEncrypt && m_encryption != null)
 					Log(LogType.Message, $"Exported encrypted Json data to {pOutputFile}.txt.");
 				else
@@ -3685,20 +3673,20 @@ namespace ExcelToUnity_DataConverter
 
 		private void TxtGoogleClientID_Leave(object sender, EventArgs e)
 		{
-			bool changed = Config.Settings.ggClientId != TxtGoogleClientID.Text;
+			bool changed = Config.Settings.googleClientId != TxtGoogleClientID.Text;
 			if (changed)
 			{
-				Config.Settings.ggClientId = TxtGoogleClientID.Text;
+				Config.Settings.googleClientId = TxtGoogleClientID.Text;
 				Config.Save();
 			}
 		}
 
 		private void TxtGoogleClientSecret_Leave(object sender, EventArgs e)
 		{
-			bool changed = Config.Settings.ggClientSecret != TxtGoogleClientSecret.Text;
+			bool changed = Config.Settings.googleClientSecret != TxtGoogleClientSecret.Text;
 			if (changed)
 			{
-				Config.Settings.ggClientSecret = TxtGoogleClientSecret.Text;
+				Config.Settings.googleClientSecret = TxtGoogleClientSecret.Text;
 				Config.Save();
 			}
 		}

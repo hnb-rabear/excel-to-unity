@@ -723,8 +723,8 @@ namespace ExcelToUnity_DataConverter
 			UserCredential credential;
 
 			var clientSecrets = new ClientSecrets();
-			clientSecrets.ClientId = Config.Settings.ggClientId;
-			clientSecrets.ClientSecret = Config.Settings.ggClientSecret;
+			clientSecrets.ClientId = Config.Settings.googleClientId;
+			clientSecrets.ClientSecret = Config.Settings.googleClientSecret;
 
 			// The file token.json stores the user's access and refresh tokens, and is created
 			// automatically when the authorization flow completes for the first time.
