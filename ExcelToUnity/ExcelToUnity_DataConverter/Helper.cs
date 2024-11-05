@@ -101,17 +101,19 @@ namespace ExcelToUnity_DataConverter
         public static List<FieldValueType> GetFieldValueTypes(IWorkbook pWorkBook, string pSheetName)
         {
             var sheet = pWorkBook.GetSheet(pSheetName);
-            var rowData = sheet.GetRow(0);
-            if (rowData.IsNull())
+            var firstRowData = sheet.GetRow(0);
+            if (firstRowData.IsNull())
                 return null;
 
-            int lastCellNum = rowData.LastCellNum;
+            int lastCellNum = firstRowData.LastCellNum;
             var fieldsName = new string[lastCellNum];
             var fieldsValue = new string[lastCellNum];
-            for (int col = 0; col < rowData.LastCellNum; col++)
+            for (int col = 0; col < firstRowData.LastCellNum; col++)
             {
-                var cell = rowData.GetCell(col);
-                if (cell != null && !string.IsNullOrEmpty(cell.StringCellValue))
+                var cell = firstRowData.GetCell(col);
+				if (cell == null || cell.CellType != CellType.String)
+					continue;
+				if (!string.IsNullOrEmpty(cell.StringCellValue))
                     fieldsName[col] = cell.ToString().Replace(" ", "_");
                 else
                     fieldsName[col] = "";
@@ -120,13 +122,15 @@ namespace ExcelToUnity_DataConverter
 
             for (int row = 1; row <= sheet.LastRowNum; row++)
             {
-                rowData = sheet.GetRow(row);
-                if (rowData != null)
+                firstRowData = sheet.GetRow(row);
+                if (firstRowData != null)
                 {
                     //Find longest value, and use it to check value type
                     for (int col = 0; col < fieldsName.Length; col++)
                     {
-                        var cell = rowData.GetCell(col);
+						if (string.IsNullOrEmpty(fieldsName[col]))
+							continue;
+						var cell = firstRowData.GetCell(col);
                         if (cell != null)
                         {
                             string cellStr = cell.ToCellString();
@@ -141,7 +145,9 @@ namespace ExcelToUnity_DataConverter
             for (int i = 0; i < fieldsName.Length; i++)
             {
                 string fieldName = fieldsName[i];
-                string filedValue = fieldsValue[i].Trim();
+				if (string.IsNullOrEmpty(fieldName))
+					continue;
+				string filedValue = fieldsValue[i].Trim();
                 bool isArray = fieldName.Contains("[]");
                 var fieldValueType = new FieldValueType(fieldName);
                 if (!isArray)
