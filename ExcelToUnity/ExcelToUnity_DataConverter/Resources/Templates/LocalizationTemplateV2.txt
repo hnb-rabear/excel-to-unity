@@ -125,7 +125,7 @@ public static class LOCALIZATION_CLASS_NAME
                 var textAsset = operation.Result;
                 if (textAsset != null)
                     m_Texts = GetJsonList(textAsset.text);
-                Addressables.Release(operation);}
+                Addressables.Release(operation);
             }
             else
 #endif
