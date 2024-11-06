@@ -1997,7 +1997,7 @@ namespace ExcelToUnity_DataConverter
 				var maps = GenerateLangCharSets(m_langCharSets);
 				foreach (var map in maps)
 				{
-					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
+					Helper.WriteFile(Config.Settings.localizationOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
 					Log(LogType.Message, $"Exported characters_set_{map.Key}.txt!");
 				}
 			}
@@ -2369,7 +2369,7 @@ namespace ExcelToUnity_DataConverter
 				var maps = GenerateLangCharSets(m_langCharSets);
 				foreach (var map in maps)
 				{
-					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
+					Helper.WriteFile(Config.Settings.localizationOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
 					Log(LogType.Message, $"Exported characters_set_{map.Key}.txt!");
 				}
 			}
@@ -2931,7 +2931,7 @@ namespace ExcelToUnity_DataConverter
 				var maps = GenerateLangCharSets(m_langCharSets);
 				foreach (var map in maps)
 				{
-					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
+					Helper.WriteFile(Config.Settings.localizationOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
 					Log(LogType.Message, $"Exported characters_set_{map.Key}.txt");
 				}
 			}
