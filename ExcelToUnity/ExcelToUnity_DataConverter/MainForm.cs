@@ -332,12 +332,12 @@ namespace ExcelToUnity_DataConverter
 					var cellIdName = rowData.GetCell(col);
 					if (cellIdName == null)
 						continue;
-					if (row <= 0)
+					string key = cellIdName.ToString().Trim();
+					if (row <= 0 || string.IsNullOrEmpty(key))
 						continue;
 					var cellIdValue = rowData.GetCell(col + 1);
 					if (cellIdValue == null)
 						continue;
-					string key = cellIdName.ToString().Trim();
 					int value = int.Parse(cellIdValue.ToString().Trim());
 
 					if (m_allIds.ContainsKey(key))
@@ -614,11 +614,13 @@ namespace ExcelToUnity_DataConverter
 					mergeValues = new string[lastCellNum];
 					validCols = new bool[lastCellNum];
 
+					//Find valid columns
 					for (int col = 0; col < lastCellNum; col++)
 					{
 						var cell = rowData.GetCell(col);
 						if (cell != null
-						    && !string.IsNullOrEmpty(cell.StringCellValue)
+							&& cell.CellType == CellType.String
+							&& !string.IsNullOrEmpty(cell.StringCellValue)
 						    && !cell.StringCellValue.Contains("[x]"))
 						{
 							validCols[col] = true;
@@ -1279,10 +1281,6 @@ namespace ExcelToUnity_DataConverter
 							textDict[fieldName].Add(fieldValue);
 						}
 					}
-					else
-					{
-						Console.Write(col);
-					}
 				}
 			}
 
@@ -1436,7 +1434,7 @@ namespace ExcelToUnity_DataConverter
 			Log(LogType.Message, $"Exported {pFileName}.cs!");
 		}
 
-		private Dictionary<string, string> m_characterMaps;
+		private Dictionary<string, string> m_langCharSets;
 
 		/// <summary>
 		/// Each language have a json file
@@ -1513,10 +1511,10 @@ namespace ExcelToUnity_DataConverter
 
 				if (Config.Settings.langCharSets != null && Config.Settings.langCharSets.Contains(listText.Key))
 				{
-					if (m_characterMaps.ContainsKey(listText.Key))
-						m_characterMaps[listText.Key] += json;
+					if (m_langCharSets.ContainsKey(listText.Key))
+						m_langCharSets[listText.Key] += json;
 					else
-						m_characterMaps[listText.Key] = json;
+						m_langCharSets[listText.Key] = json;
 				}
 			}
 
@@ -1758,7 +1756,7 @@ namespace ExcelToUnity_DataConverter
 				&& !pName.StartsWith(LOCALIZATION_SHEET);
 		}
 
-		private Dictionary<string, string> GenereteCharacterMaps(Dictionary<string, string> pCharacterMaps)
+		private Dictionary<string, string> GenerateLangCharSets(Dictionary<string, string> pCharacterMaps)
 		{
 			var output = new Dictionary<string, string>();
 			foreach (var map in pCharacterMaps)
@@ -1829,7 +1827,7 @@ namespace ExcelToUnity_DataConverter
 			m_allIds = new Dictionary<string, int>();
 			m_localizedSheetsExported = new List<string>();
 			m_localizedLanguages = new List<string>();
-			m_characterMaps = new Dictionary<string, string>();
+			m_langCharSets = new Dictionary<string, string>();
 
 			//Process IDs sheets first
 			foreach (var file in Config.Settings.allFiles)
@@ -1993,10 +1991,10 @@ namespace ExcelToUnity_DataConverter
 				m_localizedSheetsExported.Add("Localization");
 			}
 
-			//Create characters maps
-			if (m_characterMaps != null && m_characterMaps.Count > 0)
+			//Create language character sets
+			if (m_langCharSets != null && m_langCharSets.Count > 0)
 			{
-				var maps = GenereteCharacterMaps(m_characterMaps);
+				var maps = GenerateLangCharSets(m_langCharSets);
 				foreach (var map in maps)
 				{
 					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"characters_map_{map.Key}.txt", map.Value);
@@ -2327,7 +2325,7 @@ namespace ExcelToUnity_DataConverter
 			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
 			m_localizedSheetsExported = new List<string>();
 			m_localizedLanguages = new List<string>();
-			m_characterMaps = new Dictionary<string, string>();
+			m_langCharSets = new Dictionary<string, string>();
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
@@ -2365,6 +2363,18 @@ namespace ExcelToUnity_DataConverter
 				m_localizedSheetsExported.Add("Localization");
 			}
 
+			//Create language character sets
+			if (m_langCharSets != null && m_langCharSets.Count > 0)
+			{
+				var maps = GenerateLangCharSets(m_langCharSets);
+				foreach (var map in maps)
+				{
+					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"characters_map_{map.Key}.txt", map.Value);
+					Log(LogType.Message, $"Exported characters_map_{map.Key}.txt!");
+				}
+			}
+
+			//Create localization manager file
 			CreateLocalizationsManagerFile();
 		}
 
@@ -2389,12 +2399,12 @@ namespace ExcelToUnity_DataConverter
 			var allSheets = new List<string>();
 			bool writeJsonFileForSingleSheet = !Config.Settings.combineJson;
 			var allJsons = new Dictionary<string, string>();
-			for (int i = 0; i < m_sheets.Count; i++)
+			foreach (var sheet in m_sheets)
 			{
-				if (m_sheets[i].Check && IsJsonSheet(m_sheets[i].SheetName))
+				if (sheet.Check && IsJsonSheet(sheet.SheetName))
 				{
-					string fileName = m_sheets[i].SheetName.Trim().Replace(" ", "_");
-					string json = ConvertSheetToJson(m_workBook, m_sheets[i].SheetName, fileName, Config.Settings.encryptJson, writeJsonFileForSingleSheet);
+					string fileName = sheet.SheetName.Trim().Replace(" ", "_");
+					string json = ConvertSheetToJson(m_workBook, sheet.SheetName, fileName, Config.Settings.encryptJson, writeJsonFileForSingleSheet);
 
 					//Merge all json into a single file
 					if (Config.Settings.combineJson)
@@ -2407,7 +2417,7 @@ namespace ExcelToUnity_DataConverter
 						allJsons.Add(fileName, json);
 					}
 
-					allSheets.Add(m_sheets[i].SheetName);
+					allSheets.Add(sheet.SheetName);
 				}
 			}
 			if (Config.Settings.combineJson)
@@ -2743,7 +2753,7 @@ namespace ExcelToUnity_DataConverter
 
 			m_localizedSheetsExported = new List<string>();
 			m_localizedLanguages = new List<string>();
-			m_characterMaps = new Dictionary<string, string>();
+			m_langCharSets = new Dictionary<string, string>();
 
 			var settings = Config.Settings;
 			var googleSheetsPaths = Config.Settings.googleSheetsPaths;
@@ -2916,9 +2926,9 @@ namespace ExcelToUnity_DataConverter
 			}
 			
 			//Create characters maps
-			if (m_characterMaps != null && m_characterMaps.Count > 0)
+			if (m_langCharSets != null && m_langCharSets.Count > 0)
 			{
-				var maps = GenereteCharacterMaps(m_characterMaps);
+				var maps = GenerateLangCharSets(m_langCharSets);
 				foreach (var map in maps)
 				{
 					Helper.WriteFile(Config.Settings.jsonOutputFolder, $"characters_map_{map.Key}.txt", map.Value);
@@ -2965,19 +2975,19 @@ namespace ExcelToUnity_DataConverter
 			return result;
 		}
 
-		private void LoadSheetConstantsData(string sheetName, IList<IList<object>> values)
+		private void LoadSheetConstantsData(string sheetName, IList<IList<object>> rowsData)
 		{
-			if (values == null || values.Count <= 0)
+			if (rowsData == null || rowsData.Count <= 0)
 			{
 				Console.WriteLine($"No data found in sheet {sheetName}.");
 				return;
 			}
 
 			var constants = new List<ConstantBuilder>();
-			for (int row = 0; row < values.Count; row++)
+			for (int row = 0; row < rowsData.Count; row++)
 			{
 				var newConst = new ConstantBuilder();
-				var rowValues = values[row];
+				var rowValues = rowsData[row];
 
 				if (rowValues.Count < 1)
 					continue;
@@ -3002,9 +3012,9 @@ namespace ExcelToUnity_DataConverter
 			BuildContentOfFileConstants(constants, sheetName);
 		}
 
-		private bool BuildContentOfFileIDs(string pSheetName, IList<IList<object>> pValues)
+		private bool BuildContentOfFileIDs(string pSheetName, IList<IList<object>> rowsData)
 		{
-			if (pValues == null || pValues.Count <= 0)
+			if (rowsData == null || rowsData.Count <= 0)
 			{
 				Log(LogType.Warning, $"Sheet {pSheetName} is empty");
 				return false;
@@ -3014,12 +3024,12 @@ namespace ExcelToUnity_DataConverter
 			var idsEnumBuilders = new List<StringBuilder>();
 			var idsEnumBuilderNames = new List<string>();
 			var idsEnumBuilderIndexes = new List<int>();
-			for (int row = 0; row < pValues.Count; row++)
+			for (int row = 0; row < rowsData.Count; row++)
 			{
-				var rowValues = pValues[row];
-				for (int col = 0; col <= rowValues.Count; col += 3)
+				var rowData = rowsData[row];
+				for (int col = 0; col < rowData.Count; col += 3)
 				{
-					var key = rowValues[col].ToString().Trim();
+					var key = rowData[col].ToString().Trim();
 					if (string.IsNullOrEmpty(key))
 						continue;
 					int index = col / 3;
@@ -3035,7 +3045,7 @@ namespace ExcelToUnity_DataConverter
 							continue;
 
 						//Value
-						var valueStr = rowValues[col + 1].ToString().Trim();
+						var valueStr = rowData[col + 1].ToString().Trim();
 						if (string.IsNullOrEmpty(valueStr))
 						{
 							MessageBox.Show($@"Sheet {pSheetName}: Key {key} doesn't have value!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -3050,9 +3060,9 @@ namespace ExcelToUnity_DataConverter
 						sb.Append(";");
 
 						//Comment
-						if (col + 2 < rowValues.Count)
+						if (col + 2 < rowData.Count)
 						{
-							var cellComment = rowValues[col + 2].ToString();
+							var cellComment = rowData[col + 2].ToString();
 							if (!string.IsNullOrEmpty(cellComment.Trim()))
 								sb.Append(" /*").Append(cellComment).Append("*/");
 						}
@@ -3580,9 +3590,9 @@ namespace ExcelToUnity_DataConverter
 			return finalContent;
 		}
 
-		private void LoadSheetLocalizationData(IList<IList<object>> pValues, string pSheetName)
+		private void LoadSheetLocalizationData(IList<IList<object>> rowsData, string pSheetName)
 		{
-			if (pValues == null || pValues.Count == 0)
+			if (rowsData == null || rowsData.Count == 0)
 			{
 				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
 				return;
@@ -3590,18 +3600,18 @@ namespace ExcelToUnity_DataConverter
 
 			var idStrings = new List<string>();
 			var textDict = new Dictionary<string, List<string>>();
-			var firstRow = pValues[0];
+			var firstRow = rowsData[0];
 			int maxCellNum = firstRow.Count;
 
-			for (int row = 0; row < pValues.Count; row++)
+			for (int row = 0; row < rowsData.Count; row++)
 			{
-				var rowValues = pValues[row];
-				if (rowValues == null)
+				var rowData = rowsData[row];
+				if (rowData == null || rowData.Count == 0)
 					continue;
 				for (int col = 0; col < maxCellNum; col++)
 				{
-					var fieldValue = rowValues[col].ToString().Trim();
-					var fieldName = pValues[0][col].ToString();
+					var fieldValue = rowData[col].ToString().Trim();
+					var fieldName = rowsData[0][col].ToString();
 					if (!string.IsNullOrEmpty(fieldName))
 					{
 						//idString
@@ -3636,10 +3646,6 @@ namespace ExcelToUnity_DataConverter
 								textDict.Add(fieldName, new List<string>());
 							textDict[fieldName].Add(fieldValue);
 						}
-					}
-					else
-					{
-						Console.Write(col);
 					}
 				}
 			}
