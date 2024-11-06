@@ -67,10 +67,11 @@ namespace ExcelToUnity_DataConverter
 			return result;
 		}
 
-		public string GetLocalizationFolder()
+		public string GetLocalizationFolder(out bool isAddressableAsset)
 		{
 			string path = localizationOutputFolder;
 			string resourcesDirName = "Resources";
+			isAddressableAsset = false;
 
 			// Find the index of the Resources directory
 			int resourcesIndex = path.IndexOf(resourcesDirName, StringComparison.OrdinalIgnoreCase);
@@ -85,8 +86,8 @@ namespace ExcelToUnity_DataConverter
 				return pathAfterResources;
 			}
 
-			// Return empty or a default value if Resources not found
-			return string.Empty;
+			isAddressableAsset = true;
+			return "Localizations";
 		}
 
 		public void RemoveGoogleSheet(string googleSheetId)

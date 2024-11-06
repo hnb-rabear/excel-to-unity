@@ -1429,7 +1429,8 @@ namespace ExcelToUnity_DataConverter
 			fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
 			fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_LIST", allLanguagePackBuilder.ToString());
 			fileTemplateContent = fileTemplateContent.Replace("//LOCALIZED_DICTIONARY", languageFilesBuilder.ToString());
-			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
+			fileTemplateContent = fileTemplateContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder(out bool isAddressable));
+			fileTemplateContent = fileTemplateContent.Replace("IS_ADDRESSABLE", isAddressable.ToString().ToLower());
 			Helper.WriteFile(Config.Settings.constantsOutputFolder, pFileName + ".cs", fileTemplateContent);
 			Log(LogType.Message, $"Exported {pFileName}.cs!");
 		}
@@ -1538,7 +1539,8 @@ namespace ExcelToUnity_DataConverter
 			fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_CONST", idBuilder.ToString());
 			fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY_KEY_STRING", idStringDictBuilder.ToString());
 			fileContent = fileContent.Replace("//LOCALIZED_DICTIONARY", languagesDictBuilder.ToString());
-			fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
+			fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder(out bool isAddressable));
+			fileContent = fileContent.Replace("IS_ADDRESSABLE", isAddressable.ToString().ToLower());
 			fileContent = AddNamespace(fileContent);
 			Helper.WriteFile(Config.Settings.constantsOutputFolder, $"{pFileName}.cs", fileContent);
 			Log(LogType.Message, $"Exported {pFileName}.cs!");
@@ -1632,7 +1634,8 @@ namespace ExcelToUnity_DataConverter
 				fileContent = fileContent.Replace("//LOCALIZATION_SET_FOLDER", setFolder.ToString());
 				fileContent = fileContent.Replace("//LOCALIZATION_USE_ADDRESSABLE", useAddressable.ToString());
 				fileContent = fileContent.Replace("//LOCALIZATION_SYSTEM_LANGUAGE", systemLanguages.ToString());
-				fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder());
+				fileContent = fileContent.Replace("LOCALIZATION_FOLDER", Config.Settings.GetLocalizationFolder(out bool isAddressable));
+				fileContent = fileContent.Replace("IS_ADDRESSABLE", isAddressable.ToString().ToLower());
 				fileContent = AddNamespace(fileContent);
 				Helper.WriteFile(Config.Settings.constantsOutputFolder, "LocalizationsManager.cs", fileContent);
 				Log(LogType.Message, $"Exported LocalizationsManager.cs!");

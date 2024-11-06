@@ -181,6 +181,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 
         private void OnEnable()
         {
+            LOCALIZATION_CLASS_NAME.InitInEditor();
             m_MaxResults = 20;
             m_Target = target as LOCALIZATION_CLASS_NAMEText;
         }
@@ -194,6 +195,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Search Key", GUILayout.Width(100));
             m_Search = EditorGUILayout.TextField(m_Search, EditorStyles.textField);
+            EditorGUILayout.LabelField("Show Text", GUILayout.Width(80));
             m_ShowText = EditorGUILayout.Toggle(m_ShowText);
             GUILayout.EndHorizontal();
 
