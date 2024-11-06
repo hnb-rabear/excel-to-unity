@@ -56,23 +56,20 @@ public static class LOCALIZATION_CLASS_NAME
 			Debug.Log($"Init {nameof(LOCALIZATION_CLASS_NAME)}");
 #endif
 		    string file = LanguageFiles[lang];
-            string address = $"{Folder}/{file}";
 #if ADDRESSABLES
             if (Addressable)
             {
-                var operation = Addressables.LoadAssetAsync<TextAsset>(address);
+                var operation = Addressables.LoadAssetAsync<TextAsset>(file);
                 await operation;
                 var textAsset = operation.Result;
                 if (textAsset != null)
-                {
                     m_Texts = GetJsonList(textAsset.text);
-                    Addressables.Release(operation);
-                }
+                Addressables.Release(operation);
             }
             else
 #endif
             {
-                var asset = Resources.Load<TextAsset>(address);
+                var asset = Resources.Load<TextAsset>(string.IsNullOrEmpty(Folder) ? file : $"{Folder}/{file}");
                 if (asset == null)
                     return;
                 string json = asset.text;
@@ -120,23 +117,20 @@ public static class LOCALIZATION_CLASS_NAME
             Debug.Log($"Init {nameof(LOCALIZATION_CLASS_NAME)}");
 #endif
             string file = LanguageFiles[lang];
-            string address = $"{Folder}/{file}";
 #if ADDRESSABLES
             if (Addressable)
             {
-                var operation = Addressables.LoadAssetAsync<TextAsset>(address);
+                var operation = Addressables.LoadAssetAsync<TextAsset>(file);
                 yield return operation;
                 var textAsset = operation.Result;
                 if (textAsset != null)
-                {
                     m_Texts = GetJsonList(textAsset.text);
-                    Addressables.Release(operation);
-                }
+                Addressables.Release(operation);}
             }
             else
 #endif
             {
-                var request = Resources.LoadAsync<TextAsset>(address);
+                var request = Resources.LoadAsync<TextAsset>(string.IsNullOrEmpty(Folder) ? file : $"{Folder}/{file}");
                 while (!request.isDone)
                     yield return null;
                 if (request.asset == null)
@@ -516,23 +510,20 @@ public static class LOCALIZATION_CLASS_NAME
         if (m_LanguageTemp != lang)
         {
             string file = LanguageFiles[lang];
-            string address = $"{Folder}/{file}";
 #if ADDRESSABLES
             if (Addressable)
             {
-                var operation = Addressables.LoadAssetAsync<TextAsset>(address);
+                var operation = Addressables.LoadAssetAsync<TextAsset>(file);
                 operation.WaitForCompletion(); // Blocks the main thread until complete (Editor and Development Builds Only)
                 var textAsset = operation.Result;
                 if (textAsset != null)
-                {
                     m_Texts = GetJsonList(textAsset.text);
-                    Addressables.Release(operation);
-                }
+                Addressables.Release(operation);
             }
             else
 #endif
             {
-                var asset = Resources.Load<TextAsset>(address);
+                var asset = Resources.Load<TextAsset>(string.IsNullOrEmpty(Folder) ? file : $"{Folder}/{file}");
                 if (asset == null)
                     return;
                 string json = asset.text;
