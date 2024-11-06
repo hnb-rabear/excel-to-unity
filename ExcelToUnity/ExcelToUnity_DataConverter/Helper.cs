@@ -334,8 +334,8 @@ namespace ExcelToUnity_DataConverter
             if (!System.IO.File.Exists(filePath))
                 using (System.IO.File.Create(filePath)) { }
 
-            using (var sw = new StreamWriter(filePath))
-            {
+            using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			{
                 sw.WriteLine(pContent);
                 sw.Close();
             }
