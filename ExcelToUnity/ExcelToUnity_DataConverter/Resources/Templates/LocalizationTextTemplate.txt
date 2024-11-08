@@ -67,7 +67,7 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 		Refresh();
     }
 
-    public void Set(string pId, params string[] pArgs)
+    public void Set(string pId, string[] pArgs)
     {
         if (m_LocalizedIDString != pId)
         {
@@ -78,6 +78,12 @@ public class LOCALIZATION_CLASS_NAMEText : MonoBehaviour
 		m_Args = pArgs;
 		Refresh();
     }
+
+    public void SetArgs(params string[] pArgs)
+	{
+	    m_Args = pArgs;
+	    Refresh();
+	}
 
     private void Init()
     {
