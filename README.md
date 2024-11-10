@@ -4,25 +4,25 @@ __You can find more detailed instructions and the demo project [Here](https://gi
 
 # 1. Introduction
 
-This tool is designed to assist independent game developers by providing a simple way to design and manage databases that can be used by both developers and designers. It allows designers to easily modify game statistics without needing developer assistance.
+This tool simplifies database design and management for game developers and designers, allowing easy modification of game statistics without needing developer help.
 
-Every game project, regardless of size, requires a static database. As the project grows, so does the need for data tables, constants, and IDs. Without an effective management solution, this can become complex. This tool aims to simplify this process by managing IDs and constants, and providing a single location to search, modify, and update these elements along with the data table.
+As game projects grow, so does the need for efficient data table, constant, and ID management. This tool centralizes the process, enabling easy search, modification, and updates.
 
-Over time, the tool has evolved to include new data types and leverages the capabilities of Excel for design and management. While it was primarily developed for RPG games, which typically have large static databases, it can also be used for other game genres that require extensive static databases.
+Originally designed for RPGs with extensive databases, it now supports various game genres and utilizes Excel and Google Spreadsheets for data management.
 
 # 2. Main functions
 
-- Support for managing the Database entirely with Excel.
-- Efficiently manage IDs and Constants, allowing for batch adjustments without affecting the Database.
-- Easily manage multiple languages through the Localization system, which can be powerfully integrated with Unity.
-- Export Data Table to JSON Data files for easy integration into Unity.
-- Provide many data formats, which can be flexibly changed according to Data design requirements.
+- **Excel and Google Sheets Integration:** Manage your entire database using Excel or Google Spreadsheets.
+- **ID and Constant Management:** Make batch adjustments to IDs and constants without impacting the database.
+- **Localization System:** Effortlessly handle multiple languages, with seamless Unity integration.
+- **JSON Export:** Convert data tables to JSON files for easy Unity integration.
+- **Flexible Data Formats:** Support a variety of data formats, adaptable to your design needs.
 
 # 3. Introduce features and installation instructions
 
 ## 3.1. Export single excel
 
-![excel-2-unity-tab-1](https://github.com/nbhung100914/excel-to-unity/assets/9100041/f2467b96-1eec-42c2-baad-806c86fe93ae)
+![excel-2-unity-tab-1](https://github.com/user-attachments/assets/6f57d31a-7995-4878-aca1-96dc1e10dd42)
 
 This is a basic but very important function, helping you get acquainted with the tools. If your Static Database is not too large or complex, and only needs an excel file to contain all data, then this function is enough for your needs. However, if your Static Database is complex and needs to be stored in multiple Excel files, you will need to use the **Export Multi Excels** function. This function will be introduced in the next section.
 
@@ -33,50 +33,61 @@ The important functions are in the buttons on the right:
 - **Export Localization:** export Localization Data and corresponding Localization Component, Localization API.
 - **Export Json:** export Data Table sheets to JSON Data.
 
-## 3.2. Export multi excels (All in one)
+## 3.2. Export multiple Excel Spreadsheets
 
-![excel-2-unity-tab-2](https://github.com/nbhung100914/excel-to-unity/assets/9100041/82288317-29d9-4a1a-aadd-6bf730fa2e82)
+![excel-2-unity-tab-2](https://github.com/user-attachments/assets/35a4d7ba-d722-4894-a7d1-eb42d837d78f)
 
 This is a comprehensive function, everything will be processed with just one button press:
 
-1. Select all the excel files you want to process.
-2. You can decide whether to export IDs, Constants or not by checking the corresponding CheckBox for each excel file.
-3. Finally, press the Export All button.
+1. Select all the Excel files you want to process.
+2. Choose whether to export IDs and Constants by checking the appropriate boxes for each file.
+3. Press the Export All button to complete the process.
 
-## 3.3. Settings
+## 3.3. Export multiple Google Spreadsheets
 
-![excel-2-unity-tab-3](https://github.com/nbhung100914/excel-to-unity/assets/9100041/a0268340-6198-4e38-bc97-c04f900ef2eb)
+![excel-2-unity-tab-7](https://github.com/user-attachments/assets/5430c82e-e1f6-4a3b-b76b-79755a055b04)
 
-- **Json Data Output:** The data table will be converted to JSON Data and saved at this address.
-- **Constants Output:** IDs, Constants, Localization Component, and Localization API will be saved at this address.
-- **Localization Output:** Localization Data will be saved at this address. This address should be in the _Resources_ folder.
-- **Namespace:** Declare the namespace for the C# files that the tool exports.
+Prefer using Google Spreadsheets? No problem.
+
+1. Enter the IDs for the Google Spreadsheet files you want to process.
+2. Press the Export All button to begin the export.
+
+## 3.4. Settings
+
+![excel-2-unity-tab-3](https://github.com/user-attachments/assets/21c4a78b-7c89-4e0f-8386-485aff073301)
+
+- **Json Data Output:** Converts the data table to JSON format and saves it at the specified address.
+- **Constants Output:** Saves IDs, Constants, Localization Components, and Localization API at the given address.
+- **Localization Output:** Stores Localization Data at the provided address, which should be within the _Resources_ folder or in the _Localizations_ folder if you want to load Localizations by Addressable Asset System.
+- **Namespace:** Defines the namespace for the exported C# files.
 - **Separate IDs:**
-  - TRUE: Export _[%IDs]_ sheets to independent C# files with file names structured as _[SheetName] + IDs.cs_
-  - FALSE: Consolidate all _[%IDs]_ sheets from all excel files into one and then export to a single C# file named _IDs.cs_
+  - TRUE: Exports _[%IDs]_ sheets to individual C# files named _[SheetName] + IDs.cs_.
+  - FALSE: Merges all _[%IDs]_ sheets from all Excel files into a single C# file named _IDs.cs._
 - **Separate Constants:**
-  - TRUE: Export _[%Constants]_ sheets to independent C# files with file names structured as _[SheetName] + %Constants.cs_
-  - FALSE: Consolidate all _[%Constants]_ sheets from all excel files into one and then export to a single C# file named _Constants.cs_
+  - TRUE: Exports _[%Constants]_ sheets to individual C# files named _[SheetName] + %Constants.cs_.
+  - FALSE: Merges all _[%Constants]_ sheets from all Excel files into a single C# file named _Constants.cs_.
 - **Separate Localization:**
-  - TRUE: Export _[%Localization%]_ sheets to independent groups, each group includes Localization Data, Component, and API, the file names will have the following structure:
+  - TRUE: Exports _[Localization%]_ sheets to separate groups, each containing Localization Data, Component, and API, with the following file name structure:
     - Localization Data: _[SheetName]\_[language].txt_
     - Component: _[SheetName] + Text.cs_
     - API: _[SheetName].cs_
-  - FALSE: Consolidate all _[%Localization%]_ sheets from all excel files into one and then export to a single group, the file names will have the following structure:
+  - FALSE: Merges all _[Localization%]_ sheets from all Excel files into a single group, with the following file name structure:
     - Localization Data: _Localization\_ + [language].txt_
     - Component: _LocalizationText.cs_
     - API: _Localization.cs_
-- **Encrypt Json:** Encrypt JSON Data before exporting to a text file
-- **Only enum as ID:** Applies to _[%IDs]_ sheets, columns with the extension _[enum]_. If selected, that IDs column will be exported as enum and ignore the Integer Constant form.
-- **One Json - One Excel:** Consolidate Data Table in one excel file into a single json file, the file name is structured as _[ExcelName].txt_
-- **Encryption Key:** Key to encrypt JSON Data
-- **Language maps:** Applies to Localization combined with TextMeshPro, used to compile the character table of a language. Mainly applied for Korean, Japanese, and Chinese, these are languages with an extremely large character system.
-- **Excluded Sheets:** Enter the names of Sheets to be excluded when processing Data Table.
-- **Excluded Sheets:** Enter the names of fields to be excluded when processing Data Table.
+- **Encrypt Json:** Encrypts JSON Data before exporting to a text file.
+- **Only enum as IDs:** For _[%IDs]_ sheets, columns with the extension _[enum]_ will be exported as enums and will not include the Integer Constant form.
+- **One Json - One Excel:** Merges the Data Table from one Excel file into a single JSON file, named _[ExcelName].txt_.
+- **Language maps:** Used in Localization with TextMeshPro to compile the character table of a language, mainly applied for Korean, Japanese, and Chinese due to their extensive character systems.
+- **Persistent columns:** Specifies the names of columns to retain during processing even if they are empty.
+- **Excluded Sheets:** Specifies the names of sheets to exclude when processing the Data Table.
+- **GG Client ID:** Enter your Google Client ID (retrieved from Credentials in Google Console).
+- **GG Client Secret:** Enter your Google Secret (retrieved from Credentials in Google Console).
+- **Encryption Key:** The key used to encrypt JSON Data.
 
-## 3.4. Encrypt & Decrypt Text
+## 3.5. Encrypt & Decrypt Text
 
-![excel-2-unity-tab-4](https://github.com/nbhung100914/excel-to-unity/assets/9100041/58034c2f-97e3-44e5-907d-559294960358)
+![excel-2-unity-tab-4](https://github.com/user-attachments/assets/f7e50d41-6cac-4f32-9251-91589652c1ca)
 
 This function allows you to encrypt or decrypt a string of characters based on the Key provided in the Settings Tab. You can use this function to secure the content of a text, or to open and read the encrypted JSON Data files after they have been exported.
 
