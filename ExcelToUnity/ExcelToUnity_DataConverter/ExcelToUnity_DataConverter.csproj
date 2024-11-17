@@ -259,9 +259,6 @@
     <Content Include="Resources\Templates\LocalizationsManagerTemplate.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Templates\LocalizationTemplate.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Templates\LocalizationTemplateV2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

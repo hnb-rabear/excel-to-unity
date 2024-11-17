@@ -2791,7 +2791,7 @@ namespace ExcelToUnity_DataConverter
 				}
 			}
 
-			// 2. Read and write other data type
+			// Read and write other data type
 			foreach (var googleSheets in googleSheetsPaths)
 			{
 				var sheets = new List<GoogleSheetsPath.Sheet>();
@@ -2928,7 +2928,7 @@ namespace ExcelToUnity_DataConverter
 				m_localizedSheetsExported.Add("Localization");
 			}
 			
-			//Create characters maps
+			//Create characters sets
 			if (m_langCharSets != null && m_langCharSets.Count > 0)
 			{
 				var maps = GenerateLangCharSets(m_langCharSets);

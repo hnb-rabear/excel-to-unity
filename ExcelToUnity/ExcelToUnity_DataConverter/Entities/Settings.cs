@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,7 +82,7 @@ namespace ExcelToUnity_DataConverter
 				int startAfterResources = resourcesIndex + resourcesDirName.Length;
 
 				// Get the path after Resources
-				string pathAfterResources = path.Substring(startAfterResources).TrimStart(System.IO.Path.DirectorySeparatorChar);
+				string pathAfterResources = path.Substring(startAfterResources).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
 				return pathAfterResources;
 			}

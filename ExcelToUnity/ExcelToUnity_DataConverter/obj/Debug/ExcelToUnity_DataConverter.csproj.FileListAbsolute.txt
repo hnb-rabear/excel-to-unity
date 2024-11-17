@@ -229,7 +229,6 @@ E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\R
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\ConstantsTemplate.txt
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\IDsTemplate.txt
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationsManagerTemplate.txt
-E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTemplate.txt
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTemplateV2.txt
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTextTemplate.txt
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\SettingsTemplate.txt
