@@ -1448,6 +1448,7 @@ namespace ExcelToUnity_DataConverter
 		}
 
 		private Dictionary<string, string> m_langCharSets;
+		private StringBuilder m_langCharSetsAll;
 
 		/// <summary>
 		/// Each language have a json file
@@ -1529,6 +1530,7 @@ namespace ExcelToUnity_DataConverter
 					else
 						m_langCharSets[listText.Key] = json;
 				}
+				m_langCharSetsAll.Append(json);
 			}
 
 			//Build language dictionary
@@ -1771,7 +1773,7 @@ namespace ExcelToUnity_DataConverter
 				&& !pName.StartsWith(LOCALIZATION_SHEET);
 		}
 
-		private Dictionary<string, string> GenerateLangCharSets(Dictionary<string, string> pCharacterMaps)
+		private Dictionary<string, string> GenerateCharacterSets(Dictionary<string, string> pCharacterMaps)
 		{
 			var output = new Dictionary<string, string>();
 			foreach (var map in pCharacterMaps)
@@ -1784,6 +1786,16 @@ namespace ExcelToUnity_DataConverter
 				output.Add(map.Key, combinedStr);
 			}
 			return output;
+		}
+
+		private string GenerateCharacterSet(string pContent)
+		{
+			string charactersSet = "";
+			var unique = new HashSet<char>(pContent);
+			foreach (char c in unique)
+				charactersSet += c;
+			charactersSet = string.Concat(charactersSet.OrderBy(c => c));
+			return charactersSet;
 		}
 
 		private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -1843,6 +1855,7 @@ namespace ExcelToUnity_DataConverter
 			m_localizedSheetsExported = new List<string>();
 			m_localizedLanguages = new List<string>();
 			m_langCharSets = new Dictionary<string, string>();
+			m_langCharSetsAll = new StringBuilder();
 
 			//Process IDs sheets first
 			foreach (var file in Config.Settings.allFiles)
@@ -2009,12 +2022,17 @@ namespace ExcelToUnity_DataConverter
 			//Create language character sets
 			if (m_langCharSets != null && m_langCharSets.Count > 0)
 			{
-				var maps = GenerateLangCharSets(m_langCharSets);
-				foreach (var map in maps)
+				var sets = GenerateCharacterSets(m_langCharSets);
+				foreach (var map in sets)
 				{
 					Helper.WriteFile(Config.Settings.localizationOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
 					Log(LogType.Message, $"Exported characters_set_{map.Key}.txt!");
 				}
+			}
+			if (!string.IsNullOrEmpty(m_langCharSetsAll.ToString()))
+			{
+				var characterSet = GenerateCharacterSet(m_langCharSetsAll.ToString());
+				Helper.WriteFile(Config.Settings.localizationOutputFolder, "characters_set_all.txt", characterSet);
 			}
 
 			//Create localization manager file
@@ -2341,6 +2359,7 @@ namespace ExcelToUnity_DataConverter
 			m_localizedSheetsExported = new List<string>();
 			m_localizedLanguages = new List<string>();
 			m_langCharSets = new Dictionary<string, string>();
+			m_langCharSetsAll = new StringBuilder();
 
 			for (int i = 0; i < m_sheets.Count; i++)
 			{
@@ -2381,12 +2400,17 @@ namespace ExcelToUnity_DataConverter
 			//Create language character sets
 			if (m_langCharSets != null && m_langCharSets.Count > 0)
 			{
-				var maps = GenerateLangCharSets(m_langCharSets);
-				foreach (var map in maps)
+				var sets = GenerateCharacterSets(m_langCharSets);
+				foreach (var map in sets)
 				{
 					Helper.WriteFile(Config.Settings.localizationOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
 					Log(LogType.Message, $"Exported characters_set_{map.Key}.txt!");
 				}
+			}
+			if (!string.IsNullOrEmpty(m_langCharSetsAll.ToString()))
+			{
+				var characterSet = GenerateCharacterSet(m_langCharSetsAll.ToString());
+				Helper.WriteFile(Config.Settings.localizationOutputFolder, "characters_set_all.txt", characterSet);
 			}
 
 			//Create localization manager file
@@ -2769,6 +2793,7 @@ namespace ExcelToUnity_DataConverter
 			m_localizedSheetsExported = new List<string>();
 			m_localizedLanguages = new List<string>();
 			m_langCharSets = new Dictionary<string, string>();
+			m_langCharSetsAll = new StringBuilder();
 
 			var settings = Config.Settings;
 			var googleSheetsPaths = Config.Settings.googleSheetsPaths;
@@ -2943,14 +2968,19 @@ namespace ExcelToUnity_DataConverter
 			//Create characters sets
 			if (m_langCharSets != null && m_langCharSets.Count > 0)
 			{
-				var maps = GenerateLangCharSets(m_langCharSets);
-				foreach (var map in maps)
+				var sets = GenerateCharacterSets(m_langCharSets);
+				foreach (var map in sets)
 				{
 					Helper.WriteFile(Config.Settings.localizationOutputFolder, $"characters_set_{map.Key}.txt", map.Value);
 					Log(LogType.Message, $"Exported characters_set_{map.Key}.txt");
 				}
 			}
-			
+			if (!string.IsNullOrEmpty(m_langCharSetsAll.ToString()))
+			{
+				var characterSet = GenerateCharacterSet(m_langCharSetsAll.ToString());
+				Helper.WriteFile(Config.Settings.localizationOutputFolder, "characters_set_all.txt", characterSet);
+			}
+
 			//Create localization manager file
 			CreateLocalizationsManagerFile();
 			

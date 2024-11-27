@@ -97,3 +97,4 @@
 - Replaced loading localization with UniTask to use Task instead.
 - Fixed issue with retrieving the localization folder.
 - Fixed persistent fields not working
+- Add character set that contain all languages
