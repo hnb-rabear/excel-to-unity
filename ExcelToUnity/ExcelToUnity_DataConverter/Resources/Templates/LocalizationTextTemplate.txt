@@ -1,5 +1,5 @@
 /***
- * Author RadBear - nbhung71711@gmail.com - 2018
+ * This script is automatically generated.
  ***/
 
 using System;

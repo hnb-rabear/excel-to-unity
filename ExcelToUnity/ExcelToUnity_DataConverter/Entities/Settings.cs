@@ -47,7 +47,7 @@ namespace ExcelToUnity_DataConverter
 		public bool separateLocalizations = true;
 		public bool combineJson; //Combine Json data type sheets
 		public bool onlyEnumAsIDs;
-		public string langCharSets = @"japan; korean; chinese";
+		public string langCharSets = @"jp; ko; cn";
 		public string googleClientId;
 		public string googleClientSecret;
 

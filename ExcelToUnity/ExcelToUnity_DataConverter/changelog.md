@@ -80,3 +80,20 @@
 
 ## Version 1.5.0
 - Supported Google Sheets
+
+## Version 1.5.1
+- Fixed localization template
+- Updated example localization sheet
+- Changed documentation link
+- Renamed some settings
+
+## Version 1.5.2
+- Added conditions to bypass invalid spreadsheets.
+- Fixed loading Localizations with Addressable Assets.
+- Fixed output folder of Localization files.
+- Renamed characters_map to characters_set
+
+## Version 1.5.3
+- Replaced loading localization with UniTask to use Task instead.
+- Fixed issue with retrieving the localization folder.
+- Fixed persistent fields not working

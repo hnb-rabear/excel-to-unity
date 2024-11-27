@@ -19,6 +19,8 @@ namespace ExcelToUnity_DataConverter
 {
 	public partial class MainForm : Form
 	{
+		public const string VERSION = "1.5.3";
+
 #region Internal Class
 
 		public class Sheet
@@ -586,8 +588,6 @@ namespace ExcelToUnity_DataConverter
 
 		private string ConvertSheetToJson(IWorkbook pWorkBook, string pSheetName, string pOutputFile, List<FieldValueType> pFieldValueTypes, bool pEncrypt, bool pAutoWriteFile)
 		{
-			var unminifiedFields = Config.Settings.GetPersistentFields();
-
 			var sheet = pWorkBook.GetSheet(pSheetName);
 			if (sheet.IsNull() || sheet.LastRowNum == 0)
 			{
@@ -595,6 +595,7 @@ namespace ExcelToUnity_DataConverter
 				return null;
 			}
 
+			var persistentFields = Config.Settings.GetPersistentFields();
 			int lastCellNum = 0;
 			string[] fields = null;
 			string[] mergeValues = null;
@@ -801,10 +802,21 @@ namespace ExcelToUnity_DataConverter
 					}
 					else
 					{
-						bool importantField = unminifiedFields.Contains(fieldName.Replace("[]", "").ToLower());
-
+						bool IsPersistentField()
+						{
+							bool importantField = false;
+							foreach (var value in persistentFields)
+							{
+								if (fieldName.StartsWith(value))
+								{
+									return true;
+								}
+							}
+							return false;
+						}
+						
 						//Ignore empty field or field have value which equal 0
-						if (string.IsNullOrEmpty(fieldValue) || fieldValue == "0" && !importantField)
+						if ((string.IsNullOrEmpty(fieldValue) || fieldValue == "0") && !IsPersistentField())
 							continue;
 
 						bool nestedFiled = fieldName.Contains(".");
@@ -1689,7 +1701,7 @@ namespace ExcelToUnity_DataConverter
 				weboxHelp.DocumentText = htmlContent;
 			}
 
-			txtVersion.Text = @"1.5.0";
+			txtVersion.Text = VERSION;
 
 			//Validate user
 			TabPage tpEncryption = tabMenu.TabPages[3];

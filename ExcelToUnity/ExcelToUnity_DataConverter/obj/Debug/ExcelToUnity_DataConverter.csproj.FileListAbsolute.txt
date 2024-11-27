@@ -142,7 +142,6 @@ C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debu
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\ConstantsTemplate.txt
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\IDsTemplate.txt
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationsManagerTemplate.txt
-C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTemplate.txt
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTemplateV2.txt
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationTextTemplate.txt
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\SettingsTemplate.txt
@@ -343,3 +342,5 @@ C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debu
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\System.CodeDom.xml
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\license.e2u
 E:\Projects\_\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\bWtgYWt1Yg==.e2u
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\license.e2u
+C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\bWtgYWt1Yg==.e2u
