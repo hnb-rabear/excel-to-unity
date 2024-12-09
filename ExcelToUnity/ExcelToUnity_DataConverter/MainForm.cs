@@ -1773,18 +1773,11 @@ namespace ExcelToUnity_DataConverter
 				&& !pName.StartsWith(LOCALIZATION_SHEET);
 		}
 
-		private Dictionary<string, string> GenerateCharacterSets(Dictionary<string, string> pCharacterMaps)
+		private Dictionary<string, string> GenerateCharacterSets(Dictionary<string, string> pContentGroups)
 		{
 			var output = new Dictionary<string, string>();
-			foreach (var map in pCharacterMaps)
-			{
-				string combinedStr = "";
-				var unique = new HashSet<char>(map.Value);
-				foreach (char c in unique)
-					combinedStr += c;
-				combinedStr = string.Concat(combinedStr.OrderBy(c => c));
-				output.Add(map.Key, combinedStr);
-			}
+			foreach (var map in pContentGroups)
+				output.Add(map.Key, GenerateCharacterSet(map.Value));
 			return output;
 		}
 
@@ -2033,6 +2026,7 @@ namespace ExcelToUnity_DataConverter
 			{
 				var characterSet = GenerateCharacterSet(m_langCharSetsAll.ToString());
 				Helper.WriteFile(Config.Settings.localizationOutputFolder, "characters_set_all.txt", characterSet);
+				Log(LogType.Message, $"Exported characters_set_all.txt!");
 			}
 
 			//Create localization manager file
@@ -2411,6 +2405,7 @@ namespace ExcelToUnity_DataConverter
 			{
 				var characterSet = GenerateCharacterSet(m_langCharSetsAll.ToString());
 				Helper.WriteFile(Config.Settings.localizationOutputFolder, "characters_set_all.txt", characterSet);
+				Log(LogType.Message, $"Exported characters_set_all.txt!");
 			}
 
 			//Create localization manager file
@@ -2979,6 +2974,7 @@ namespace ExcelToUnity_DataConverter
 			{
 				var characterSet = GenerateCharacterSet(m_langCharSetsAll.ToString());
 				Helper.WriteFile(Config.Settings.localizationOutputFolder, "characters_set_all.txt", characterSet);
+				Log(LogType.Message, $"Exported characters_set_all.txt!");
 			}
 
 			//Create localization manager file
