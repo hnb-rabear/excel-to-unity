@@ -28,10 +28,10 @@ This is a basic but very important function, helping you get acquainted with the
 
 The important functions are in the buttons on the right:
 
-- **Export IDs:** export IDs sheets to C# files.
-- **Export Constants:** export Constants sheets to C# files.
-- **Export Localization:** export Localization Data and corresponding Localization Component, Localization API.
-- **Export Json:** export Data Table sheets to JSON Data.
+- **Export IDs:** Converts ID sheets to C# files.
+- **Export Constants:** Converts Constants sheets to C# files.
+- **Export Localization:** Exports Localization Data, Localization Components, and Localization API.
+- **Export Json:** Transforms Data Table sheets into JSON data.
 
 ## 3.2. Export multiple Excel Spreadsheets
 
@@ -39,7 +39,7 @@ The important functions are in the buttons on the right:
 
 This is a comprehensive function, everything will be processed with just one button press:
 
-1. Select all the Excel files you want to process.
+1. Add all the Excel files you want to process.
 2. Choose whether to export IDs and Constants by checking the appropriate boxes for each file.
 3. Press the Export All button to complete the process.
 
@@ -109,16 +109,16 @@ This function allows you to encrypt or decrypt a string of characters based on t
 |        |     |         | BUILDING_7    | 7   |         | PET_7    | 7   |         |                   |     |
 |        |     |         | BUILDING_8    | 8   |         |          |     |         |                   |     |
 
-Sheets named according to the syntax _[%IDs]_ are called IDs sheets. They are used to compile all ids into Integer Constants. The design rules are as follows:
+ID Sheets, named with the suffix `IDs` are used to compile all IDs into Integer Constants. The design rules are:
 
-- The sheet name needs to have `IDs` as a prefix or suffix.
-- In this Sheet, only use the Integer data type.
-- Each group is arranged in 3 consecutive columns.
-- The first row contains the group name for easy lookup.
-- The first column contains the Key Name, and the next column contains the Key Value.
+- The sheet name must end with `IDs`.
+- Only the Integer data type is allowed.
+- Each group is organized in 3 consecutive columns.
+- The first row contains the group name for easy reference.
+- The first column holds the Key Name, and the next column holds the Key Value.
 - Key Value must be an integer.
-- By default, all ids of a column will be exported as Integer Constants, but you can also export them as enum by adding the suffix [enum] to the group name.
-- You can choose to only export enum and ignore Integer Constant by selecting `Only enum as IDs` in the Settings section.
+- By default, all IDs in a column will be exported as Integer Constants. Add the suffix [enum] to the group name to export them as an enum.
+- To only export enums and skip Integer Constants, select `Only enum as IDs` in the Settings.
 
 ```
 | Group | Key | Comment |
@@ -146,13 +146,13 @@ Sheets named according to the syntax _[%IDs]_ are called IDs sheets. They are us
 | EXAMPLE_FORMULA_1     | int         | =1\*10\*36         | Excel formula example |
 | EXAMPLE_FORMULA_2     | float       | =1+2+3+4+5+6+7+8+9 | Excel formula example |
 
-Sheets named according to the syntax _[%Constants]_ are called Constants Sheets. They are used to compile the Constants in the project. The table below will help you refer to all the data types that can be used in this sheet. The design rules are as follows:
+Constants Sheets, named with the suffix `Constants` compile project constants. The design rules are:
 
-- The sheet name needs to have `Constants` as a prefix or suffix.
+- The sheet name must end with `Constants`.
 - There are four columns: Name, Type, Value, and Comment.
-- Name: This is the name of the constant, it must be written continuously, does not contain special characters, and should be capitalized.
-- Type: This is the data type of the constant. You can use the following data types: `int`, `float`, `bool`, `string`, `int-array`, `float-array`, `vector2`, and `vector3`.
-- Value: The value corresponding to the data type. For array data types, elements must be separated by `:` or `|` or `newline`.
+  - Name: The name of the constant; must be continuous, without special characters.
+  - Type: The data type of the constant. Possible data types include: `int`, `float`, `bool`, `string`, `int-array`, `float-array`, `vector2`, and `vector3`.
+  - Value: The value matching the data type. For array types, separate elements with `:` or `|` or `newline`.
 
 ```
 | Name | Type | Value | Comment |
@@ -181,12 +181,13 @@ Sheets named according to the syntax _[%Constants]_ are called Constants Sheets.
 | hero_name    | HERO_2     | hero name 2               | nombre del héroe 2             |
 | hero_name    | HERO_3     | hero name 3               | nombre del héroe 3             |
 
-Sheets named according to the syntax _[%Localization%]_ are called Localization Sheets. The design rules are as follows:
+Localization Sheets are named with the prefix `Localization` and follow these rules:
 
-- The sheet name needs to have `Localization` as a prefix or suffix.
-- This sheet has a structure of 2 key columns, one is the main key `idString` and one is the additional key `relativeId`.
-- The next columns will contain localized content.
-- The key of a row is the combination of `idString` and `relativeId`.
+- TThe sheet name must start with `Localization`.
+- Each sheet has two key columns: the main key `idString` and an additional key `relativeId`.
+- The following columns contain localized content.
+- The key for each row is a combination of `idString` and `relativeId`.
+- `relativeId` can reference an ID from the IDs sheets.
 
 ```
 | idString | relativeId | english | spanish | japan | .... |
