@@ -4,11 +4,11 @@ __You can find more detailed instructions and the demo project [Here](https://gi
 
 # 1. Introduction
 
-This tool simplifies database design and management for game developers and designers, allowing easy modification of game statistics without needing developer help.
+This tool simplifies database design and management for game developers and designers, allowing for easy modification of configurations and statistics.
 
-As game projects grow, so does the need for efficient data table, constant, and ID management. This tool centralizes the process, enabling easy search, modification, and updates.
+As projects grow, the need for efficient management of data tables, constants, and IDs increases. This tool centralizes the process, enabling easy searching, modification, and updates.
 
-Originally designed for RPGs with extensive databases, it now supports various game genres and utilizes Excel and Google Spreadsheets for data management.
+It supports various data types and utilizes popular spreadsheet tools for data management.
 
 # 2. Main functions
 
