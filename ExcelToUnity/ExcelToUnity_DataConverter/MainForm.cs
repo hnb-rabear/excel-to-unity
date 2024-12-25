@@ -19,7 +19,7 @@ namespace ExcelToUnity_DataConverter
 {
 	public partial class MainForm : Form
 	{
-		public const string VERSION = "1.5.3";
+		public const string VERSION = "1.5.4";
 
 #region Internal Class
 
