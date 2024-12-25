@@ -336,7 +336,7 @@ namespace ExcelToUnity_DataConverter
 
             using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
-                sw.WriteLine(pContent);
+                sw.Write(pContent);
                 sw.Close();
             }
         }
@@ -348,7 +348,7 @@ namespace ExcelToUnity_DataConverter
 
             using (var sw = new StreamWriter(pFilePath))
             {
-                sw.WriteLine(pContent);
+                sw.Write(pContent);
                 sw.Close();
             }
         }

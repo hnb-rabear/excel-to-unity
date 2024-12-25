@@ -98,3 +98,8 @@
 - Fixed issue with retrieving the localization folder.
 - Fixed persistent fields not working
 - Add character set that contain all languages
+
+## Version 1.5.4
+- Removed Help tab
+- Renamed to SheetX and changed the Icon
+- Fixed out-of-index error when removing a google sheet

@@ -246,9 +246,6 @@
     <None Include="Resources\check.png" />
     <None Include="Resources\cancel.png" />
     <Content Include="icon.ico" />
-    <Content Include="Resources\help.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\icon.jfif" />
     <Content Include="Resources\Templates\ConstantsTemplate.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -138,7 +138,6 @@ E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Res
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\SettingsTemplate.txt
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\changelog.md
 E:\Projects\_\ExcelToUnity\ExcelToUnity\ExcelToUnity_DataConverter\obj\Debug\ExcelToUnity_DataConverter.csproj.SuggestedBindingRedirects.cache
-C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\help.md
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\ConstantsTemplate.txt
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\IDsTemplate.txt
 C:\Work\Projects\excel-to-unity\ExcelToUnity\ExcelToUnity_DataConverter\bin\Debug\Resources\Templates\LocalizationsManagerTemplate.txt

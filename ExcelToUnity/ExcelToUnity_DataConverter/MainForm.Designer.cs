@@ -61,8 +61,6 @@ namespace ExcelToUnity_DataConverter
 			this.ToolStripStatusLblCopyRight = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tpChangeLog = new System.Windows.Forms.TabPage();
 			this.weboxChangelog = new System.Windows.Forms.WebBrowser();
-			this.tpHelp = new System.Windows.Forms.TabPage();
-			this.weboxHelp = new System.Windows.Forms.WebBrowser();
 			this.linkDownloadExample = new System.Windows.Forms.LinkLabel();
 			this.tpEncription = new System.Windows.Forms.TabPage();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -138,7 +136,6 @@ namespace ExcelToUnity_DataConverter
 			this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
 			this.statusStrip2.SuspendLayout();
 			this.tpChangeLog.SuspendLayout();
-			this.tpHelp.SuspendLayout();
 			this.tpEncription.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -387,25 +384,6 @@ namespace ExcelToUnity_DataConverter
 			this.weboxChangelog.Name = "weboxChangelog";
 			this.weboxChangelog.Size = new System.Drawing.Size(690, 386);
 			this.weboxChangelog.TabIndex = 0;
-			// 
-			// tpHelp
-			// 
-			this.tpHelp.Controls.Add(this.weboxHelp);
-			this.tpHelp.Location = new System.Drawing.Point(4, 22);
-			this.tpHelp.Name = "tpHelp";
-			this.tpHelp.Padding = new System.Windows.Forms.Padding(3);
-			this.tpHelp.Size = new System.Drawing.Size(696, 392);
-			this.tpHelp.TabIndex = 5;
-			this.tpHelp.Text = "Help";
-			// 
-			// weboxHelp
-			// 
-			this.weboxHelp.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.weboxHelp.Location = new System.Drawing.Point(3, 3);
-			this.weboxHelp.MinimumSize = new System.Drawing.Size(20, 20);
-			this.weboxHelp.Name = "weboxHelp";
-			this.weboxHelp.Size = new System.Drawing.Size(690, 386);
-			this.weboxHelp.TabIndex = 24;
 			// 
 			// linkDownloadExample
 			// 
@@ -1174,7 +1152,6 @@ namespace ExcelToUnity_DataConverter
 			this.tabMenu.Controls.Add(this.tpExportMultiExcels);
 			this.tabMenu.Controls.Add(this.tpSettings);
 			this.tabMenu.Controls.Add(this.tpEncription);
-			this.tabMenu.Controls.Add(this.tpHelp);
 			this.tabMenu.Controls.Add(this.tpChangeLog);
 			this.tabMenu.Controls.Add(this.tpGoogleSpreadSheets);
 			this.tabMenu.ItemSize = new System.Drawing.Size(124, 18);
@@ -1350,12 +1327,11 @@ namespace ExcelToUnity_DataConverter
 			this.MinimumSize = new System.Drawing.Size(720, 515);
 			this.Name = "MainForm";
 			this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.Text = "Excel To Unity - Data Converter";
+			this.Text = "SheetX - Sheets Exporter";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.statusStrip2.ResumeLayout(false);
 			this.statusStrip2.PerformLayout();
 			this.tpChangeLog.ResumeLayout(false);
-			this.tpHelp.ResumeLayout(false);
 			this.tpEncription.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.PerformLayout();
@@ -1399,7 +1375,6 @@ namespace ExcelToUnity_DataConverter
         private System.Windows.Forms.ToolStripStatusLabel ToolStripStatusLblCopyRight;
         private System.Windows.Forms.ToolStripStatusLabel txtVersion;
         private System.Windows.Forms.TabPage tpChangeLog;
-        private System.Windows.Forms.TabPage tpHelp;
         private System.Windows.Forms.TabPage tpEncription;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button BtnDecrypt;
@@ -1467,7 +1442,6 @@ namespace ExcelToUnity_DataConverter
         private System.Windows.Forms.DataGridViewCheckBoxColumn exportConstants;
         private System.Windows.Forms.DataGridViewImageColumn status;
         private System.Windows.Forms.DataGridViewButtonColumn BtnDelete;
-		private System.Windows.Forms.WebBrowser weboxHelp;
 		private System.Windows.Forms.WebBrowser weboxChangelog;
 		private System.Windows.Forms.TabPage tpGoogleSpreadSheets;
 		private System.Windows.Forms.TextBox TxtLogExportingGoogleSheets;

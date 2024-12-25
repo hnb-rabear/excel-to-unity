@@ -1695,21 +1695,13 @@ namespace ExcelToUnity_DataConverter
 				weboxChangelog.DocumentText = htmlContent;
 			}
 
-			string helpPath = "Resources\\help.md";
-			using (var reader = new StreamReader(helpPath))
-			{
-				string content = reader.ReadToEnd();
-				string htmlContent = Markdown.ToHtml(content);
-				weboxHelp.DocumentText = htmlContent;
-			}
-
 			txtVersion.Text = VERSION;
 
 			//Validate user
-			TabPage tpEncryption = tabMenu.TabPages[3];
-			TabPage tpChangeLog = tabMenu.TabPages[5];
 			TabPage tpExportMultiExcels = tabMenu.TabPages[1];
-			TabPage tpExportMultiGoogleSheets = tabMenu.TabPages[6];
+			TabPage tpEncryption = tabMenu.TabPages[3];
+			TabPage tpChangeLog = tabMenu.TabPages[4];
+			TabPage tpExportMultiGoogleSheets = tabMenu.TabPages[5];
 			switch (Config.User.user)
 			{
 				case UserType.None:
@@ -2714,6 +2706,8 @@ namespace ExcelToUnity_DataConverter
 
 				Config.Settings.RemoveGoogleSheet(googleSheetId);
 				Config.Save();
+
+				RefreshDtgGoogleSheetsPaths();
 
 			}
 			else if (e.ColumnIndex == DtgGoogleSheets.Columns["BtnEditGoogleSheet"].Index)
