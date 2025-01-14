@@ -21,7 +21,7 @@ namespace ExcelToUnity_DataConverter
 	{
 		public const string VERSION = "1.5.4";
 
-#region Internal Class
+		#region Internal Class
 
 		public class Sheet
 		{
@@ -84,11 +84,11 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-#endregion
+		#endregion
 
 		//=================================
 
-#region Constants
+		#region Constants
 
 		public const string APPLICATION_NAME = "Google Sheet to Unity - Data Converter";
 		private const string CONSTANTS_CS_TEMPLATE = "Resources\\Templates\\ConstantsTemplate.txt";
@@ -103,11 +103,11 @@ namespace ExcelToUnity_DataConverter
 		private const string SETTINGS_SHEET = "Settings";
 		private const string LOCALIZATION_SHEET = "Localization";
 
-#endregion
+		#endregion
 
 		//==================================
 
-#region Members
+		#region Members
 
 		private List<Sheet> m_sheets = new List<Sheet>();
 		private Dictionary<string, int> m_allIds = new Dictionary<string, int>();
@@ -121,22 +121,22 @@ namespace ExcelToUnity_DataConverter
 		private List<string> m_localizedSheetsExported;
 		private List<string> m_localizedLanguages;
 
-#endregion
+		#endregion
 
 		//=========================================
 
-#region Constructor
+		#region Constructor
 
 		public MainForm()
 		{
 			InitializeComponent();
 		}
 
-#endregion
+		#endregion
 
 		//=============================================================
 
-#region Private
+		#region Private
 
 		private string ConvertSheetToJson(IWorkbook pWorkBook, string pSheetName, string pFileName, bool pEncrypt, bool pWriteFile)
 		{
@@ -159,7 +159,7 @@ namespace ExcelToUnity_DataConverter
 			Config.Save();
 		}
 
-#region Load and create IDs
+		#region Load and create IDs
 
 		private bool BuildContentOfFileIDs(IWorkbook pWorkBook, string pSheetName)
 		{
@@ -396,9 +396,9 @@ namespace ExcelToUnity_DataConverter
 			return 0;
 		}
 
-#endregion
+		#endregion
 
-#region Load and create Constants
+		#region Load and create Constants
 
 		private void LoadSheetConstantsData(IWorkbook pWorkbook, string pSheetName)
 		{
@@ -543,18 +543,18 @@ namespace ExcelToUnity_DataConverter
 						fieldStr = $"\tpublic const string {name} = \"{value.Trim()}\";";
 						break;
 					case "string-array":
-					{
-						string arrayStr = "";
-						string[] values = Helper.SplitValueToArray(value);
-						for (int j = 0; j < values.Length; j++)
 						{
-							if (j == values.Length - 1)
-								arrayStr += "\"" + values[j].Trim() + "\"";
-							else
-								arrayStr += "\"" + values[j].Trim() + "\", ";
+							string arrayStr = "";
+							string[] values = Helper.SplitValueToArray(value);
+							for (int j = 0; j < values.Length; j++)
+							{
+								if (j == values.Length - 1)
+									arrayStr += "\"" + values[j].Trim() + "\"";
+								else
+									arrayStr += "\"" + values[j].Trim() + "\", ";
+							}
+							fieldStr = $"\tpublic static readonly string[] {name} = new string[{values.Length}] {"{"} {arrayStr} {"}"};";
 						}
-						fieldStr = $"\tpublic static readonly string[] {name} = new string[{values.Length}] {"{"} {arrayStr} {"}"};";
-					}
 						break;
 				}
 
@@ -584,7 +584,7 @@ namespace ExcelToUnity_DataConverter
 			Log(LogType.Message, $"Exported {pExportFileName}.cs!");
 		}
 
-#endregion
+		#endregion
 
 		private string ConvertSheetToJson(IWorkbook pWorkBook, string pSheetName, string pOutputFile, List<FieldValueType> pFieldValueTypes, bool pEncrypt, bool pAutoWriteFile)
 		{
@@ -622,7 +622,7 @@ namespace ExcelToUnity_DataConverter
 						if (cell != null
 							&& cell.CellType == CellType.String
 							&& !string.IsNullOrEmpty(cell.StringCellValue)
-						    && !cell.StringCellValue.Contains("[x]"))
+							&& !cell.StringCellValue.Contains("[x]"))
 						{
 							validCols[col] = true;
 							fields[col] = cell.ToString().Trim();
@@ -814,7 +814,7 @@ namespace ExcelToUnity_DataConverter
 							}
 							return false;
 						}
-						
+
 						//Ignore empty field or field have value which equal 0
 						if ((string.IsNullOrEmpty(fieldValue) || fieldValue == "0") && !IsPersistentField())
 							continue;
@@ -890,100 +890,100 @@ namespace ExcelToUnity_DataConverter
 										break;
 
 									case "array-number":
-									{
-										fieldName = fieldName.Replace("[]", "");
-										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-										var arrayStr = "[";
-										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											string val = arrayValue[k].Trim();
-											if (referencedId)
-												val = GetReferenceId(val, out bool _).ToString();
-											if (k == 0) arrayStr += val;
-											else arrayStr += "," + val;
+											fieldName = fieldName.Replace("[]", "");
+											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+											var arrayStr = "[";
+											for (int k = 0; k < arrayValue.Length; k++)
+											{
+												string val = arrayValue[k].Trim();
+												if (referencedId)
+													val = GetReferenceId(val, out bool _).ToString();
+												if (k == 0) arrayStr += val;
+												else arrayStr += "," + val;
+											}
+											arrayStr += "]";
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+											else
+											{
+												int[] array = JsonConvert.DeserializeObject<int[]>(arrayStr);
+												jsonObject[fieldName] = JArray.FromObject(array);
+											}
 										}
-										arrayStr += "]";
-										if (!nestedFiled)
-											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-										else
-										{
-											int[] array = JsonConvert.DeserializeObject<int[]>(arrayStr);
-											jsonObject[fieldName] = JArray.FromObject(array);
-										}
-									}
 										break;
 
 									case "array-string":
-									{
-										fieldName = fieldName.Replace("[]", "");
-										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-										var arrayStr = "[";
-										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
-											else arrayStr += $",\"{arrayValue[k].Trim()}\"";
+											fieldName = fieldName.Replace("[]", "");
+											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+											var arrayStr = "[";
+											for (int k = 0; k < arrayValue.Length; k++)
+											{
+												if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
+												else arrayStr += $",\"{arrayValue[k].Trim()}\"";
+											}
+											arrayStr += "]";
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+											else
+											{
+												string[] array = JsonConvert.DeserializeObject<string[]>(arrayStr);
+												jsonObject[fieldName] = JArray.FromObject(array);
+											}
 										}
-										arrayStr += "]";
-										if (!nestedFiled)
-											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-										else
-										{
-											string[] array = JsonConvert.DeserializeObject<string[]>(arrayStr);
-											jsonObject[fieldName] = JArray.FromObject(array);
-										}
-									}
 										break;
 
 									case "array-bool":
-									{
-										fieldName = fieldName.Replace("[]", "");
-										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-										var arrayStr = "[";
-										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
-											else arrayStr += "," + arrayValue[k].Trim().ToLower();
+											fieldName = fieldName.Replace("[]", "");
+											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+											var arrayStr = "[";
+											for (int k = 0; k < arrayValue.Length; k++)
+											{
+												if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
+												else arrayStr += "," + arrayValue[k].Trim().ToLower();
+											}
+											arrayStr += "]";
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+											else
+											{
+												bool[] array = JsonConvert.DeserializeObject<bool[]>(arrayStr);
+												jsonObject[fieldName] = JArray.FromObject(array);
+											}
 										}
-										arrayStr += "]";
-										if (!nestedFiled)
-											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-										else
-										{
-											bool[] array = JsonConvert.DeserializeObject<bool[]>(arrayStr);
-											jsonObject[fieldName] = JArray.FromObject(array);
-										}
-									}
 										break;
 
 									case "json":
-									{
-										fieldName = fieldName.Replace("{}", "");
+										{
+											fieldName = fieldName.Replace("{}", "");
 
-										//Search Id in field value
-										if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
-										{
-											m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
+											//Search Id in field value
+											if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
+											{
+												m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
+											}
+											foreach (var id in m_allIDsSorted)
+											{
+												if (fieldValue.Contains(id.Key))
+													fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
+											}
+											if (!Helper.IsValidJson(fieldValue))
+											{
+												MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
+													@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+												Log(LogType.Error, $"Invalid data, Sheet: {pSheetName}, Field: {fieldName}, Row: {i + 1}");
+											}
+											var tempObj = JsonConvert.DeserializeObject(fieldValue);
+											var tempJsonStr = JsonConvert.SerializeObject(tempObj);
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
+											else
+											{
+												jsonObject[fieldName] = JObject.Parse(tempJsonStr);
+											}
 										}
-										foreach (var id in m_allIDsSorted)
-										{
-											if (fieldValue.Contains(id.Key))
-												fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
-										}
-										if (!Helper.IsValidJson(fieldValue))
-										{
-											MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
-												@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-											Log(LogType.Error, $"Invalid data, Sheet: {pSheetName}, Field: {fieldName}, Row: {i + 1}");
-										}
-										var tempObj = JsonConvert.DeserializeObject(fieldValue);
-										var tempJsonStr = JsonConvert.SerializeObject(tempObj);
-										if (!nestedFiled)
-											fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
-										else
-										{
-											jsonObject[fieldName] = JObject.Parse(tempJsonStr);
-										}
-									}
 										break;
 								}
 
@@ -1184,7 +1184,7 @@ namespace ExcelToUnity_DataConverter
 			//}
 			if (Config.Settings.allFiles != null)
 				Config.Settings.allFiles.Sort();
-			
+
 			m_bindingExcelPaths.ResetBindings();
 			DtgFilePaths.Refresh();
 			DtgFilePaths.AutoResizeColumns();
@@ -1558,7 +1558,7 @@ namespace ExcelToUnity_DataConverter
 			fileContent = AddNamespace(fileContent);
 			Helper.WriteFile(Config.Settings.constantsOutputFolder, $"{pFileName}.cs", fileContent);
 			Log(LogType.Message, $"Exported {pFileName}.cs!");
-			
+
 			//Write file localized text component
 			fileContent = File.ReadAllText(LOCALIZATION_TEXT_TEMPLATE);
 			fileContent = fileContent.Replace("LOCALIZATION_CLASS_NAME", pFileName);
@@ -1668,11 +1668,11 @@ namespace ExcelToUnity_DataConverter
 			return fileContent;
 		}
 
-#endregion
+		#endregion
 
 		//====================================================
 
-#region Events
+		#region Events
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
@@ -1830,7 +1830,7 @@ namespace ExcelToUnity_DataConverter
 			var bindingList = (BindingList<ExcelPath>)DtgFilePaths.DataSource;
 			Config.Settings.allFiles = bindingList.ToList();
 			Config.Save();
-			
+
 			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
 			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
 			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
@@ -2023,7 +2023,7 @@ namespace ExcelToUnity_DataConverter
 
 			//Create localization manager file
 			CreateLocalizationsManagerFile();
-			
+
 			Log(LogType.Message, "Done!");
 		}
 
@@ -2421,7 +2421,7 @@ namespace ExcelToUnity_DataConverter
 					if (sheet.SheetName.EndsWith(IDS_SHEET))
 						LoadSheetIDsValues(m_workBook, sheet.SheetName);
 			}
-			
+
 			var allSheets = new List<string>();
 			bool writeJsonFileForSingleSheet = !Config.Settings.combineJson;
 			var allJsons = new Dictionary<string, string>();
@@ -2508,7 +2508,7 @@ namespace ExcelToUnity_DataConverter
 			public List<string> fieldValues = new List<string>();
 		}
 
-#endregion
+		#endregion
 
 		private void BtnDecrypt_Click(object sender, EventArgs e)
 		{
@@ -2774,7 +2774,7 @@ namespace ExcelToUnity_DataConverter
 			m_idsBuilderDict = new Dictionary<string, StringBuilder>();
 			m_constantsBuilderDict = new Dictionary<string, StringBuilder>();
 			m_localizationsDict = new Dictionary<string, LocalizationBuilder>();
-			
+
 			TxtLogExportingGoogleSheets.Text = "";
 			m_allIDsSorted = null;
 			m_allIds = new Dictionary<string, int>();
@@ -2848,12 +2848,12 @@ namespace ExcelToUnity_DataConverter
 					var request = service.Spreadsheets.Values.Get(googleSheets.id, range);
 					var response = request.Execute();
 					var values = response.Values;
-					
+
 					//Load and write json file
 					if (IsJsonSheet(sheet.name))
 					{
 						string fileName = sheet.name.Trim().Replace(" ", "_");
-						string json = ConvertSheetToJson(values, sheet.name, fileName, Config.Settings.encryptJson, !Config.Settings.combineJson);
+						string json = ConvertSheetToJson(sheetInfo, values, sheet.name, fileName, Config.Settings.encryptJson, !Config.Settings.combineJson);
 						if (Config.Settings.combineJson)
 						{
 							if (allJsons.ContainsKey(fileName))
@@ -2877,21 +2877,21 @@ namespace ExcelToUnity_DataConverter
 						else
 							Log(LogType.Message, $"Exported Json data to {mergedFileName}.txt.");
 					}
-					
+
 					//Load and write constants
 					if (sheet.name.EndsWith(CONSTANTS_SHEET))
 					{
 						LoadSheetConstantsData(sheet.name, values);
-						
+
 						if (m_constantsBuilderDict.ContainsKey(sheet.name) && Config.Settings.separateConstants)
 							CreateFileConstants(m_constantsBuilderDict[sheet.name].ToString(), sheet.name);
 					}
-					
+
 					//Load and write localizations
 					if (sheet.name.StartsWith(LOCALIZATION_SHEET))
 					{
-						LoadSheetLocalizationData(values, sheet.name);
-						
+						LoadSheetLocalizationData(sheetInfo, values, sheet.name);
+
 						if (m_localizationsDict.ContainsKey(sheet.name) && Config.Settings.separateLocalizations)
 						{
 							var builder = m_localizationsDict[sheet.name];
@@ -2917,7 +2917,7 @@ namespace ExcelToUnity_DataConverter
 				}
 				CreateFileIDs("IDs", builder.ToString());
 			}
-			
+
 			//Create file contain all Constants
 			if (!Config.Settings.separateConstants)
 			{
@@ -2933,7 +2933,7 @@ namespace ExcelToUnity_DataConverter
 				}
 				CreateFileConstants(builder.ToString(), "Constants");
 			}
-			
+
 			//Create file contain all Localizations
 			if (!Config.Settings.separateLocalizations)
 			{
@@ -2953,7 +2953,7 @@ namespace ExcelToUnity_DataConverter
 				CreateLocalizationFileV2(localizationBuilder.idsString, localizationBuilder.languageTextDict, "Localization");
 				m_localizedSheetsExported.Add("Localization");
 			}
-			
+
 			//Create characters sets
 			if (m_langCharSets != null && m_langCharSets.Count > 0)
 			{
@@ -2973,7 +2973,7 @@ namespace ExcelToUnity_DataConverter
 
 			//Create localization manager file
 			CreateLocalizationsManagerFile();
-			
+
 			Log(LogType.Message, "Done!");
 		}
 
@@ -3037,8 +3037,8 @@ namespace ExcelToUnity_DataConverter
 					newConst.comment = rowValues[3].ToString().Trim();
 
 				if (string.IsNullOrEmpty(newConst.name)
-				    || string.IsNullOrEmpty(newConst.valueType)
-				    || string.IsNullOrEmpty(newConst.value))
+					|| string.IsNullOrEmpty(newConst.valueType)
+					|| string.IsNullOrEmpty(newConst.value))
 					continue;
 
 				constants.Add(newConst);
@@ -3086,7 +3086,7 @@ namespace ExcelToUnity_DataConverter
 							MessageBox.Show($@"Sheet {pSheetName}: Key {key} doesn't have value!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 							continue;
 						}
-						
+
 						int.TryParse(valueStr, out int value);
 						sb.Append("\tpublic const int ");
 						sb.Append(key);
@@ -3185,15 +3185,15 @@ namespace ExcelToUnity_DataConverter
 			return true;
 		}
 
-		private string ConvertSheetToJson(IList<IList<object>> pValues, string pSheetName, string pFileName, bool pEncrypt, bool pWriteFile)
+		private string ConvertSheetToJson(Google.Apis.Sheets.v4.Data.Sheet sheet, IList<IList<object>> pValues, string pSheetName, string pFileName, bool pEncrypt, bool pWriteFile)
 		{
-			var fieldValueTypes = Helper.GetFieldValueTypes(pValues);
+			var fieldValueTypes = Helper.GetFieldValueTypes(sheet, pValues);
 			if (fieldValueTypes == null)
 				return "{}";
-			return ConvertSheetToJson(pValues, pSheetName, pFileName, fieldValueTypes, pEncrypt, pWriteFile);
+			return ConvertSheetToJson(sheet, pValues, pSheetName, pFileName, fieldValueTypes, pEncrypt, pWriteFile);
 		}
-		
-		private string ConvertSheetToJson(IList<IList<object>> pValues, string pSheetName, string pOutputFile, List<FieldValueType> pFieldValueTypes, bool pEncrypt, bool pAutoWriteFile)
+
+		private string ConvertSheetToJson(Google.Apis.Sheets.v4.Data.Sheet sheet, IList<IList<object>> pValues, string pSheetName, string pOutputFile, List<FieldValueType> pFieldValueTypes, bool pEncrypt, bool pAutoWriteFile)
 		{
 			var unminifiedFields = Config.Settings.GetPersistentFields();
 
@@ -3205,6 +3205,7 @@ namespace ExcelToUnity_DataConverter
 
 			int lastCellNum = 0;
 			string[] fields = null;
+			string[] mergeValues = null;
 			bool[] validCols = null;
 			var rowContents = new List<RowContent>();
 
@@ -3219,10 +3220,19 @@ namespace ExcelToUnity_DataConverter
 					lastCellNum = rowValues.Count;
 					fields = new string[lastCellNum];
 					validCols = new bool[lastCellNum];
+					mergeValues = new string[lastCellNum];
+					string mergedCell = "";
 
 					for (int col = 0; col < lastCellNum; col++)
 					{
 						var cellValue = rowValues[col].ToString().Trim();
+
+						bool isMergedCell = Helper.IsMergedCell(sheet, row, col);
+						if (isMergedCell && !string.IsNullOrEmpty(cellValue))
+							mergedCell = cellValue;
+						else if (isMergedCell && string.IsNullOrEmpty(cellValue))
+							cellValue = mergedCell;
+
 						if (!string.IsNullOrEmpty(cellValue) && !cellValue.Contains("[x]"))
 						{
 							validCols[col] = true;
@@ -3247,6 +3257,13 @@ namespace ExcelToUnity_DataConverter
 						{
 							string fieldName = fields[col];
 							string fieldValue = cellValue;
+
+							bool isMergedCell = Helper.IsMergedCell(sheet, row, col);
+							if (isMergedCell && !string.IsNullOrEmpty(fieldValue))
+								mergeValues[col] = fieldValue;
+							if (isMergedCell && string.IsNullOrEmpty(fieldValue))
+								fieldValue = mergeValues[col];
+
 							fieldName = fieldName.Replace(" ", "_");
 							rowContent.fieldNames.Add(fieldName);
 							rowContent.fieldValues.Add(fieldValue);
@@ -3475,100 +3492,100 @@ namespace ExcelToUnity_DataConverter
 										break;
 
 									case "array-number":
-									{
-										fieldName = fieldName.Replace("[]", "");
-										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-										var arrayStr = "[";
-										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											string val = arrayValue[k].Trim();
-											if (referencedId)
-												val = GetReferenceId(val, out bool _).ToString();
-											if (k == 0) arrayStr += val;
-											else arrayStr += "," + val;
+											fieldName = fieldName.Replace("[]", "");
+											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+											var arrayStr = "[";
+											for (int k = 0; k < arrayValue.Length; k++)
+											{
+												string val = arrayValue[k].Trim();
+												if (referencedId)
+													val = GetReferenceId(val, out bool _).ToString();
+												if (k == 0) arrayStr += val;
+												else arrayStr += "," + val;
+											}
+											arrayStr += "]";
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+											else
+											{
+												int[] array = JsonConvert.DeserializeObject<int[]>(arrayStr);
+												jsonObject[fieldName] = JArray.FromObject(array);
+											}
 										}
-										arrayStr += "]";
-										if (!nestedFiled)
-											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-										else
-										{
-											int[] array = JsonConvert.DeserializeObject<int[]>(arrayStr);
-											jsonObject[fieldName] = JArray.FromObject(array);
-										}
-									}
 										break;
 
 									case "array-string":
-									{
-										fieldName = fieldName.Replace("[]", "");
-										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-										var arrayStr = "[";
-										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
-											else arrayStr += $",\"{arrayValue[k].Trim()}\"";
+											fieldName = fieldName.Replace("[]", "");
+											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+											var arrayStr = "[";
+											for (int k = 0; k < arrayValue.Length; k++)
+											{
+												if (k == 0) arrayStr += $"\"{arrayValue[k].Trim()}\"";
+												else arrayStr += $",\"{arrayValue[k].Trim()}\"";
+											}
+											arrayStr += "]";
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+											else
+											{
+												string[] array = JsonConvert.DeserializeObject<string[]>(arrayStr);
+												jsonObject[fieldName] = JArray.FromObject(array);
+											}
 										}
-										arrayStr += "]";
-										if (!nestedFiled)
-											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-										else
-										{
-											string[] array = JsonConvert.DeserializeObject<string[]>(arrayStr);
-											jsonObject[fieldName] = JArray.FromObject(array);
-										}
-									}
 										break;
 
 									case "array-bool":
-									{
-										fieldName = fieldName.Replace("[]", "");
-										var arrayValue = Helper.SplitValueToArray(fieldValue, false);
-										var arrayStr = "[";
-										for (int k = 0; k < arrayValue.Length; k++)
 										{
-											if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
-											else arrayStr += "," + arrayValue[k].Trim().ToLower();
+											fieldName = fieldName.Replace("[]", "");
+											var arrayValue = Helper.SplitValueToArray(fieldValue, false);
+											var arrayStr = "[";
+											for (int k = 0; k < arrayValue.Length; k++)
+											{
+												if (k == 0) arrayStr += arrayValue[k].Trim().ToLower();
+												else arrayStr += "," + arrayValue[k].Trim().ToLower();
+											}
+											arrayStr += "]";
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{arrayStr},";
+											else
+											{
+												bool[] array = JsonConvert.DeserializeObject<bool[]>(arrayStr);
+												jsonObject[fieldName] = JArray.FromObject(array);
+											}
 										}
-										arrayStr += "]";
-										if (!nestedFiled)
-											fieldContentStr += $"\"{fieldName}\":{arrayStr},";
-										else
-										{
-											bool[] array = JsonConvert.DeserializeObject<bool[]>(arrayStr);
-											jsonObject[fieldName] = JArray.FromObject(array);
-										}
-									}
 										break;
 
 									case "json":
-									{
-										fieldName = fieldName.Replace("{}", "");
+										{
+											fieldName = fieldName.Replace("{}", "");
 
-										//Search Id in field value
-										if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
-										{
-											m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
+											//Search Id in field value
+											if (m_allIDsSorted == null || m_allIDsSorted.Count == 0)
+											{
+												m_allIDsSorted = Helper.SortIDsByLength(m_allIds);
+											}
+											foreach (var id in m_allIDsSorted)
+											{
+												if (fieldValue.Contains(id.Key))
+													fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
+											}
+											if (!Helper.IsValidJson(fieldValue))
+											{
+												MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
+													@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+												Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
+											}
+											var tempObj = JsonConvert.DeserializeObject(fieldValue);
+											var tempJsonStr = JsonConvert.SerializeObject(tempObj);
+											if (!nestedFiled)
+												fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
+											else
+											{
+												jsonObject[fieldName] = JObject.Parse(tempJsonStr);
+											}
 										}
-										foreach (var id in m_allIDsSorted)
-										{
-											if (fieldValue.Contains(id.Key))
-												fieldValue = fieldValue.Replace(id.Key, id.Value.ToString());
-										}
-										if (!Helper.IsValidJson(fieldValue))
-										{
-											MessageBox.Show($@"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}",
-												@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-											Log(LogType.Error, $"Invalid Json string at Sheet: {pSheetName} Field: {fieldName} Row: {i + 1}");
-										}
-										var tempObj = JsonConvert.DeserializeObject(fieldValue);
-										var tempJsonStr = JsonConvert.SerializeObject(tempObj);
-										if (!nestedFiled)
-											fieldContentStr += $"\"{fieldName}\":{tempJsonStr},";
-										else
-										{
-											jsonObject[fieldName] = JObject.Parse(tempJsonStr);
-										}
-									}
 										break;
 								}
 
@@ -3625,7 +3642,7 @@ namespace ExcelToUnity_DataConverter
 			return finalContent;
 		}
 
-		private void LoadSheetLocalizationData(IList<IList<object>> rowsData, string pSheetName)
+		private void LoadSheetLocalizationData(Google.Apis.Sheets.v4.Data.Sheet sheet, IList<IList<object>> rowsData, string pSheetName)
 		{
 			if (rowsData == null || rowsData.Count == 0)
 			{
@@ -3638,6 +3655,7 @@ namespace ExcelToUnity_DataConverter
 			var firstRow = rowsData[0];
 			int maxCellNum = firstRow.Count;
 
+			string mergeCellValue = "";
 			for (int row = 0; row < rowsData.Count; row++)
 			{
 				var rowData = rowsData[row];
@@ -3645,8 +3663,13 @@ namespace ExcelToUnity_DataConverter
 					continue;
 				for (int col = 0; col < maxCellNum; col++)
 				{
-					var fieldValue = rowData[col].ToString().Trim();
 					var fieldName = rowsData[0][col].ToString();
+					var fieldValue = rowData[col].ToString().Trim();
+					bool isMergedCell = Helper.IsMergedCell(sheet, row, col);
+					if (isMergedCell && !string.IsNullOrEmpty(fieldValue))
+						mergeCellValue = fieldValue;
+					if (isMergedCell && string.IsNullOrEmpty(fieldValue))
+						fieldValue = mergeCellValue;
 					if (!string.IsNullOrEmpty(fieldName))
 					{
 						//idString

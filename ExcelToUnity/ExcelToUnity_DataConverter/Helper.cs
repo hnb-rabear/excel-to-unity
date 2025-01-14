@@ -224,34 +224,51 @@ namespace ExcelToUnity_DataConverter
             return fieldValueTypes;
         }
 
-        public static List<FieldValueType> GetFieldValueTypes(IList<IList<object>> pValues)
+        public static List<FieldValueType> GetFieldValueTypes(Google.Apis.Sheets.v4.Data.Sheet sheet, IList<IList<object>> pValues)
         {
             if (pValues == null || pValues.Count == 0)
                 return null;
-            var rowValues = pValues[0];
-            var fieldsName = new string[rowValues.Count];
-            var fieldsValue = new string[rowValues.Count];
-            for (int col = 0; col < rowValues.Count; col++)
+            var firstRowValues = pValues[0];
+			if (pValues.Count > 1)
+			{
+				var secondRowValues = pValues[1];
+				if (secondRowValues.Count > firstRowValues.Count) // Probably has merged cells
+					for (var i = firstRowValues.Count; i < secondRowValues.Count; i++)
+						firstRowValues.Add("");
+			}
+			var fieldsName = new string[firstRowValues.Count];
+            var fieldsValue = new string[firstRowValues.Count];
+			var mergedCellValue = "";
+			for (int col = 0; col < firstRowValues.Count; col++)
             {
-                var cell = rowValues[col].ToString().Trim();
+                var cell = firstRowValues[col].ToString().Trim();
+
                 if (!string.IsNullOrEmpty(cell))
                     fieldsName[col] = cell.Replace(" ", "_");
                 else
                     fieldsName[col] = "";
-                fieldsValue[col] = "";
+
+				// Check merged cells
+				bool isMergedCell = IsMergedCell(sheet, 0, col);
+				if (isMergedCell && !string.IsNullOrEmpty(fieldsName[col]))
+					mergedCellValue = fieldsName[col];
+				else if (isMergedCell && string.IsNullOrEmpty(fieldsName[col]))
+					fieldsName[col] = mergedCellValue;
+
+				fieldsValue[col] = "";
             }
 
             for (int row = 1; row < pValues.Count; row++)
             {
-                rowValues = pValues[row];
-                if (rowValues != null)
+                firstRowValues = pValues[row];
+                if (firstRowValues != null)
                 {
                     //Find longest value, and use it to check value type
                     for (int col = 0; col < fieldsName.Length; col++)
                     {
                         var cellStr = "";
-                        if (col < rowValues.Count)
-                            cellStr = rowValues[col].ToString();
+                        if (col < firstRowValues.Count)
+                            cellStr = firstRowValues[col].ToString();
                         if (!string.IsNullOrEmpty(cellStr))
                         {
                             cellStr = cellStr.Trim();
@@ -762,6 +779,17 @@ namespace ExcelToUnity_DataConverter
 			}
 
 			return columnLetter;
+		}
+
+		public static bool IsMergedCell(Google.Apis.Sheets.v4.Data.Sheet sheet, int row, int col)
+		{
+			var mergedCells = sheet.Merges;
+			if (mergedCells == null)
+				return false;
+			bool isMerged = mergedCells.Any(m =>
+				row >= m.StartRowIndex && row < m.EndRowIndex
+				&& col >= m.StartColumnIndex && col < m.EndColumnIndex);
+			return isMerged;
 		}
 	}
 }
