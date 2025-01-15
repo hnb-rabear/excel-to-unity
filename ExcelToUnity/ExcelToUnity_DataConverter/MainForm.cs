@@ -591,7 +591,7 @@ namespace ExcelToUnity_DataConverter
 			var sheet = pWorkBook.GetSheet(pSheetName);
 			if (sheet == null || sheet.LastRowNum == 0)
 			{
-				Log(LogType.Warning, $"Sheet {sheet.SheetName} is empty!");
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
 				return null;
 			}
 
@@ -2125,8 +2125,6 @@ namespace ExcelToUnity_DataConverter
 		{
 			if (e == null || e.RowIndex == DtgFilePaths.NewRowIndex || e.RowIndex < 0)
 				return;
-
-			var row = DtgFilePaths.Rows[e.RowIndex];
 
 			if (e.ColumnIndex == DtgFilePaths.Columns["BtnDelete"].Index)
 			{
