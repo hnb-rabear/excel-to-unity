@@ -103,3 +103,11 @@
 - Removed Help tab
 - Renamed to SheetX and changed the Icon
 - Fixed out-of-index error when removing a google sheet
+
+# Version 1.5.5
+- Include the Zero Cell when exporting JSON, rather than excluding it.
+- Resolve path conversion issues across different operating systems.
+- Allow merging of rows in Google Sheets.
+- Allow combining headers to create array type data.
+- Support nested array data type.
+- Update example spreadsheets

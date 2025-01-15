@@ -138,7 +138,7 @@ namespace ExcelToUnity_DataConverter
 			}
 		}
 
-		public void SetGoogleSheet(string googleSheetId, string googleSheetName, List<GoogleSheetsPath.Sheet> sheets)
+		public void SetGoogleSheet(string googleSheetId, string googleSheetName, List<GoogleSheetsPath.SheetPath> sheets)
 		{
 			for (int i = 0; i < googleSheetsPaths.Count; i++)
 			{

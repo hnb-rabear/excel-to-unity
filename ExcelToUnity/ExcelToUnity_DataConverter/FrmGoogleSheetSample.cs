@@ -10,8 +10,8 @@ namespace ExcelToUnity_DataConverter
 {
 	public partial class FrmGoogleSheetSample : Form
 	{
-		private BindingList<GoogleSheetsPath.Sheet> m_bindingSheets;
-		public List<GoogleSheetsPath.Sheet> sheets;
+		private BindingList<GoogleSheetsPath.SheetPath> m_bindingSheets;
+		public List<GoogleSheetsPath.SheetPath> sheets;
 		public string googleSheetId;
 		public string googleSheetName;
 
@@ -31,9 +31,9 @@ namespace ExcelToUnity_DataConverter
 				Authenticate();
 		}
 
-		public List<GoogleSheetsPath.Sheet> GetGoogleSheetsFromGridView()
+		public List<GoogleSheetsPath.SheetPath> GetGoogleSheetsFromGridView()
 		{
-			var dataList = new List<GoogleSheetsPath.Sheet>();
+			var dataList = new List<GoogleSheetsPath.SheetPath>();
 
 			// Get column indices by their names
 			int pathColumnIdx = DtgGoogleSheets.Columns["name"].Index;
@@ -47,7 +47,7 @@ namespace ExcelToUnity_DataConverter
 				// Only process rows that are not new rows (the empty row at the end of DataGridView)
 				if (!row.IsNewRow)
 				{
-					var data = new GoogleSheetsPath.Sheet()
+					var data = new GoogleSheetsPath.SheetPath()
 					{
 						name = row.Cells[pathColumnIdx].Value?.ToString(),
 						selected = row.Cells[selectedColumnIdx].Value != null && (bool)row.Cells[selectedColumnIdx].Value,
@@ -98,11 +98,11 @@ namespace ExcelToUnity_DataConverter
 			}
 			googleSheetName = spreadsheet.Properties.Title;
 			TxtGoogleSheetName.Text = spreadsheet.Properties.Title;
-			sheets = new List<GoogleSheetsPath.Sheet>();
+			sheets = new List<GoogleSheetsPath.SheetPath>();
 			foreach (var sheet in spreadsheet.Sheets)
 			{
 				var sheetName = sheet.Properties.Title;
-				sheets.Add(new GoogleSheetsPath.Sheet()
+				sheets.Add(new GoogleSheetsPath.SheetPath()
 				{
 					name = sheetName,
 					selected = true,
@@ -121,7 +121,7 @@ namespace ExcelToUnity_DataConverter
 				}
             }
 
-			m_bindingSheets = new BindingList<GoogleSheetsPath.Sheet>(sheets);
+			m_bindingSheets = new BindingList<GoogleSheetsPath.SheetPath>(sheets);
 			DtgGoogleSheets.DataSource = m_bindingSheets;
 		}
 

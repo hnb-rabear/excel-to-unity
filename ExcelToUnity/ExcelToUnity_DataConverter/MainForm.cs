@@ -1,6 +1,7 @@
 using ChoETL;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
 using Markdig;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,12 +15,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static GoogleSheetsPath;
 
 namespace ExcelToUnity_DataConverter
 {
 	public partial class MainForm : Form
 	{
-		public const string VERSION = "1.5.4";
+		public const string VERSION = "1.5.5";
 
 		#region Internal Class
 
@@ -178,77 +180,77 @@ namespace ExcelToUnity_DataConverter
 			for (int row = 0; row <= sheet.LastRowNum; row++)
 			{
 				var rowData = sheet.GetRow(row);
-				if (rowData != null)
+				if (rowData == null)
+					continue;
+				for (int col = 0; col < rowData.LastCellNum; col += 3)
 				{
-					for (int col = 0; col <= rowData.LastCellNum; col += 3)
+					var cellKey = rowData.GetCell(col);
+					if (cellKey == null)
+						continue;
+					int index = col / 3;
+					var sb = index < idsBuilders.Count ? idsBuilders[index] : new StringBuilder();
+					if (!idsBuilders.Contains(sb))
 					{
-						var cellKey = rowData.GetCell(col);
-						if (cellKey != null)
+						idsBuilders.Add(sb);
+					}
+					//Values row
+					if (row > 0)
+					{
+						string key = cellKey.ToString().Trim();
+						if (string.IsNullOrEmpty(key))
+							continue;
+
+						//Value
+						var cellValue = rowData.GetCell(col + 1);
+						if (cellValue == null || string.IsNullOrEmpty(cellValue.ToString()))
 						{
-							int index = col / 3;
-							var sb = index < idsBuilders.Count ? idsBuilders[index] : new StringBuilder();
-							if (!idsBuilders.Contains(sb))
-							{
-								idsBuilders.Add(sb);
-							}
-							//Values row
-							if (row > 0)
-							{
-								string key = cellKey.ToString().Trim();
-								if (string.IsNullOrEmpty(key))
-									continue;
+							MessageBox.Show($@"Sheet {sheet.SheetName}: Key {key} doesn't have value!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							continue;
+						}
 
-								//Value
-								var cellValue = rowData.GetCell(col + 1);
-								if (cellValue == null || string.IsNullOrEmpty(cellValue.ToString()))
-								{
-									MessageBox.Show($@"Sheet {sheet.SheetName}: Key {key} doesn't have value!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-									continue;
-								}
+						string valueStr = cellValue.ToString().Trim();
+						int.TryParse(valueStr, out int value);
+						sb.Append("\tpublic const int ");
+						sb.Append(key);
+						sb.Append(" = ");
+						sb.Append(value);
+						sb.Append(";");
 
-								string valueStr = cellValue.ToString().Trim();
-								int.TryParse(valueStr, out int value);
-								sb.Append("\tpublic const int ");
-								sb.Append(key);
-								sb.Append(" = ");
-								sb.Append(value);
-								sb.Append(";");
-
-								//Comment
-								var cellComment = rowData.GetCell(col + 2);
-								if (cellComment != null && !string.IsNullOrEmpty(cellComment.ToString().Trim()))
-								{
-									string cellCommentFormula = Helper.ConvertFormulaCell(cellComment);
-									if (cellCommentFormula != null)
-										sb.Append(" /*").Append(cellCommentFormula).Append("*/");
-									else
-										sb.Append(" /*").Append(cellComment).Append("*/");
-								}
-
-								if (m_allIds.TryGetValue(key, out int val))
-								{
-									if (val != value)
-										MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-								}
-								else
-									m_allIds.AddOrUpdate(key, value);
-							}
-							//Header row
+						//Comment
+						var cellComment = rowData.GetCell(col + 2);
+						if (cellComment != null && !string.IsNullOrEmpty(cellComment.ToString().Trim()))
+						{
+							string cellCommentFormula = Helper.ConvertFormulaCell(cellComment);
+							if (cellCommentFormula != null)
+								sb.Append(" /* ").Append(cellCommentFormula).Append(" */ ");
 							else
-							{
-								if (cellKey.ToString().Contains("[enum]"))
-								{
-									idsEnumBuilders.Add(sb);
-									idsEnumBuilderNames.Add(cellKey.ToString().Replace("[enum]", ""));
-									idsEnumBuilderIndexes.Add(index);
-								}
+								sb.Append(" /* ").Append(cellComment).Append(" */ ");
+						}
 
-								sb.Append("\t#region ")
-									.Append(cellKey);
-							}
-							sb.Append(Environment.NewLine);
+						if (m_allIds.TryGetValue(key, out int val))
+						{
+							if (val != value)
+								MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
+						else
+						{
+							m_allIds[key] = value;
 						}
 					}
+					//Header row
+					else
+					{
+						if (cellKey.ToString().EndsWith("[enum]"))
+						{
+							idsEnumBuilders.Add(sb);
+							idsEnumBuilderNames.Add(cellKey.ToString().Replace("[enum]", ""));
+							idsEnumBuilderIndexes.Add(index);
+						}
+
+						sb.Append("\t#region ")
+							.Append(cellKey);
+					}
+					sb.Append(Environment.NewLine);
 				}
 			}
 
@@ -259,26 +261,29 @@ namespace ExcelToUnity_DataConverter
 			{
 				for (int i = 0; i < idsEnumBuilders.Count; i++)
 				{
-					var str = idsEnumBuilders[i].ToString()
-						.Replace("\r\n\tpublic const int ", "")
-						.Replace("\r\n", "")
-						.Replace(";", ",").Trim();
-					str = str.Remove(str.Length - 1);
-					var enumIndex = str.IndexOf("[enum]", StringComparison.Ordinal);
-					str = str.Remove(0, enumIndex + 6).Replace(",", ", ");
+					string str = Helper.RemoveComments(idsEnumBuilders[i].ToString())
+						.Replace("  ", " ")
+						.Replace(Environment.NewLine + "\tpublic const int ", "")
+						.Replace(Environment.NewLine, "")
+						.Replace(";", ", ")
+						.Trim();
+
+					int enumIndex = str.IndexOf("[enum]", StringComparison.Ordinal);
+					if (enumIndex >= 0)
+						str = str.Substring(enumIndex + 6);
 
 					string enumName = idsEnumBuilderNames[i].Replace(" ", "_");
 
-					var enumBuilder = new StringBuilder();
-					enumBuilder.Append("\tpublic enum ")
+					var enumBuilder = new StringBuilder()
+						.Append("\tpublic enum ")
 						.Append(enumName)
 						.Append(" { ")
 						.Append(str)
-						.Append(" }\n");
+						.Append($" }}{Environment.NewLine}");
 					if (Config.Settings.onlyEnumAsIDs)
 					{
-						var tempSb = new StringBuilder();
-						tempSb.Append("\t#region ")
+						var tempSb = new StringBuilder()
+							.Append("\t#region ")
 							.Append(enumName)
 							.Append(Environment.NewLine)
 							.Append(enumBuilder);
@@ -310,7 +315,6 @@ namespace ExcelToUnity_DataConverter
 			}
 			else
 				m_idsBuilderDict.Add(pSheetName, builder);
-
 			return true;
 		}
 
@@ -2746,7 +2750,7 @@ namespace ExcelToUnity_DataConverter
 
 		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://github.com/hnb-rabear/excel-to-unity/blob/main/Example.xlsx");
+			Process.Start("https://docs.google.com/spreadsheets/d/1_9BqoKwRsod5cMwML5n_pLpuWk045lD3Jd7nrizqVBo/edit?usp=sharing");
 		}
 
 		private void BtnSaveSettings_Click(object sender, EventArgs e)
@@ -2884,6 +2888,7 @@ namespace ExcelToUnity_DataConverter
 			{
 				// Get the sheet metadata to determine its dimensions
 				var sheetMetadata = service.Spreadsheets.Get(googleSheets.id).Execute();
+				ValidateSheetPaths(sheetMetadata, googleSheets);
 				foreach (var sheet in googleSheets.sheets)
 				{
 					if (!sheet.selected || !sheet.name.EndsWith(IDS_SHEET))
@@ -2912,7 +2917,7 @@ namespace ExcelToUnity_DataConverter
 			// Read and write other data type
 			foreach (var googleSheets in googleSheetsPaths)
 			{
-				var sheets = new List<GoogleSheetsPath.Sheet>();
+				var sheets = new List<GoogleSheetsPath.SheetPath>();
 				var excludedSheets = settings.GetExcludedSheets();
 				foreach (var sheet in googleSheets.sheets)
 				{
@@ -3141,9 +3146,9 @@ namespace ExcelToUnity_DataConverter
 
 		private bool BuildContentOfFileIDs(string pSheetName, IList<IList<object>> rowsData)
 		{
-			if (rowsData == null || rowsData.Count <= 0)
+			if (rowsData == null || rowsData.Count == 0)
 			{
-				Log(LogType.Warning, $"Sheet {pSheetName} is empty");
+				Log(LogType.Warning, $"Sheet {pSheetName} is empty!");
 				return false;
 			}
 
@@ -3154,10 +3159,12 @@ namespace ExcelToUnity_DataConverter
 			for (int row = 0; row < rowsData.Count; row++)
 			{
 				var rowData = rowsData[row];
+				if (rowData == null)
+					continue;
 				for (int col = 0; col < rowData.Count; col += 3)
 				{
-					var key = rowData[col].ToString().Trim();
-					if (string.IsNullOrEmpty(key))
+					var cellKey = rowData[col];
+					if (cellKey == null)
 						continue;
 					int index = col / 3;
 					var sb = index < idsBuilders.Count ? idsBuilders[index] : new StringBuilder();
@@ -3168,17 +3175,19 @@ namespace ExcelToUnity_DataConverter
 					//Values row
 					if (row > 0)
 					{
+						string key = cellKey.ToString().Trim();
 						if (string.IsNullOrEmpty(key))
 							continue;
 
 						//Value
-						var valueStr = rowData[col + 1].ToString().Trim();
-						if (string.IsNullOrEmpty(valueStr))
+						var cellValue = rowData[col + 1];
+						if (cellValue == null || string.IsNullOrEmpty(cellValue.ToString()))
 						{
 							MessageBox.Show($@"Sheet {pSheetName}: Key {key} doesn't have value!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 							continue;
 						}
 
+						string valueStr = cellValue.ToString().Trim();
 						int.TryParse(valueStr, out int value);
 						sb.Append("\tpublic const int ");
 						sb.Append(key);
@@ -3189,27 +3198,33 @@ namespace ExcelToUnity_DataConverter
 						//Comment
 						if (col + 2 < rowData.Count)
 						{
-							var cellComment = rowData[col + 2].ToString();
-							if (!string.IsNullOrEmpty(cellComment.Trim()))
-								sb.Append(" /*").Append(cellComment).Append("*/");
+							var cellComment = rowData[col + 2];
+							if (cellComment != null && !string.IsNullOrEmpty(cellComment.ToString().Trim()))
+								sb.Append(" /* ").Append(cellComment).Append(" */");
 						}
 
-						if (m_allIds.ContainsKey(key))
-							MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						m_allIds.AddOrUpdate(key, value);
+						if (m_allIds.TryGetValue(key, out int val))
+						{
+							if (val != value)
+								MessageBox.Show($@"ID {key} is duplicated in sheet {pSheetName}", @"Duplicated ID!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
+						else
+						{
+							m_allIds[key] = value;
+						}
 					}
 					//Header row
 					else
 					{
-						if (key.Contains("[enum]"))
+						if (cellKey.ToString().EndsWith("[enum]"))
 						{
 							idsEnumBuilders.Add(sb);
-							idsEnumBuilderNames.Add(key.Replace("[enum]", ""));
+							idsEnumBuilderNames.Add(cellKey.ToString().Replace("[enum]", ""));
 							idsEnumBuilderIndexes.Add(index);
 						}
 
 						sb.Append("\t#region ")
-							.Append(key);
+							.Append(cellKey);
 					}
 					sb.Append(Environment.NewLine);
 				}
@@ -3222,26 +3237,29 @@ namespace ExcelToUnity_DataConverter
 			{
 				for (int i = 0; i < idsEnumBuilders.Count; i++)
 				{
-					var str = idsEnumBuilders[i].ToString()
-						.Replace("\r\n\tpublic const int ", "")
-						.Replace("\r\n", "")
-						.Replace(";", ",").Trim();
-					str = str.Remove(str.Length - 1);
-					var enumIndex = str.IndexOf("[enum]", StringComparison.Ordinal);
-					str = str.Remove(0, enumIndex + 6).Replace(",", ", ");
+					string str = Helper.RemoveComments(idsEnumBuilders[i].ToString())
+						.Replace("  ", " ")
+						.Replace(Environment.NewLine + "\tpublic const int ", "")
+						.Replace(Environment.NewLine, "")
+						.Replace(";", ", ")
+						.Trim();
+
+					int enumIndex = str.IndexOf("[enum]", StringComparison.Ordinal);
+					if (enumIndex >= 0)
+						str = str.Substring(enumIndex + 6);
 
 					string enumName = idsEnumBuilderNames[i].Replace(" ", "_");
 
-					var enumBuilder = new StringBuilder();
-					enumBuilder.Append("\tpublic enum ")
+					var enumBuilder = new StringBuilder()
+						.Append("\tpublic enum ")
 						.Append(enumName)
 						.Append(" { ")
 						.Append(str)
-						.Append(" }\n");
+						.Append($" }}{Environment.NewLine}");
 					if (Config.Settings.onlyEnumAsIDs)
 					{
-						var tempSb = new StringBuilder();
-						tempSb.Append("\t#region ")
+						var tempSb = new StringBuilder()
+							.Append("\t#region ")
 							.Append(enumName)
 							.Append(Environment.NewLine)
 							.Append(enumBuilder);
@@ -3951,6 +3969,39 @@ namespace ExcelToUnity_DataConverter
 			{
 				Config.Settings.googleClientSecret = TxtGoogleClientSecret.Text;
 				Config.Save();
+			}
+		}
+
+		private void ValidateSheetPaths(Spreadsheet sheetMetadata, GoogleSheetsPath pGoogleSheetsPath)
+		{
+			var sheetPaths = new List<SheetPath>();
+			foreach (var sheet in sheetMetadata.Sheets)
+			{
+				var sheetName = sheet.Properties.Title;
+				sheetPaths.Add(new SheetPath()
+				{
+					name = sheetName,
+					selected = true,
+				});
+			}
+
+			// Sync with current save
+			for (int i = 0; i < pGoogleSheetsPath.sheets.Count; i++)
+			{
+				var sheetPath = pGoogleSheetsPath.sheets[i];
+				if (!sheetPaths.Exists(x => x.name == sheetPath.name))
+				{
+					pGoogleSheetsPath.sheets.RemoveAt(i);
+					i--;
+				}
+			}
+			foreach (var sheetPath in sheetPaths)
+			{
+				var existedSheet = pGoogleSheetsPath.sheets.Find(x => x.name == sheetPath.name);
+				if (existedSheet != null)
+					sheetPath.selected = existedSheet.selected;
+				else
+					pGoogleSheetsPath.AddSheet(sheetPath.name);
 			}
 		}
 

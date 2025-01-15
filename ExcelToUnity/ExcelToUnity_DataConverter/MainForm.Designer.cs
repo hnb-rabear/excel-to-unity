@@ -389,13 +389,13 @@ namespace ExcelToUnity_DataConverter
 			// 
 			this.linkDownloadExample.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkDownloadExample.AutoSize = true;
-			this.linkDownloadExample.Location = new System.Drawing.Point(594, 9);
+			this.linkDownloadExample.Location = new System.Drawing.Point(577, 9);
 			this.linkDownloadExample.Name = "linkDownloadExample";
 			this.linkDownloadExample.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.linkDownloadExample.Size = new System.Drawing.Size(98, 13);
+			this.linkDownloadExample.Size = new System.Drawing.Size(115, 13);
 			this.linkDownloadExample.TabIndex = 26;
 			this.linkDownloadExample.TabStop = true;
-			this.linkDownloadExample.Text = "Download Example";
+			this.linkDownloadExample.Text = "Example Spreadsheets";
 			this.linkDownloadExample.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
 			// 
 			// tpEncription

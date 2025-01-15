@@ -13,6 +13,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -338,7 +339,7 @@ namespace ExcelToUnity_DataConverter
             if (!Directory.Exists(pFolderPath))
                 Directory.CreateDirectory(pFolderPath);
 
-            string filePath = $"{pFolderPath}\\{pFileName}";
+            string filePath = Path.Combine(pFolderPath, pFileName);
             if (!System.IO.File.Exists(filePath))
                 using (System.IO.File.Create(filePath)) { }
 
@@ -548,9 +549,9 @@ namespace ExcelToUnity_DataConverter
 
         public static string[] SplitValueToArray(string pValue, bool pIncludeColon = true)
         {
-            string[] splits = new[] { ":", "|", "\r\n", "\r", "\n" };
+            string[] splits = new[] { ":", "|", Environment.NewLine, "\n" };
             if (!pIncludeColon)
-                splits = new[] { "|", "\r\n", "\r", "\n" };
+                splits = new[] { "|", Environment.NewLine, "\n" };
             string[] result = pValue.Split(splits, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
             return result;
         }
@@ -781,6 +782,11 @@ namespace ExcelToUnity_DataConverter
 				row >= m.StartRowIndex && row < m.EndRowIndex
 				&& col >= m.StartColumnIndex && col < m.EndColumnIndex);
 			return isMerged;
+		}
+
+		public static string RemoveComments(string input)
+		{
+			return Regex.Replace(input, @"/\*.*?\*/", string.Empty);
 		}
 	}
 }

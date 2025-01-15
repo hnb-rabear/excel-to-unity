@@ -31,10 +31,10 @@ public class GoogleSheetsPath : IComparable<GoogleSheetsPath>
 {
 	public string name { get; set; }
 	public string id { get; set; }
-	public List<Sheet> sheets { get; set; } = new List<Sheet>();
+	public List<SheetPath> sheets { get; set; } = new List<SheetPath>();
 
 	[Serializable]
-	public class Sheet
+	public class SheetPath
 	{
 		public string name { get; set; }
 		public bool selected { get; set; }
@@ -45,7 +45,7 @@ public class GoogleSheetsPath : IComparable<GoogleSheetsPath>
 		for (int i = 0; i < sheets.Count; i++)
 			if (sheets[i].name == name)
 				return;
-		sheets.Add(new Sheet { name = name, selected = true });
+		sheets.Add(new SheetPath { name = name, selected = true });
 	}
 
 	public void RemoveSheet(string name)
