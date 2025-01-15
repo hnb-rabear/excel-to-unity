@@ -95,140 +95,129 @@ namespace ExcelToUnity_DataConverter
             return false;
         }
 
-        /// <summary>
-        /// Return the the name and type of Field of a column
-        /// </summary>
         public static List<FieldValueType> GetFieldValueTypes(IWorkbook pWorkBook, string pSheetName)
-        {
-            var sheet = pWorkBook.GetSheet(pSheetName);
-            var firstRowData = sheet.GetRow(0);
-            if (firstRowData.IsNull())
-                return null;
+		{
+			var sheet = pWorkBook.GetSheet(pSheetName);
+			var firstRowData = sheet?.GetRow(0);
+			if (firstRowData == null)
+				return null;
 
-            int lastCellNum = firstRowData.LastCellNum;
-            var fieldsName = new string[lastCellNum];
-            var fieldsValue = new string[lastCellNum];
-            for (int col = 0; col < firstRowData.LastCellNum; col++)
-            {
-                var cell = firstRowData.GetCell(col);
-				if (cell == null || cell.CellType != CellType.String)
+			int lastCellNum = firstRowData.LastCellNum;
+			var fieldsName = new string[lastCellNum];
+			var fieldsValue = new string[lastCellNum];
+			var mergedCellValue = "";
+			for (int col = 0; col < firstRowData.LastCellNum; col++)
+			{
+				var cell = firstRowData.GetCell(col);
+				if (cell == null || !cell.IsMergedCell && cell.CellType != CellType.String)
 					continue;
-				if (!string.IsNullOrEmpty(cell.StringCellValue))
-                    fieldsName[col] = cell.ToString().Replace(" ", "_");
-                else
-                    fieldsName[col] = "";
-                fieldsValue[col] = "";
-            }
 
-            for (int row = 1; row <= sheet.LastRowNum; row++)
-            {
-                firstRowData = sheet.GetRow(row);
-                if (firstRowData != null)
-                {
-                    //Find longest value, and use it to check value type
-                    for (int col = 0; col < fieldsName.Length; col++)
-                    {
+				if (!string.IsNullOrEmpty(cell.StringCellValue))
+					fieldsName[col] = cell.ToString().Replace(" ", "_");
+				else
+					fieldsName[col] = "";
+
+				// Check merged cells
+				if (cell.IsMergedCell && !string.IsNullOrEmpty(fieldsName[col]))
+					mergedCellValue = fieldsName[col];
+				else if (cell.IsMergedCell && string.IsNullOrEmpty(fieldsName[col]))
+					fieldsName[col] = mergedCellValue;
+
+				fieldsValue[col] = "";
+			}
+
+			// Get the standard value of the column to verify its data type.
+			for (int row = 1; row <= sheet.LastRowNum; row++)
+			{
+				firstRowData = sheet.GetRow(row);
+				if (firstRowData != null)
+				{
+					// Find the longest value, and use it to check value type
+					for (int col = 0; col < fieldsName.Length; col++)
+					{
 						if (string.IsNullOrEmpty(fieldsName[col]))
 							continue;
 						var cell = firstRowData.GetCell(col);
-                        if (cell != null)
-                        {
-                            string cellStr = cell.ToCellString();
-                            if (cellStr.Length > fieldsValue[col].Length)
-                                fieldsValue[col] = cellStr;
-                        }
-                    }
-                }
-            }
+						if (cell == null)
+							continue;
+						string cellStr = cell.ToCellString();
+						if (cellStr.Length > fieldsValue[col].Length)
+							fieldsValue[col] = cellStr;
+					}
+				}
+			}
 
-            var fieldValueTypes = new List<FieldValueType>();
-            for (int i = 0; i < fieldsName.Length; i++)
-            {
-                string fieldName = fieldsName[i];
+			var fieldValueTypes = new List<FieldValueType>();
+			for (int i = 0; i < fieldsName.Length; i++)
+			{
+				string fieldName = fieldsName[i];
 				if (string.IsNullOrEmpty(fieldName))
 					continue;
-				string filedValue = fieldsValue[i].Trim();
-                bool isArray = fieldName.Contains("[]");
-                var fieldValueType = new FieldValueType(fieldName);
-                if (!isArray)
-                {
-                    if (string.IsNullOrEmpty(filedValue))
-                    {
-                        fieldValueType.type = "string";
-                    }
-                    else
-                    {
-                        if (!filedValue.Contains(',') && decimal.TryParse(filedValue, out decimal _))
-                        {
-                            fieldValueType.type = "number";
-                        }
-                        else if (bool.TryParse(filedValue.ToLower(), out bool _))
-                        {
-                            fieldValueType.type = "bool";
-                        }
-                        else if (fieldName.Contains("{}"))
-                        {
-                            fieldValueType.type = "json";
-                        }
-                        else
-                        {
-                            fieldValueType.type = "string";
-                        }
-                    }
-                    fieldValueTypes.Add(fieldValueType);
-                }
-                else
-                {
-                    string[] values = SplitValueToArray(filedValue, false);
-                    int lenVal = 0;
-                    string longestValue = "";
-                    foreach (string val in values)
-                    {
-                        if (lenVal < val.Length)
-                        {
-                            lenVal = val.Length;
-                            longestValue = val;
-                        }
-                    }
-                    if (values.Length > 0)
-                    {
-                        if (string.IsNullOrEmpty(longestValue))
-                        {
-                            fieldValueType.type = "array-string";
-                        }
-                        else
-                        {
-                            if (!longestValue.Contains(',') && decimal.TryParse(longestValue, out decimal _))
-                            {
-                                fieldValueType.type = "array-number";
-                            }
-                            else if (bool.TryParse(longestValue.ToLower(), out bool _))
-                            {
-                                fieldValueType.type = "array-bool";
-                            }
-                            else
-                            {
-                                fieldValueType.type = "array-string";
-                            }
-                        }
-                        fieldValueTypes.Add(fieldValueType);
-                    }
-                    else
-                    {
-                        fieldValueType.type = "array-string";
-                        fieldValueTypes.Add(fieldValueType);
-                    }
-                }
-            }
+				string fieldValue = fieldsValue[i].Trim();
+				bool isArray = fieldName.EndsWith("[]");
+				var fieldValueType = new FieldValueType(fieldName);
+				if (!isArray)
+				{
+					if (string.IsNullOrEmpty(fieldValue))
+						fieldValueType.type = ValueType.Text;
+					else
+					{
+						if (decimal.TryParse(fieldValue, out decimal _))
+							fieldValueType.type = ValueType.Number;
+						else if (bool.TryParse(fieldValue.ToLower(), out bool _))
+							fieldValueType.type = ValueType.Bool;
+						else if (fieldName.EndsWith("{}"))
+							fieldValueType.type = ValueType.Json;
+						else
+							fieldValueType.type = ValueType.Text;
+						fieldValueTypes.Add(fieldValueType);
+					}
+				}
+				else
+				{
+					string[] values = SplitValueToArray(fieldValue, false);
+					int lenVal = 0;
+					string longestValue = "";
+					foreach (string val in values)
+					{
+						if (lenVal < val.Length)
+						{
+							lenVal = val.Length;
+							longestValue = val;
+						}
+					}
+					if (values.Length > 0)
+					{
+						if (string.IsNullOrEmpty(longestValue))
+							fieldValueType.type = ValueType.ArrayText;
+						else
+						{
+							if (decimal.TryParse(longestValue, out decimal _))
+								fieldValueType.type = ValueType.ArrayNumber;
+							else if (bool.TryParse(longestValue.ToLower(), out bool _))
+								fieldValueType.type = ValueType.ArrayBool;
+							else
+								fieldValueType.type = ValueType.ArrayText;
+							fieldValueTypes.Add(fieldValueType);
+						}
+					}
+					else
+					{
+						fieldValueType.type = ValueType.ArrayText;
+						if (!string.IsNullOrEmpty(longestValue))
+							fieldValueTypes.Add(fieldValueType);
+					}
+				}
+			}
 
-            return fieldValueTypes;
-        }
+			return fieldValueTypes;
+		}
 
         public static List<FieldValueType> GetFieldValueTypes(Google.Apis.Sheets.v4.Data.Sheet sheet, IList<IList<object>> pValues)
-        {
-            if (pValues == null || pValues.Count == 0)
-                return null;
-            var firstRowValues = pValues[0];
+		{
+			if (pValues == null || pValues.Count == 0)
+				return null;
+			var firstRowValues = pValues[0];
 			if (pValues.Count > 1)
 			{
 				var secondRowValues = pValues[1];
@@ -237,17 +226,18 @@ namespace ExcelToUnity_DataConverter
 						firstRowValues.Add("");
 			}
 			var fieldsName = new string[firstRowValues.Count];
-            var fieldsValue = new string[firstRowValues.Count];
+			var fieldsValue = new string[firstRowValues.Count];
 			var mergedCellValue = "";
 			for (int col = 0; col < firstRowValues.Count; col++)
-            {
-                var cell = firstRowValues[col].ToString().Trim();
-
-                if (!string.IsNullOrEmpty(cell))
-                    fieldsName[col] = cell.Replace(" ", "_");
-                else
-                    fieldsName[col] = "";
-
+			{
+				var cell = firstRowValues[col];
+				var value = cell.ToString().Trim();
+				
+				if (!string.IsNullOrEmpty(value))
+					fieldsName[col] = value.Replace(" ", "_");
+				else
+					fieldsName[col] = "";
+				
 				// Check merged cells
 				bool isMergedCell = IsMergedCell(sheet, 0, col);
 				if (isMergedCell && !string.IsNullOrEmpty(fieldsName[col]))
@@ -256,91 +246,92 @@ namespace ExcelToUnity_DataConverter
 					fieldsName[col] = mergedCellValue;
 
 				fieldsValue[col] = "";
-            }
+			}
 
-            for (int row = 1; row < pValues.Count; row++)
-            {
-                firstRowValues = pValues[row];
-                if (firstRowValues != null)
-                {
-                    //Find longest value, and use it to check value type
-                    for (int col = 0; col < fieldsName.Length; col++)
-                    {
-                        var cellStr = "";
-                        if (col < firstRowValues.Count)
-                            cellStr = firstRowValues[col].ToString();
-                        if (!string.IsNullOrEmpty(cellStr))
-                        {
-                            cellStr = cellStr.Trim();
-                            if (cellStr.Length > fieldsValue[col].Length)
-                                fieldsValue[col] = cellStr;
-                        }
-                    }
-                }
-            }
+			for (int row = 1; row < pValues.Count; row++)
+			{
+				firstRowValues = pValues[row];
+				if (firstRowValues != null)
+				{
+					//Find longest value, and use it to check value type
+					for (int col = 0; col < fieldsName.Length; col++)
+					{
+						var cellStr = "";
+						if (col < firstRowValues.Count)
+							cellStr = firstRowValues[col].ToString();
+						if (!string.IsNullOrEmpty(cellStr))
+						{
+							cellStr = cellStr.Trim();
+							if (cellStr.Length > fieldsValue[col].Length)
+								fieldsValue[col] = cellStr;
+						}
+					}
+				}
+			}
 
-            var fieldValueTypes = new List<FieldValueType>();
-            for (int i = 0; i < fieldsName.Length; i++)
-            {
-                string fieldName = fieldsName[i];
-                string filedValue = fieldsValue[i].Trim();
-                bool isArray = fieldName.Contains("[]");
-                var fieldValueType = new FieldValueType(fieldName);
-                if (!isArray)
-                {
-                    if (string.IsNullOrEmpty(filedValue))
-                        fieldValueType.type = "string";
-                    else
-                    {
-                        if (!filedValue.Contains(',') && decimal.TryParse(filedValue, out decimal _))
-                            fieldValueType.type = "number";
-                        else if (bool.TryParse(filedValue.ToLower(), out bool _))
-                            fieldValueType.type = "bool";
-                        else if (fieldName.Contains("{}"))
-                            fieldValueType.type = "json";
-                        else
-                            fieldValueType.type = "string";
-                    }
-                    fieldValueTypes.Add(fieldValueType);
-                }
-                else
-                {
-                    string[] values = SplitValueToArray(filedValue, false);
-                    int lenVal = 0;
-                    string longestValue = "";
-                    foreach (string val in values)
-                    {
-                        if (lenVal < val.Length)
-                        {
-                            lenVal = val.Length;
-                            longestValue = val;
-                        }
-                    }
-                    if (values.Length > 0)
-                    {
-                        if (string.IsNullOrEmpty(longestValue))
-                            fieldValueType.type = "array-string";
-                        else
-                        {
-                            if (!longestValue.Contains(',') && decimal.TryParse(longestValue, out decimal _))
-                                fieldValueType.type = "array-number";
-                            else if (bool.TryParse(longestValue.ToLower(), out bool _))
-                                fieldValueType.type = "array-bool";
-                            else
-                                fieldValueType.type = "array-string";
-                        }
-                        fieldValueTypes.Add(fieldValueType);
-                    }
-                    else
-                    {
-                        fieldValueType.type = "array-string";
-                        fieldValueTypes.Add(fieldValueType);
-                    }
-                }
-            }
+			var fieldValueTypes = new List<FieldValueType>();
+			for (int i = 0; i < fieldsName.Length; i++)
+			{
+				string fieldName = fieldsName[i];
+				string filedValue = fieldsValue[i].Trim();
+				bool isArray = fieldName.EndsWith("[]");
+				var fieldValueType = new FieldValueType(fieldName);
+				if (!isArray)
+				{
+					if (string.IsNullOrEmpty(filedValue))
+						fieldValueType.type = ValueType.Text;
+					else
+					{
+						if (decimal.TryParse(filedValue, out decimal _))
+							fieldValueType.type = ValueType.Number;
+						else if (bool.TryParse(filedValue.ToLower(), out bool _))
+							fieldValueType.type = ValueType.Bool;
+						else if (fieldName.EndsWith("{}"))
+							fieldValueType.type = ValueType.Json;
+						else
+							fieldValueType.type = ValueType.Text;
+						fieldValueTypes.Add(fieldValueType);
+					}
+				}
+				else
+				{
+					string[] values = SplitValueToArray(filedValue, false);
+					int lenVal = 0;
+					string longestValue = "";
+					foreach (string val in values)
+					{
+						if (lenVal < val.Length)
+						{
+							lenVal = val.Length;
+							longestValue = val;
+						}
+					}
+					if (values.Length > 0)
+					{
+						if (string.IsNullOrEmpty(longestValue))
+							fieldValueType.type = ValueType.ArrayText;
+						else
+						{
+							if (decimal.TryParse(longestValue, out decimal _))
+								fieldValueType.type = ValueType.ArrayNumber;
+							else if (bool.TryParse(longestValue.ToLower(), out bool _))
+								fieldValueType.type = ValueType.ArrayBool;
+							else
+								fieldValueType.type = ValueType.ArrayText;
+							fieldValueTypes.Add(fieldValueType);
+						}
+					}
+					else
+					{
+						fieldValueType.type = ValueType.ArrayText;
+						if (!string.IsNullOrEmpty(longestValue))
+							fieldValueTypes.Add(fieldValueType);
+					}
+				}
+			}
 
-            return fieldValueTypes;
-        }
+			return fieldValueTypes;
+		}
         
         public static void WriteFile(string pFolderPath, string pFileName, string pContent)
         {

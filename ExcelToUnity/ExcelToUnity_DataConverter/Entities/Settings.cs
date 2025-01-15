@@ -163,7 +163,6 @@ namespace ExcelToUnity_DataConverter
 	{
 		public string Key { get; set; }
 		public int Value { get; set; }
-
 		public ID(string key, int value)
 		{
 			Key = key;
@@ -174,18 +173,22 @@ namespace ExcelToUnity_DataConverter
 	public class FieldValueType
 	{
 		public string name;
-		public string type;
-
+		public ValueType type;
 		public FieldValueType(string name)
 		{
 			this.name = name;
 		}
+	}
 
-		public FieldValueType(string name, string type)
-		{
-			this.name = name;
-			this.type = type;
-		}
+	public enum ValueType
+	{
+		Text,
+		Number,
+		Bool,
+		Json,
+		ArrayText,
+		ArrayNumber,
+		ArrayBool,
 	}
 
 	public enum UserType

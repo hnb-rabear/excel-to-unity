@@ -51,7 +51,7 @@ namespace ExcelToUnity_DataConverter
 			{
 				string json = sr.ReadToEnd();
 				if (AAA)
-					json = m_Encryption.DecryptValue(json);
+					json = m_Encryption.Decrypt(json);
 				if (!string.IsNullOrEmpty(json))
 				{
 					try
@@ -147,7 +147,7 @@ namespace ExcelToUnity_DataConverter
 
 		public static string GetLicenseFile()
 		{
-			string fileName = AAA ? m_Encryption.EncryptValue("license") : "license";
+			string fileName = AAA ? m_Encryption.Encrypt("license") : "license";
 			var path = Path.Combine("Resources", $"{fileName}.e2u");
 			if (!File.Exists(path))
 				using (File.Create(path)) { }
@@ -158,7 +158,7 @@ namespace ExcelToUnity_DataConverter
 		{
 			string content = JsonConvert.SerializeObject(m_User);
 			if (AAA)
-				content = m_Encryption.EncryptValue(content);
+				content = m_Encryption.Encrypt(content);
 			Helper.WriteFile(GetLicenseFile(), content);
 		}
 	}

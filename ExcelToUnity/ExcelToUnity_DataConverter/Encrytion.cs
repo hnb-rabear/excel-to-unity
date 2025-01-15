@@ -13,7 +13,7 @@ public class Encryption
         this.mEncrypKey = pEncryptKey;
     }
 
-    public string EncryptValue(string pValue)
+    public string Encrypt(string pValue)
     {
         if (string.IsNullOrEmpty(pValue))
             return "";
@@ -22,7 +22,7 @@ public class Encryption
         return System.Convert.ToBase64String(plainTextBytes);
     }
 
-    public string DecryptValue(string pValue)
+    public string Decrypt(string pValue)
     {
         var base64EncodedBytes = System.Convert.FromBase64String(pValue);
         return Encoding.UTF8.GetString(XOR(base64EncodedBytes, mEncrypKey));
