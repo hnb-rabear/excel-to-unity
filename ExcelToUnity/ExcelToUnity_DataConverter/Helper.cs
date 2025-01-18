@@ -152,7 +152,7 @@ namespace ExcelToUnity_DataConverter
 			for (int i = 0; i < fieldsName.Length; i++)
 			{
 				string fieldName = fieldsName[i];
-				if (string.IsNullOrEmpty(fieldName))
+				if (string.IsNullOrEmpty(fieldName) || fieldName.EndsWith("[x]"))
 					continue;
 				string fieldValue = fieldsValue[i].Trim();
 				bool isArray = fieldName.EndsWith("[]");
@@ -274,6 +274,8 @@ namespace ExcelToUnity_DataConverter
 			for (int i = 0; i < fieldsName.Length; i++)
 			{
 				string fieldName = fieldsName[i];
+				if (string.IsNullOrEmpty(fieldName) || fieldName.EndsWith("[x]"))
+					continue;
 				string filedValue = fieldsValue[i].Trim();
 				bool isArray = fieldName.EndsWith("[]");
 				var fieldValueType = new FieldValueType(fieldName);

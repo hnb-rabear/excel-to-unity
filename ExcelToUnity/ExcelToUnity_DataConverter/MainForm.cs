@@ -603,7 +603,6 @@ namespace ExcelToUnity_DataConverter
 			int lastCellNum = 0;
 			string[] fields = null;
 			string[] mergeValues = null;
-			bool[] validCols = null;
 			var rowContents = new List<RowContent>();
 
 			for (int row = 0; row <= sheet.LastRowNum; row++)
@@ -617,12 +616,13 @@ namespace ExcelToUnity_DataConverter
 					lastCellNum = rowValues.LastCellNum;
 					fields = new string[lastCellNum];
 					mergeValues = new string[lastCellNum];
-					validCols = new bool[lastCellNum];
 					string mergedCell = "";
 					//Find valid columns
 					for (int col = 0; col < lastCellNum; col++)
 					{
 						var cell = rowValues.GetCell(col);
+						if (cell == null)
+							continue;
 						var cellValue = cell.ToString().Trim();
 						if (cell.IsMergedCell && !string.IsNullOrEmpty(cellValue))
 							mergedCell = cellValue;
@@ -630,12 +630,10 @@ namespace ExcelToUnity_DataConverter
 							cellValue = mergedCell;
 						if ((!string.IsNullOrEmpty(cellValue) || cell.IsMergedCell) && !cellValue.EndsWith("[x]"))
 						{
-							validCols[col] = true;
 							fields[col] = cellValue;
 						}
 						else
 						{
-							validCols[col] = false;
 							fields[col] = "";
 						}
 						mergeValues[col] = "";
@@ -647,9 +645,13 @@ namespace ExcelToUnity_DataConverter
 					for (int col = 0; col < lastCellNum; col++)
 					{
 						var cell = rowValues.GetCell(col);
+						if (cell == null)
+							continue;
 						if (fields != null)
 						{
 							string fieldName = fields[col];
+							if (string.IsNullOrEmpty(fieldName))
+								continue;
 							string fieldValue = cell.ToCellString().Trim();
 
 							if (cell != null && cell.IsMergedCell && !string.IsNullOrEmpty(fieldValue))
@@ -693,9 +695,6 @@ namespace ExcelToUnity_DataConverter
 					combinedCols[key] = $"\"{key}\":[";
 				for (int j = 0; j < rowContent.fieldNames.Count; j++) // Columns
 				{
-					bool valid = validCols[j];
-					if (!valid)
-						continue;
 					string fieldName = rowContent.fieldNames[j];
 					var filedValueType = pFieldValueTypes.Find(x => x.name == fieldName);
 					if (filedValueType == null)
@@ -3316,7 +3315,6 @@ namespace ExcelToUnity_DataConverter
 			int lastCellNum = 0;
 			string[] fields = null;
 			string[] mergeValues = null;
-			bool[] validCols = null;
 			var rowContents = new List<RowContent>();
 
 			for (int row = 0; row < pValues.Count; row++)
@@ -3330,7 +3328,6 @@ namespace ExcelToUnity_DataConverter
 					lastCellNum = rowValues.Count;
 					fields = new string[lastCellNum];
 					mergeValues = new string[lastCellNum];
-					validCols = new bool[lastCellNum];
 					string mergedCell = "";
 					//Find valid columns
 					for (int col = 0; col < lastCellNum; col++)
@@ -3346,12 +3343,10 @@ namespace ExcelToUnity_DataConverter
 						
 						if (!string.IsNullOrEmpty(cellValue) && !cellValue.Contains("[x]"))
 						{
-							validCols[col] = true;
 							fields[col] = cellValue;
 						}
 						else
 						{
-							validCols[col] = false;
 							fields[col] = "";
 						}
 						mergeValues[col] = "";
@@ -3368,6 +3363,8 @@ namespace ExcelToUnity_DataConverter
 						if (fields != null)
 						{
 							string fieldName = fields[col];
+							if (string.IsNullOrEmpty(fieldName))
+								continue;
 							string fieldValue = cellValue;
 
 							bool isMergedCell = Helper.IsMergedCell(sheet, row, col);
@@ -3412,9 +3409,6 @@ namespace ExcelToUnity_DataConverter
 					combinedCols[key] = $"\"{key}\":[";
 				for (int j = 0; j < rowContent.fieldNames.Count; j++)
 				{
-					bool valid = validCols[j];
-					if (!valid)
-						continue;
 					string fieldName = rowContent.fieldNames[j];
 					var filedValueType = pFieldValueTypes.Find(x => x.name == fieldName);
 					if (filedValueType == null)
